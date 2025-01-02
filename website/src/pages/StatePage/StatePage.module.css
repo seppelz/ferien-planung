@@ -1,0 +1,339 @@
+:root {
+  /* Dynamic State Colors - Injected from stateColorSchemes.ts */
+  --state-primary-main: var(--state-color-primary-main, #0077b6);
+  --state-primary-light: var(--state-color-primary-light, #0090d9);
+  --state-primary-dark: var(--state-color-primary-dark, #005d91);
+  
+  --state-secondary-main: var(--state-color-secondary-main, #f5f5f5);
+  --state-secondary-light: var(--state-color-secondary-light, #ffffff);
+  --state-secondary-dark: var(--state-color-secondary-dark, #e0e0e0);
+  
+  --state-accent-main: var(--state-color-accent-main, #004b93);
+  --state-accent-light: var(--state-color-accent-light, #0066cc);
+  --state-accent-dark: var(--state-color-accent-dark, #003366);
+
+  /* Background Colors */
+  --bg-default: var(--state-color-bg-default, #ffffff);
+  --bg-paper: var(--state-color-bg-paper, #f8f9fa);
+  --bg-subtle: var(--state-color-bg-subtle, #f0f2f5);
+
+  /* Text Colors */
+  --text-primary: var(--state-color-text-primary, #1a1a1a);
+  --text-secondary: var(--state-color-text-secondary, #4a4a4a);
+  --text-light: var(--state-color-text-light, #ffffff);
+  --text-dark: var(--state-color-text-dark, #000000);
+
+  /* Gradient Classes */
+  --gradient-primary: var(--state-gradient-primary, linear-gradient(135deg, var(--state-primary-main), var(--state-primary-light)));
+  --gradient-secondary: var(--state-gradient-secondary, linear-gradient(135deg, var(--state-secondary-main), var(--state-secondary-light)));
+  --gradient-accent: var(--state-gradient-accent, linear-gradient(135deg, var(--state-accent-main), var(--state-accent-light)));
+
+  /* Button Colors */
+  --button-primary-bg: var(--state-color-button-primary-bg, var(--state-primary-main));
+  --button-primary-hover: var(--state-color-button-primary-hover, var(--state-primary-dark));
+  --button-primary-text: var(--state-color-button-primary-text, var(--text-light));
+
+  --button-secondary-bg: var(--state-color-button-secondary-bg, var(--state-secondary-main));
+  --button-secondary-hover: var(--state-color-button-secondary-hover, var(--state-secondary-dark));
+  --button-secondary-text: var(--state-color-button-secondary-text, var(--text-dark));
+
+  --button-accent-bg: var(--state-color-button-accent-bg, var(--state-accent-main));
+  --button-accent-hover: var(--state-color-button-accent-hover, var(--state-accent-dark));
+  --button-accent-text: var(--state-color-button-accent-text, var(--text-light));
+
+  /* Border Colors */
+  --border-light: var(--state-color-border-light, #e0e0e0);
+  --border-medium: var(--state-color-border-medium, #bdbdbd);
+  --border-dark: var(--state-color-border-dark, #757575);
+
+  /* Shadows */
+  --shadow-small: var(--state-shadow-small, 0 2px 4px rgba(0, 0, 0, 0.1));
+  --shadow-medium: var(--state-shadow-medium, 0 4px 6px rgba(0, 0, 0, 0.1));
+  --shadow-large: var(--state-shadow-large, 0 8px 16px rgba(0, 0, 0, 0.1));
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 350ms ease;
+} 
+
+/* Update section backgrounds to be slightly transparent and use subtle gradients */
+.holidayColumn,
+.stateOverviewSection,
+.seasonalSection,
+.vacationSection,
+.regionalSection {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--state-primary-main) 3%, var(--bg-default) 97%),
+    color-mix(in srgb, var(--state-secondary-main) 5%, var(--bg-default) 95%)
+  );
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(var(--state-primary-main-rgb), 0.08);
+  border-radius: 24px;
+  margin: 2rem auto;
+  max-width: 1600px;
+  width: calc(100% - 4rem);
+  overflow: hidden;
+  box-shadow: 
+    0 4px 20px rgba(var(--state-primary-main-rgb), 0.03),
+    0 2px 8px rgba(var(--state-primary-main-rgb), 0.02);
+}
+
+/* Update section headers */
+.sectionHeader {
+  background: var(--gradient-primary);
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.sectionHeader h4,
+.sectionIcon {
+  color: var(--text-light);
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+/* Update CTA section */
+.ctaSection {
+  width: 100%;
+  margin: 4rem auto 0;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg,
+    var(--state-primary-color),
+    var(--state-secondary-color)
+  );
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.ctaSection::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+    url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%' height='100%' filter='url(%23noiseFilter)' opacity='0.015'/%3E%3C/svg%3E");
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.ctaContent {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.ctaTitle {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+}
+
+.ctaDescription {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  background: white;
+  color: var(--state-primary-color);
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  box-shadow: 
+    0 4px 6px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 
+    0 6px 12px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.12);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+.ctaIcon {
+  font-size: 1.25rem;
+  transition: transform 0.3s ease;
+  color: var(--state-primary-color);
+}
+
+.ctaButton:hover .ctaIcon {
+  transform: translateX(4px);
+}
+
+/* Update seasonal section */
+.seasonalSection {
+  background: linear-gradient(135deg,
+    color-mix(in srgb, var(--state-primary-color) 3%, white 97%),
+    color-mix(in srgb, var(--state-secondary-color) 5%, white 95%)
+  );
+  padding: 2rem;
+  margin-top: 3rem;
+  border-radius: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.seasonalSection h2 {
+  color: var(--state-primary-color);
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(135deg,
+    var(--state-primary-color),
+    var(--state-secondary-color)
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Update vacation section */
+.vacationSection {
+  padding: var(--section-spacing-large) var(--section-spacing-small);
+  position: relative;
+  overflow: hidden;
+}
+
+.vacationSection h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  color: #333333;
+  padding: 0 1rem;
+}
+
+.vacationGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  padding: 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.vacationCard {
+  background: white;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-medium);
+  transition: var(--transition-normal);
+  border: 1px solid rgba(var(--state-primary-main-rgb), 0.1);
+}
+
+.vacationCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-large);
+}
+
+.destinationHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg,
+    var(--state-primary-color),
+    var(--state-secondary-color)
+  );
+  color: white;
+}
+
+.destinationHeader h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.destinationContent {
+  padding: 1.5rem;
+}
+
+.destinationDescription {
+  font-size: 1rem;
+  color: #666666;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.destinationDetails {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  background: linear-gradient(135deg,
+    var(--state-primary-color),
+    var(--state-secondary-color)
+  );
+  border-radius: 0.5rem;
+  color: white;
+}
+
+.sectionHeader h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: white;
+  margin: 0;
+}
+
+.sectionIcon {
+  color: white;
+}
+
+.attractionsSection ul,
+.activitiesSection ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.attractionsSection li,
+.activitiesSection li {
+  font-size: 0.95rem;
+  color: #666666;
+  padding: 0.75rem 1rem;
+  background: color-mix(in srgb, var(--state-primary-color) 5%, white 95%);
+  border-radius: 0.5rem;
+  border: 1px solid rgba(var(--state-primary-main-rgb), 0.15);
+  transition: var(--transition-normal);
+}
+
+.attractionsSection li:hover,
+.activitiesSection li:hover {
+  transform: translateY(-2px);
+  background: color-mix(in srgb, var(--state-primary-color) 8%, white 92%);
+  box-shadow: var(--shadow-small);
+} 

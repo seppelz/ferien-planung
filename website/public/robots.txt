@@ -1,0 +1,22 @@
+# https://holiday-planner.de/robots.txt
+# Allow all web crawlers to access all content
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://holiday-planner.de/sitemap.xml
+
+# Prevent crawling of error pages
+Disallow: /404
+Disallow: /500
+
+# Prevent crawling of API routes
+Disallow: /api/
+
+# Allow crawling of static assets
+Allow: /images/
+Allow: /icons/
+Allow: /fonts/
+
+# Crawl delay to prevent server overload
+Crawl-delay: 1 
