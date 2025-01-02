@@ -11,8 +11,8 @@
       "destination": "/:path*",
       "has": [
         {
-          "type": "path",
-          "value": "(?!app/|api/).*"
+          "type": "host",
+          "value": "ferien-planung.de"
         }
       ]
     }
