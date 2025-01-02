@@ -7,8 +7,14 @@
       "destination": "/app/dist/:path*"
     },
     {
-      "source": "/((?!app/|api/).*)",
-      "destination": "/:1"
+      "source": "/:path*",
+      "destination": "/:path*",
+      "has": [
+        {
+          "type": "path",
+          "value": "(?!app/|api/).*"
+        }
+      ]
     }
   ],
   "installCommand": "echo 'Installing dependencies in individual directories'"
