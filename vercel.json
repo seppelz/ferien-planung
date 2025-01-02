@@ -7,14 +7,8 @@
       "destination": "/app/dist/:path*"
     },
     {
-      "source": "/:path*",
-      "destination": "/:path*",
-      "has": [
-        {
-          "type": "host",
-          "value": "ferien-planung.de"
-        }
-      ]
+      "source": "/(.*)",
+      "destination": "/$1"
     }
   ],
   "installCommand": "echo 'Installing dependencies in individual directories'"
