@@ -135,6 +135,20 @@ declare const styles: {
   readonly errorMessage: string;
   readonly successState: string;
   readonly successMessage: string;
+  readonly holidayContent: string;
+  readonly familyActivities: string;
+  readonly promoContent: string;
+  readonly promoStats: string;
+  readonly promoStat: string;
+  readonly promoValue: string;
+  readonly promoLabel: string;
+  readonly promoText: string;
+  readonly promoFeatures: string;
+  readonly promoFeature: string;
+  readonly promoIcon: string;
+  readonly promoCTA: string;
+  readonly promoArrow: string;
+  readonly plannerPromo: string;
 };
 
 export default styles; 

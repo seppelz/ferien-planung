@@ -1,6 +1,6 @@
-import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
-import { VacationDestination } from '../types/StateInfo';
+import { StateInfo } from '../../types/StateInfo';
+import { SeasonalTradition } from '../../types/holiday';
+import { VacationDestination } from '../../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
 const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
@@ -129,6 +129,7 @@ const vacationDestinations: VacationDestination[] = [
 ];
 
 export const bremen: StateInfo = {
+  name: "Bremen",
   fullName: "Bremen",
   shortName: "HB",
   capital: "Bremen",
@@ -142,6 +143,7 @@ export const bremen: StateInfo = {
   ],
   keyFacts: {
     population: "680.000",
+    capital: "Bremen",
     area: "419 km²",
     founded: "787",
     economicStrength: [
@@ -154,19 +156,21 @@ export const bremen: StateInfo = {
   },
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: false,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Bremen ein gesetzlicher Feiertag.`
       }
     })),
     ...(holidays.publicHolidays["2025"]["HB"] || []).map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: true,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Bremen ein gesetzlicher Feiertag.`
       }
@@ -230,17 +234,18 @@ export const bremen: StateInfo = {
       }
     };
 
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
+    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
     const holidayInfo = familyActivities[holidayName] || {
       description: `${holiday.name} in Bremen`,
       activities: []
     };
 
     return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
+      name: holiday.name,
+      type: "school" as const,
+      start: holiday.start,
+      end: holiday.end,
+      isRegional: true,
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities

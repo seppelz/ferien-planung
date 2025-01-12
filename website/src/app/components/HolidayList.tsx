@@ -9,7 +9,7 @@ import {
   faTrademark,
   faPlus
 } from '@fortawesome/free-solid-svg-icons';
-import { Holiday } from '@/types/Holiday';
+import { Holiday } from '@/types/holiday';
 import styles from '@/app/styles/StatePage.module.css';
 
 interface HolidayListProps {

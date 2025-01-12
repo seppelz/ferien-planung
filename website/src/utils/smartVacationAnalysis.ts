@@ -1,7 +1,5 @@
-import { addDays, eachDayOfInterval, format, isWeekend, isSameDay, isSameMonth, isSameYear, differenceInDays, subDays, startOfDay } from 'date-fns';
+import { addDays, eachDayOfInterval, format, isWeekend, isSameDay, differenceInDays, subDays, startOfDay } from 'date-fns';
 import { Holiday, BridgeDay } from '../types/holiday';
-import { GermanState } from '../types/GermanState';
-import { bridgeDayService } from '../services/bridgeDayService';
 
 export interface VacationRecommendation {
   startDate: Date;
@@ -33,11 +31,7 @@ const formatDateRange = (start: Date, end: Date): string => {
 
 const isPublicHoliday = (date: Date, holidays: Holiday[]): boolean => {
   if (isWeekend(date)) return false;
-  return holidays.some(h => h.type === 'public' && isSameDay(h.date, date));
-};
-
-const isFreeDay = (date: Date, holidays: Holiday[]): boolean => {
-  return isWeekend(date) || isPublicHoliday(date, holidays);
+  return holidays.some(h => h.type === 'public' && isSameDay(new Date(h.start), date));
 };
 
 // Calculate workdays needed between two dates
@@ -60,8 +54,8 @@ const findFreeDays = (start: Date, end: Date, holidays: Holiday[]): {
     weekendDays: days.filter(d => isWeekend(d)),
     publicHolidays: holidays.filter(h => 
       h.type === 'public' && 
-      days.some(d => isSameDay(d, h.date)) &&
-      !isWeekend(h.date)
+      days.some(d => isSameDay(d, new Date(h.start))) &&
+      !isWeekend(new Date(h.start))
     )
   };
 };
@@ -80,11 +74,6 @@ const analyzeBridgeDayOpportunity = (
   
   // Calculate total days in period
   const totalDays = differenceInDays(end, start) + 1;
-  
-  // Calculate actual free days (weekends + holidays + vacation days)
-  const freeDays = eachDayOfInterval({ start, end }).filter(d => 
-    isWeekend(d) || isPublicHoliday(d, holidays)
-  ).length;
   
   // Total gained days is the period length
   const gainedDays = totalDays;
@@ -154,20 +143,19 @@ const analyzeBridgeDayOpportunity = (
 };
 
 export function analyzeVacationOpportunities(
-  holidays: Holiday[],
-  state: GermanState
+  holidays: Holiday[]
 ): VacationRecommendation[] {
   const recommendations: VacationRecommendation[] = [];
   
-  // Get bridge days from service
-  const bridgeDays = bridgeDayService.calculateBridgeDays(holidays, state);
+  // Get bridge days from holidays
+  const bridgeDays = holidays.filter(h => h.type === 'bridge') as BridgeDay[];
   
   // Group bridge days that are close to each other (within 3 days)
   const groupedBridgeDays: BridgeDay[][] = [];
   let currentGroup: BridgeDay[] = [];
   
   const sortedBridgeDays = [...bridgeDays].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
+    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()
   );
 
   for (const bridgeDay of sortedBridgeDays) {
@@ -175,7 +163,7 @@ export function analyzeVacationOpportunities(
       currentGroup.push(bridgeDay);
     } else {
       const lastDay = currentGroup[currentGroup.length - 1];
-      const daysBetween = differenceInDays(bridgeDay.date, lastDay.date);
+      const daysBetween = differenceInDays(new Date(bridgeDay.start), new Date(lastDay.start));
       
       if (daysBetween <= 3) {
         currentGroup.push(bridgeDay);
@@ -196,12 +184,12 @@ export function analyzeVacationOpportunities(
     const lastDay = group[group.length - 1];
     
     // Look at a window around the group
-    const windowStart = addDays(firstDay.date, -3);
-    const windowEnd = addDays(lastDay.date, 3);
+    const windowStart = addDays(new Date(firstDay.start), -3);
+    const windowEnd = addDays(new Date(lastDay.start), 3);
     
     // Try different period lengths
-    for (let start = windowStart; start <= firstDay.date; start = addDays(start, 1)) {
-      for (let end = lastDay.date; end <= windowEnd; end = addDays(end, 1)) {
+    for (let start = windowStart; start <= new Date(firstDay.start); start = addDays(start, 1)) {
+      for (let end = new Date(lastDay.start); end <= windowEnd; end = addDays(end, 1)) {
         const rec = analyzeBridgeDayOpportunity(start, end, holidays);
         if (rec) recommendations.push(rec);
       }
@@ -216,7 +204,7 @@ export function analyzeVacationOpportunities(
   let currentHolidayGroup: Holiday[] = [];
   
   const sortedHolidays = [...publicHolidays].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
+    (a, b) => new Date(a.start).getTime() - new Date(b.start).getTime()
   );
 
   for (const holiday of sortedHolidays) {
@@ -224,7 +212,7 @@ export function analyzeVacationOpportunities(
       currentHolidayGroup.push(holiday);
     } else {
       const lastHoliday = currentHolidayGroup[currentHolidayGroup.length - 1];
-      const daysBetween = differenceInDays(holiday.date, lastHoliday.date);
+      const daysBetween = differenceInDays(new Date(holiday.start), new Date(lastHoliday.start));
       
       if (daysBetween <= 5) {
         currentHolidayGroup.push(holiday);
@@ -244,45 +232,17 @@ export function analyzeVacationOpportunities(
     const lastHoliday = group[group.length - 1];
     
     // Look at a window around the group
-    const windowStart = addDays(firstHoliday.date, -5);
-    const windowEnd = addDays(lastHoliday.date, 5);
+    const windowStart = addDays(new Date(firstHoliday.start), -5);
+    const windowEnd = addDays(new Date(lastHoliday.start), 5);
     
     // Try different period lengths
-    for (let start = windowStart; start <= firstHoliday.date; start = addDays(start, 1)) {
-      for (let end = lastHoliday.date; end <= windowEnd; end = addDays(end, 1)) {
+    for (let start = windowStart; start <= new Date(firstHoliday.start); start = addDays(start, 1)) {
+      for (let end = new Date(lastHoliday.start); end <= windowEnd; end = addDays(end, 1)) {
         const rec = analyzeBridgeDayOpportunity(start, end, holidays);
         if (rec) recommendations.push(rec);
       }
     }
   }
-  
-  // Sort by efficiency and length
-  recommendations.sort((a, b) => {
-    const lengthDiff = (b.gainedDays / b.requiredDays) - (a.gainedDays / a.requiredDays);
-    if (Math.abs(lengthDiff) < 0.1) { // If efficiency is similar, prefer longer periods
-      return b.gainedDays - a.gainedDays;
-    }
-    return lengthDiff;
-  });
-  
-  // Remove overlapping recommendations, preferring longer/more efficient ones
-  const uniqueRecommendations: VacationRecommendation[] = [];
-  const addedPeriods = new Set<string>();
-  
-  for (const rec of recommendations) {
-    const periodKey = `${rec.periodStart.getTime()}-${rec.periodEnd.getTime()}`;
-    if (addedPeriods.has(periodKey)) continue;
-    
-    const hasOverlap = uniqueRecommendations.some(existing => 
-      (rec.periodStart <= existing.periodEnd && rec.periodEnd >= existing.periodStart)
-    );
-    
-    if (!hasOverlap) {
-      uniqueRecommendations.push(rec);
-      addedPeriods.add(periodKey);
-    }
-  }
-  
-  // Sort by date
-  return uniqueRecommendations.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
+
+  return recommendations;
 }

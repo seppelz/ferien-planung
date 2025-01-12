@@ -1,6 +1,6 @@
-import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
-import { VacationDestination } from '../types/StateInfo';
+import { StateInfo } from '../../types/StateInfo';
+import { SeasonalTradition } from '../../types/holiday';
+import { VacationDestination } from '../../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
 const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
@@ -54,7 +54,7 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "Frühling",
     description: "Erwachen der Küstenregion mit ersten Strandspaziergängern und Seglern. Die Kreidefelsen erstrahlen im Frühlingslicht."
   },
   {
@@ -123,6 +123,7 @@ const vacationDestinations: VacationDestination[] = [
 ];
 
 export const mecklenburgVorpommern: StateInfo = {
+  name: "Mecklenburg-Vorpommern",
   fullName: "Mecklenburg-Vorpommern",
   shortName: "MV",
   capital: "Schwerin",
@@ -137,6 +138,7 @@ export const mecklenburgVorpommern: StateInfo = {
   ],
   keyFacts: {
     population: "1,6 Millionen (2021)",
+    capital: "Schwerin",
     area: "23.295 km²",
     founded: "1945",
     economicStrength: [
@@ -148,19 +150,21 @@ export const mecklenburgVorpommern: StateInfo = {
   },
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: false,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Mecklenburg-Vorpommern ein gesetzlicher Feiertag.`
       }
     })),
     ...(holidays.publicHolidays["2025"]["MV"] || []).map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: true,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Mecklenburg-Vorpommern ein gesetzlicher Feiertag.`
       }
@@ -224,17 +228,18 @@ export const mecklenburgVorpommern: StateInfo = {
       }
     };
 
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
+    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
     const holidayInfo = familyActivities[holidayName] || {
       description: `${holiday.name} in Mecklenburg-Vorpommern`,
       activities: []
     };
 
     return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
+      name: holiday.name,
+      type: "school" as const,
+      start: holiday.start,
+      end: holiday.end,
+      isRegional: true,
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities

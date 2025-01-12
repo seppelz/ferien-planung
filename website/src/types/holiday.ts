@@ -1,28 +1,27 @@
 import { GermanState } from './GermanState';
 
-export type HolidayType = 'public' | 'regional' | 'bridge' | 'school';
+export interface HolidayDetails {
+  description: string;
+  traditions?: string[];
+  locations?: string[];
+  culturalSignificance?: string;
+  familyActivities?: string[];
+}
 
 export interface BaseHoliday {
   name: string;
-  date: string;
-  type: 'public' | 'school';
-  description?: string;
-  details?: {
-    description: string;
-    traditions?: string[];
-    culturalSignificance?: string;
-    locations?: string[];
-    familyActivities?: string[];
-  };
+  start: string;
+  end?: string;
+  type: 'public' | 'school' | 'bridge';
+  isRegional?: boolean;
+  details?: HolidayDetails;
 }
 
 export interface SingleDayHoliday extends BaseHoliday {
-  isRegional?: boolean;
   nationwide?: boolean;
 }
 
 export interface MultiDayHoliday extends BaseHoliday {
-  endDate: string;
   state: string;
 }
 
@@ -83,29 +82,8 @@ export interface HolidayData {
   publicHolidays: Record<number, Record<GermanState | 'ALL', RawPublicHoliday[]>>;
 }
 
-export interface Holiday {
-  name: string;
-  date?: string;
-  start?: string;
-  end?: string;
-  type?: 'public' | 'school';
-  isRegional?: boolean;
-  details?: {
-    description: string;
-    traditions?: string[];
-    locations?: string[];
-    culturalSignificance?: string;
-  };
-}
-
 export interface SeasonalTradition {
   season: 'Frühling' | 'Sommer' | 'Herbst' | 'Winter';
   description: string;
-}
-
-export interface HolidayDetails {
-  description: string;
-  traditions?: string[];
-  locations?: string[];
-  culturalSignificance?: string;
+  events?: string[];
 }

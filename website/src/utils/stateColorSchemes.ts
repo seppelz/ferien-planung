@@ -124,25 +124,6 @@ const berlinScheme: StateColorScheme = {
   },
 };
 
-// Convert Tailwind color to hex
-const tailwindColors = {
-  'rose': { '100': '#ffe4e6', '200': '#fecdd3' },
-  'indigo': { '50': '#eef2ff', '100': '#e0e7ff', '200': '#c7d2fe' },
-  'yellow': { '50': '#fefce8', '100': '#fef9c3' },
-  'amber': { '50': '#fffbeb', '100': '#fef3c7', '200': '#fde68a' },
-  'blue': { '50': '#eff6ff', '100': '#dbeafe', '200': '#bfdbfe' },
-  'emerald': { '50': '#ecfdf5', '100': '#d1fae5', '200': '#a7f3d0' },
-  'red': { '50': '#fef2f2', '100': '#fee2e2', '200': '#fecaca' },
-  'orange': { '100': '#ffedd5', '200': '#fed7aa' },
-  'sky': { '100': '#e0f2fe', '200': '#bae6fd' },
-  'green': { '50': '#f0fdf4', '100': '#dcfce7', '200': '#bbf7d0' },
-  'cyan': { '100': '#cffafe', '200': '#a5f3fc' },
-  'lime': { '100': '#ecfccb', '200': '#d9f99d' },
-  'teal': { '100': '#ccfbf1', '200': '#99f6e4' },
-  'purple': { '50': '#faf5ff', '100': '#f3e8ff', '200': '#e9d5ff' },
-  'violet': { '100': '#ede9fe', '200': '#ddd6fe' }
-} as const;
-
 // Initialize color schemes for all states
 const stateColorSchemes: Partial<Record<GermanState, StateColorScheme>> = {
   [GermanState.BE]: berlinScheme,
@@ -637,12 +618,11 @@ const stateColorSchemes: Partial<Record<GermanState, StateColorScheme>> = {
   },
 };
 
-// Helper function to get state color scheme with fallback
+// Export functions
 export const getStateColorScheme = (stateId: GermanState): StateColorScheme => {
   return stateColorSchemes[stateId] || berlinScheme;
 };
 
-// Helper function to get specific color values
 export const getStateColor = (
   stateId: GermanState,
   category: keyof StateColorScheme,
@@ -650,17 +630,12 @@ export const getStateColor = (
 ): string => {
   const scheme = getStateColorScheme(stateId);
   const categoryValue = scheme[category];
-  if (typeof categoryValue === 'object' && subCategory in categoryValue) {
-    return (categoryValue as Record<string, string>)[subCategory];
-  }
-  const fallbackValue = berlinScheme[category];
-  if (typeof fallbackValue === 'object' && subCategory in fallbackValue) {
-    return (fallbackValue as Record<string, string>)[subCategory];
+  if (typeof categoryValue === 'object' && categoryValue !== null) {
+    return (categoryValue as Record<string, string>)[subCategory] || '';
   }
   return '';
 };
 
-// Helper function to get gradient classes
 export const getStateGradient = (
   stateId: GermanState,
   type: 'primary' | 'secondary' | 'accent' = 'primary'

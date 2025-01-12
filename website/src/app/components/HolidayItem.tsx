@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronDown, faChevronUp, faLocationDot, faTrademark } from '@fortawesome/free-solid-svg-icons';
 import styles from '@/app/styles/StatePage.module.css';
-import { Holiday, HolidayDetails } from '@/types/Holiday';
+import { Holiday } from '@/types/holiday';
 
 interface HolidayItemProps {
   holiday: Holiday;

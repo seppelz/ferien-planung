@@ -1,29 +1,38 @@
 import { GermanState } from './GermanState';
 
-export type HolidayType = 'public' | 'regional' | 'bridge' | 'school';
+export interface HolidayDetails {
+  description: string;
+  traditions?: string[];
+  locations?: string[];
+  culturalSignificance?: string;
+  familyActivities?: string[];
+}
 
 export interface BaseHoliday {
   name: string;
-  state: GermanState;
+  type: 'public' | 'school' | 'bridge' | 'optional';
+  state?: GermanState;
+  details?: HolidayDetails;
+  isRegional?: boolean;
 }
 
 export interface SingleDayHoliday extends BaseHoliday {
-  date: Date;
-  type: 'public' | 'regional' | 'bridge';
-  endDate?: never;
+  date: string;
+  start?: never;
+  end?: never;
 }
 
 export interface MultiDayHoliday extends BaseHoliday {
-  date: Date;
-  endDate: Date;
-  type: 'school';
+  date?: never;
+  start: string;
+  end: string;
 }
 
 export type Holiday = SingleDayHoliday | MultiDayHoliday;
 
 export interface VacationPlan {
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   id: string;
   state: GermanState;
   isVisible?: boolean;
@@ -42,13 +51,13 @@ export interface BridgeDay extends SingleDayHoliday {
   totalDaysOff: number;
   efficiency: number;
   pattern: string;
-  periodStart: Date;
-  periodEnd: Date;
+  periodStart: string;
+  periodEnd: string;
 }
 
 export interface VacationPeriod {
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   holidays: Holiday[];
   bridgeDays: BridgeDay[];
   requiredVacationDays: number;
@@ -76,29 +85,7 @@ export interface HolidayData {
   publicHolidays: Record<number, Record<GermanState | 'ALL', RawPublicHoliday[]>>;
 }
 
-export interface Holiday {
-  name: string;
-  date?: string;
-  start?: string;
-  end?: string;
-  type?: 'public' | 'school';
-  isRegional?: boolean;
-  details?: {
-    description: string;
-    traditions?: string[];
-    locations?: string[];
-    culturalSignificance?: string;
-  };
-}
-
 export interface SeasonalTradition {
   season: string;
   description: string;
-}
-
-export interface HolidayDetails {
-  description: string;
-  traditions?: string[];
-  locations?: string[];
-  culturalSignificance?: string;
 }

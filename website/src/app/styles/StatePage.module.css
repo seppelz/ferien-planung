@@ -473,7 +473,7 @@
 }
 
 /* Smooth Scrolling */
-html {
+.smoothScroll {
   scroll-behavior: smooth;
 }
 
@@ -3199,11 +3199,6 @@ html {
   animation: shimmer 1.5s infinite;
 }
 
-/* Improved Focus States */
-:focus-visible {
-  outline: 2px solid var(--theme-primary);
-  outline-offset: 2px;
-}
 
 /* Enhanced Hover Effects */
 .hoverEffect {
@@ -3385,14 +3380,8 @@ html {
 }
 
 /* Enhanced Focus Styles */
-:focus {
+.focusReset:focus {
   outline: none;
-}
-
-:focus-visible {
-  outline: 2px solid var(--theme-primary);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(26, 54, 93, 0.1);
 }
 
 /* Skip Links */
@@ -4493,11 +4482,6 @@ html {
   outline-offset: 2px;
 }
 
-/* Convert focus-visible to a class */
-.focusVisible {
-  outline: 2px solid var(--theme-primary);
-  outline-offset: 2px;
-}
 
 .holidayColumn:nth-child(1) .headerIcon,
 .holidayColumn:nth-child(2) .headerIcon {
@@ -4804,3 +4788,25 @@ html {
     font-size: 0.9rem;
   }
 }
+
+.smoothScroll {
+  scroll-behavior: smooth;
+}
+
+/* Improved Focus States */
+.focusOutline:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+}
+
+.focusVisible:focus-visible {
+  outline: 2px solid var(--theme-primary);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(26, 54, 93, 0.1);
+}
+
+.focusReset:focus {
+  outline: none;
+}
+
+/* Skip Links */

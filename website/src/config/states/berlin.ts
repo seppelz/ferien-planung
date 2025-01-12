@@ -1,9 +1,9 @@
 import { StateInfo } from '../../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../../types/holiday';
+import { SeasonalTradition, HolidayDetails } from '../../types/holiday';
 import { VacationDestination } from '../../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
-const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
+const stateSpecificHolidayDetails: Record<string, HolidayDetails> = {
   "Neujahr": {
     description: "Die Berliner Silvesterfeier am Brandenburger Tor ist eine der größten Freiluftpartys Europas mit spektakulärem Feuerwerk.",
     traditions: ["Silvesterparty am Brandenburger Tor", "Neujahrslauf", "Neujahrskonzerte"],
@@ -114,6 +114,7 @@ const vacationDestinations: VacationDestination[] = [
 ];
 
 export const berlin: StateInfo = {
+  name: "Berlin",
   fullName: "Berlin",
   shortName: "BE",
   capital: "Berlin",
@@ -127,6 +128,7 @@ export const berlin: StateInfo = {
   ],
   keyFacts: {
     population: "3,7 Millionen",
+    capital: "Berlin",
     area: "892 km²",
     founded: "1237",
     economicStrength: [
@@ -139,19 +141,21 @@ export const berlin: StateInfo = {
   },
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public",
+      name: holiday.name,
+      type: "public" as const,
       isRegional: false,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Berlin ein gesetzlicher Feiertag.`
       }
     })),
     ...(holidays.publicHolidays["2025"]["BE"] || []).map(holiday => ({
-      ...holiday,
-      type: "public",
+      name: holiday.name,
+      type: "public" as const,
       isRegional: holiday.name === "Internationaler Frauentag",
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Berlin ein gesetzlicher Feiertag.`
       }
@@ -215,17 +219,18 @@ export const berlin: StateInfo = {
       }
     };
 
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
+    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
     const holidayInfo = familyActivities[holidayName] || {
       description: `${holiday.name} in Berlin`,
       activities: []
     };
 
     return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
+      name: holiday.name,
+      type: "school" as const,
+      start: holiday.start,
+      end: holiday.end,
+      isRegional: true,
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities

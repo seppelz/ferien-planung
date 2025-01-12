@@ -1,5 +1,4 @@
 import { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
 import styles from './styles/LandingPage.module.css'
 import Navigation from '@/components/Navigation/Navigation'
@@ -136,70 +135,13 @@ const TESTIMONIALS_DATA = [
   }
 ];
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://holiday-planner.de'),
-  title: 'Holiday Planner - Intelligente Urlaubsplanung & Brückentag-Analyse 2025',
-  description: 'Optimieren Sie Ihren Urlaub 2025 mit unserem kostenlosen Urlaubsplaner. Brückentage effizient nutzen, Feiertage analysieren und bis zu 24 zusätzliche freie Tage gewinnen. Jetzt clever planen!',
-  keywords: [
-    'Urlaubsplaner',
-    'Brückentage',
-    'Urlaubsplanung',
-    'Feiertage',
-    'Urlaubsoptimierung',
-    'Jahresurlaub',
-    'Urlaubstage',
-    'Feiertagskalender',
-    'Schulferien',
-    '2025'
-  ].join(', '),
-  openGraph: {
-    title: 'Holiday Planner - Smarte Urlaubsplanung 2025',
-    description: 'Maximieren Sie Ihre Urlaubstage mit intelligenter Brückentag-Analyse. Kostenlos, effizient und bundeslandspezifisch.',
-    url: 'https://holiday-planner.de',
-    siteName: 'Holiday Planner',
-    images: [
-      {
-        url: '/images/og-image.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Holiday Planner - Intelligente Urlaubsplanung',
-      },
-    ],
-    locale: 'de_DE',
-    type: 'website',
-  },
-  twitter: {
-    card: 'summary_large_image',
-    title: 'Holiday Planner - Smarte Urlaubsplanung 2025',
-    description: 'Maximieren Sie Ihre Urlaubstage mit intelligenter Brückentag-Analyse. Kostenlos, effizient und bundeslandspezifisch.',
-    images: ['/images/og-image.jpg'],
-  },
-  alternates: {
-    canonical: 'https://holiday-planner.de',
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
-  },
-  verification: {
-    google: 'your-google-verification-code',
-  },
-}
-
 // Add JSON-LD structured data
 const structuredData = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'Holiday Planner',
   description: 'Intelligente Urlaubsplanung mit Brückentagen-Optimierung für Deutschland',
-  url: 'https://holiday-planner.de',
+  url: 'https://ferien-planung.de',
   applicationCategory: 'BusinessApplication',
   operatingSystem: 'Any',
   offers: {
@@ -225,15 +167,69 @@ const structuredData = {
   }
 };
 
+export const metadata: Metadata = {
+  metadataBase: new URL('https://ferien-planung.de'),
+  title: 'Holiday Planner - Intelligente Urlaubsplanung & Brückentag-Analyse 2025',
+  description: 'Optimieren Sie Ihren Urlaub 2025 mit unserem kostenlosen Urlaubsplaner. Brückentage effizient nutzen, Feiertage analysieren und bis zu 24 zusätzliche freie Tage gewinnen. Jetzt clever planen!',
+  keywords: [
+    'Urlaubsplaner',
+    'Brückentage',
+    'Urlaubsplanung',
+    'Feiertage',
+    'Urlaubsoptimierung',
+    'Jahresurlaub',
+    'Urlaubstage',
+    'Feiertagskalender',
+    'Schulferien',
+    '2025'
+  ].join(', '),
+  openGraph: {
+    title: 'Ferien Planung - Dein Urlaubsplaner',
+    description: 'Plane deinen Urlaub mit unserem Ferien Planer. Finde die besten Zeiträume für deinen Urlaub und maximiere deine freien Tage.',
+    url: 'https://ferien-planung.de',
+    siteName: 'Holiday Planner',
+    images: [
+      {
+        url: '/images/og-image.jpg',
+        width: 1200,
+        height: 630,
+        alt: 'Holiday Planner - Intelligente Urlaubsplanung',
+      },
+    ],
+    locale: 'de_DE',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Ferien Planung - Dein Urlaubsplaner',
+    description: 'Plane deinen Urlaub mit unserem Ferien Planer. Finde die besten Zeiträume für deinen Urlaub und maximiere deine freien Tage.',
+    images: ['/images/og-image.jpg'],
+  },
+  alternates: {
+    canonical: 'https://ferien-planung.de',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  verification: {
+    google: 'your-google-verification-code',
+  },
+  other: {
+    'application/ld+json': JSON.stringify(structuredData),
+  }
+}
+
 export default function LandingPage() {
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData),
-        }}
-      />
       <Navigation />
       <main className={styles.landingPage}>
         {/* Hero Section */}
@@ -245,9 +241,9 @@ export default function LandingPage() {
                 Mach mehr aus deinen Urlaubstagen! Mit einem Brückentag kannst du einen 4-tägigen Kurzurlaub planen.
                 Unser Tool hilft dir, solche Chancen optimal zu nutzen.
               </p>
-              <button className={styles.ctaButton}>
+              <Link href="/app" className={styles.ctaButton}>
                 Jetzt Urlaub planen
-              </button>
+              </Link>
             </div>
             <div className={styles.heroIllustration}>
               <div className={styles.calendarStrip}>
@@ -432,8 +428,9 @@ export default function LandingPage() {
       </main>
       <Footer />
     </>
-  )
+  );
 }
 
 export const dynamic = 'force-static'
 export const revalidate = 86400
+

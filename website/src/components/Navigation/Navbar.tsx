@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import styles from './Navbar.module.css';
 
 interface State {
@@ -34,7 +33,6 @@ export const GERMAN_STATES: State[] = [
 
 export const Navbar: React.FC = () => {
   const [isStatesMenuOpen, setIsStatesMenuOpen] = useState(false);
-  const pathname = usePathname();
 
   const toggleStatesMenu = () => {
     setIsStatesMenuOpen(!isStatesMenuOpen);

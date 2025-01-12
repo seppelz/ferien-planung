@@ -44,7 +44,7 @@ registerRoute(
 
 // Handle offline fallback
 self.addEventListener('install', (event) => {
-  const offlinePage = new Request('/holiday/offline.html');
+  const offlinePage = new Request('/app/offline.html');
   event.waitUntil(
     fetch(offlinePage).then((response) => {
       return caches.open('offline-cache').then((cache) => {
@@ -59,7 +59,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(event.request).catch(() => {
         return caches.open('offline-cache').then((cache) => {
-          return cache.match('/holiday/offline.html');
+          return cache.match('/app/offline.html');
         });
       })
     );

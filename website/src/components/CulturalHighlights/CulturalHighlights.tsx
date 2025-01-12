@@ -5,14 +5,12 @@ export interface CulturalHighlightsProps {
   highlights: string[];
   primaryColor: string;
   secondaryColor: string;
-  tertiaryColor?: string;
 }
 
 export const CulturalHighlights: React.FC<CulturalHighlightsProps> = ({
   highlights,
   primaryColor,
-  secondaryColor,
-  tertiaryColor
+  secondaryColor
 }) => {
   return (
     <section className={styles.culturalHighlights}>

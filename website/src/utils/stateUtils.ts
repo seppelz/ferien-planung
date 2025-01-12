@@ -1,10 +1,6 @@
-import { StateInfo } from '../types/StateInfo';
-import { GermanState } from '../types/GermanState';
-
-// Import state configurations
-import { berlin } from '../config/states/berlin';
-import { bayern } from '../config/states/bayern';
 import { badenWuerttemberg } from '../config/states/baden-wuerttemberg';
+import { bayern } from '../config/states/bayern';
+import { berlin } from '../config/states/berlin';
 import { brandenburg } from '../config/states/brandenburg';
 import { bremen } from '../config/states/bremen';
 import { hamburg } from '../config/states/hamburg';
@@ -18,6 +14,8 @@ import { sachsen } from '../config/states/sachsen';
 import { sachsenAnhalt } from '../config/states/sachsen-anhalt';
 import { schleswigHolstein } from '../config/states/schleswig-holstein';
 import { thueringen } from '../config/states/thueringen';
+import { GermanState } from '../types/GermanState';
+import type { StateInfo } from '../types/StateInfo';
 
 // Map of state slugs to their data
 const STATE_DATA: Record<string, StateInfo> = {

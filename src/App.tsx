@@ -19,16 +19,11 @@ const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
 function App() {
   return (
     <HelmetProvider>
-      <Router basename="/holiday">
+      <Router basename="/app">
         <NotificationProvider>
           <PersonProvider>
             <Routes>
-              <Route path="/" element={
-                <DefaultLayout>
-                  <LandingPage />
-                </DefaultLayout>
-              } />
-              <Route path="/app" element={<MainLayout />} />
+              <Route path="/" element={<MainLayout />} />
               <Route path="/state/:stateId" element={
                 <DefaultLayout>
                   <StatePage />

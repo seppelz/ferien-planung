@@ -1,36 +1,36 @@
-import { StateInfo } from '../types/StateInfo';
-import { baden_wuerttemberg } from './baden-wuerttemberg';
+import { badenWuerttemberg } from './baden-wuerttemberg';
 import { bayern } from './bayern';
 import { berlin } from './berlin';
 import { brandenburg } from './brandenburg';
 import { bremen } from './bremen';
 import { hamburg } from './hamburg';
 import { hessen } from './hessen';
-import { mecklenburg_vorpommern } from './mecklenburg-vorpommern';
+import { mecklenburgVorpommern } from './mecklenburg-vorpommern';
 import { niedersachsen } from './niedersachsen';
-import { nordrhein_westfalen } from './nordrhein-westfalen';
-import { rheinland_pfalz } from './rheinland-pfalz';
+import { nordrheinWestfalen } from './nordrhein-westfalen';
+import { rheinlandPfalz } from './rheinland-pfalz';
 import { saarland } from './saarland';
 import { sachsen } from './sachsen';
-import { sachsen_anhalt } from './sachsen-anhalt';
-import { schleswig_holstein } from './schleswig-holstein';
+import { sachsenAnhalt } from './sachsen-anhalt';
+import { schleswigHolstein } from './schleswig-holstein';
 import { thueringen } from './thueringen';
+import type { StateInfo } from '../../types/StateInfo';
 
 export const states: Record<string, StateInfo> = {
-  'BW': baden_wuerttemberg,
+  'BW': badenWuerttemberg,
   'BY': bayern,
   'BE': berlin,
   'BB': brandenburg,
   'HB': bremen,
   'HH': hamburg,
   'HE': hessen,
-  'MV': mecklenburg_vorpommern,
+  'MV': mecklenburgVorpommern,
   'NI': niedersachsen,
-  'NW': nordrhein_westfalen,
-  'RP': rheinland_pfalz,
+  'NW': nordrheinWestfalen,
+  'RP': rheinlandPfalz,
   'SL': saarland,
   'SN': sachsen,
-  'ST': sachsen_anhalt,
-  'SH': schleswig_holstein,
+  'ST': sachsenAnhalt,
+  'SH': schleswigHolstein,
   'TH': thueringen
 }; 

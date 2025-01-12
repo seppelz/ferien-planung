@@ -1,13 +1,11 @@
 import { VacationPlan, BridgeDayRecommendation } from '../types/vacationPlan';
 import { Holiday } from '../types/holiday';
 import { 
-  addDays, 
   differenceInBusinessDays,
   differenceInDays,
   eachDayOfInterval, 
   isWeekend,
   isSameDay,
-  subDays,
   isWithinInterval
 } from 'date-fns';
 
@@ -38,36 +36,36 @@ export function findBridgeDayOpportunities(
 
   // Create intervals for school holidays to check overlaps
   const schoolHolidayIntervals = schoolHolidays.map(h => ({
-    start: new Date(h.date),
-    end: new Date(h.date)
+    start: new Date(h.start),
+    end: new Date(h.end || h.start)
   }));
 
   // Sort holidays chronologically
   const sortedHolidays = publicHolidays.sort((a, b) => 
-    new Date(a.date).getTime() - new Date(b.date).getTime()
+    new Date(a.start).getTime() - new Date(b.start).getTime()
   );
 
   // Helper function to check if a date is a holiday or school holiday
   const isHolidayOrSchoolHoliday = (date: Date) => {
-    return publicHolidays.some(h => isSameDay(new Date(h.date), date)) ||
+    return publicHolidays.some(h => isSameDay(new Date(h.start), date)) ||
            schoolHolidayIntervals.some(interval => isWithinInterval(date, interval));
   };
 
   // Look for bridge day opportunities
   for (let i = 0; i < sortedHolidays.length; i++) {
     const holiday = sortedHolidays[i];
-    const holidayDate = new Date(holiday.date);
+    const holidayDate = new Date(holiday.start);
     
     if (holidayDate < startDate || holidayDate > endDate) continue;
 
     // Look ahead up to 7 days to find connected holidays
-    let connectedDays = [holidayDate];
+    const connectedDays = [holidayDate];
     let nextDate = holidayDate;
     let j = i + 1;
 
     while (j < sortedHolidays.length) {
       const nextHoliday = sortedHolidays[j];
-      const nextHolidayDate = new Date(nextHoliday.date);
+      const nextHolidayDate = new Date(nextHoliday.start);
       const daysBetween = differenceInBusinessDays(nextHolidayDate, nextDate);
 
       if (daysBetween > 5) break;
@@ -140,7 +138,7 @@ export function analyzeSchoolHolidayOverlap(
 
     vacationDays.forEach(day => {
       if (schoolHolidays.some(holiday => 
-        isSameDay(new Date(holiday.date), day)
+        isSameDay(new Date(holiday.start), day)
       )) {
         overlappingDays++;
       }

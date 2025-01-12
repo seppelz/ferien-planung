@@ -1,54 +1,53 @@
-import { Metadata } from 'next';
-import { notFound } from 'next/navigation';
-import Link from 'next/link';
-import { getStateInfo, getStateIds, getStateEnum } from '@/utils/stateUtils';
-import { getStateColorScheme } from '@/utils/stateColorSchemes';
-import { StateInfo } from '@/types/StateInfo';
-import { Holiday } from '@/types/Holiday';
-import styles from '@/app/styles/StatePage.module.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import StatePageStyles from '@/app/components/StatePageStyles';
-import ScrollButton from '@/app/components/ScrollButton';
-import Navigation from '@/components/Navigation/Navigation';
-import SeasonalSection from '@/app/components/SeasonalSection';
-import RegionalSpecialties from '@/app/components/RegionalSpecialties';
-import HolidayList from '@/app/components/HolidayList';
-import VacationDestinations from '@/app/components/VacationDestinations';
-import CulturalHighlights from '@/app/components/CulturalHighlights';
-import { 
+import {
   faArrowRight,
   faBuilding,
-  faUsers,
-  faRulerCombined,
-  faIndustry,
   faCalendarDays,
-  faGraduationCap
+  faGraduationCap,
+  faIndustry,
+  faRulerCombined,
+  faUsers
 } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
 
-export const dynamic = 'force-static';
-export const revalidate = false;
+import CulturalHighlights from '@/app/components/CulturalHighlights';
+import HolidayList from '@/app/components/HolidayList';
+import RegionalSpecialties from '@/app/components/RegionalSpecialties';
+import ScrollButton from '@/app/components/ScrollButton';
+import SeasonalSection from '@/app/components/SeasonalSection';
+import StatePageStyles from '@/app/components/StatePageStyles';
+import VacationDestinations from '@/app/components/VacationDestinations';
+import Navigation from '@/components/Navigation/Navigation';
+import { getStateColorScheme } from '@/utils/stateColorSchemes';
+import { getStateEnum, getStateInfo, getStateIds } from '@/utils/stateUtils';
+import type { Holiday } from '@/types/holiday';
+import type { StateInfo } from '@/types/StateInfo';
+import styles from '@/app/styles/StatePage.module.css';
 
-export async function generateStaticParams() {
+type Props = {
+  params: {
+    state: string;
+  };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateStaticParams(): Promise<{ state: string }[]> {
   const stateIds = getStateIds();
   return stateIds.map((stateId) => ({
     state: stateId,
   }));
 }
 
-interface StatePageProps {
-  params: {
-    state: string;
-  };
-}
-
 // Enhance structured data
-const generateStructuredData = (stateInfo: StateInfo) => {
+const generateStructuredData = (stateInfo: StateInfo): Record<string, unknown> => {
   return {
     '@context': 'https://schema.org',
     '@type': 'State',
     name: stateInfo.name,
     description: stateInfo.description,
-    url: `https://holiday-planner.de/states/${stateInfo.name.toLowerCase().replace(/\s+/g, '-')}`,
+    url: `https://ferien-planung.de/states/${stateInfo.name.toLowerCase().replace(/\s+/g, '-')}`,
     address: {
       '@type': 'PostalAddress',
       addressCountry: 'DE',
@@ -91,19 +90,19 @@ const generateStructuredData = (stateInfo: StateInfo) => {
             '@type': 'ListItem',
             position: 1,
             name: 'Holiday Planner',
-            item: 'https://holiday-planner.de'
+            item: 'https://ferien-planung.de'
           },
           {
             '@type': 'ListItem',
             position: 2,
             name: 'Bundesländer',
-            item: 'https://holiday-planner.de/states'
+            item: 'https://ferien-planung.de/states'
           },
           {
             '@type': 'ListItem',
             position: 3,
             name: stateInfo.name,
-            item: `https://holiday-planner.de/states/${stateInfo.name.toLowerCase().replace(/\s+/g, '-')}`
+            item: `https://ferien-planung.de/states/${stateInfo.name.toLowerCase().replace(/\s+/g, '-')}`
           }
         ]
       }
@@ -112,7 +111,7 @@ const generateStructuredData = (stateInfo: StateInfo) => {
 };
 
 export async function generateMetadata(
-  { params }: StatePageProps
+  { params }: Props
 ): Promise<Metadata> {
   const stateId = params.state;
   const stateInfo = await getStateInfo(stateId);
@@ -125,7 +124,7 @@ export async function generateMetadata(
   const metaDescription = `Planen Sie Ihren Urlaub 2025 in ${stateInfo.name}. ${publicHolidaysCount} Feiertage, ${schoolHolidaysCount} Ferienzeiten und optimale Brückentage. ${stateInfo.keyFacts.population} Einwohner, ${stateInfo.keyFacts.area}.`;
 
   return {
-    metadataBase: new URL('https://holiday-planner.de'),
+    metadataBase: new URL('https://ferien-planung.de'),
     title: metaTitle,
     description: metaDescription,
     keywords: [
@@ -144,7 +143,7 @@ export async function generateMetadata(
       description: metaDescription,
       type: 'website',
       locale: 'de_DE',
-      url: `https://holiday-planner.de/states/${stateId}`,
+      url: `https://ferien-planung.de/states/${stateId}`,
       siteName: 'Holiday Planner',
       images: [
         {
@@ -178,7 +177,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function StatePage({ params }: StatePageProps) {
+export default async function StatePage({
+  params,
+}: Pick<Props, 'params'>): Promise<JSX.Element> {
   const stateId = params.state;
   const stateInfo = await getStateInfo(stateId);
   const stateEnum = getStateEnum(stateId);
@@ -291,597 +292,594 @@ export default async function StatePage({ params }: StatePageProps) {
           __html: JSON.stringify(structuredData),
         }}
       />
-      <div className={styles.statePage} style={colorStyles}>
-        <Navigation />
-        <StatePageStyles 
-          primaryColor={colorScheme.primary.main}
-          secondaryColor={colorScheme.secondary.main}
-          tertiaryColor={colorScheme.accent.main}
-        />
-        <div className={styles.statePageContent}>
-          <header className={styles.stateHeader}>
-            <div className={styles.animatedBackground}>
-              <div className={styles.celestialBody} style={{
-                '--state-primary-color': colorScheme.primary.main,
-                '--state-secondary-color': colorScheme.secondary.main,
-                '--state-tertiary-color': colorScheme.accent.main
-              } as React.CSSProperties} />
-              
-              <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
-              <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
-              <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
-              <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
-              
-              <div className={styles.seasonalDecorations}>
-                <div className={styles.springDandelion}>
-                  <div className={styles.dandelionStem}></div>
-                  <div className={styles.dandelionHead}>
-                    <div className={styles.dandelionCore}></div>
-                    {[...Array(24)].map((_, i) => (
-                      <div key={i} className={styles.seed}>
-                        <div className={styles.seedCore}></div>
-                        <div className={styles.seedParachute}></div>
-                      </div>
-                    ))}
-                  </div>
-                  {[...Array(6)].map((_, i) => (
-                    <div key={`flying-${i}`} className={styles.flyingSeed}>
+      <StatePageStyles 
+        primaryColor={colorScheme.primary.main}
+        secondaryColor={colorScheme.secondary.main}
+        tertiaryColor={colorScheme.accent.main}
+      />
+      <Navigation />
+      <main className={styles.statePage} style={colorStyles}>
+        <header className={styles.stateHeader}>
+          <div className={styles.animatedBackground}>
+            <div className={styles.celestialBody} style={{
+              '--state-primary-color': colorScheme.primary.main,
+              '--state-secondary-color': colorScheme.secondary.main,
+              '--state-tertiary-color': colorScheme.accent.main
+            } as React.CSSProperties} />
+            
+            <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
+            <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
+            <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
+            <div className={styles.cloud} style={{ '--state-primary-color': 'var(--state-primary-lighter)' } as React.CSSProperties} />
+            
+            <div className={styles.seasonalDecorations}>
+              <div className={styles.springDandelion}>
+                <div className={styles.dandelionStem}></div>
+                <div className={styles.dandelionHead}>
+                  <div className={styles.dandelionCore}></div>
+                  {[...Array(24)].map((_, i) => (
+                    <div key={i} className={styles.seed}>
                       <div className={styles.seedCore}></div>
                       <div className={styles.seedParachute}></div>
                     </div>
                   ))}
                 </div>
-
-                <div className={styles.sunflower}>
-                  <div className={styles.sunflowerStem}></div>
-                  <div className={styles.sunflowerHead}>
-                    {[...Array(12)].map((_, i) => (
-                      <div key={i} className={styles.sunflowerPetal}></div>
-                    ))}
-                    <div className={styles.sunflowerCenter}></div>
+                {[...Array(6)].map((_, i) => (
+                  <div key={`flying-${i}`} className={styles.flyingSeed}>
+                    <div className={styles.seedCore}></div>
+                    <div className={styles.seedParachute}></div>
                   </div>
-                </div>
+                ))}
+              </div>
 
-                <div className={styles.mapleLeaf}>
-                  <div className={styles.mapleTreeTrunk} />
-                  <div className={styles.mapleTreeBranch} />
-                  <div className={styles.mapleTreeBranch} />
-                  <div className={styles.mapleTreeBranch} />
-                  <div className={styles.mapleTreeBranch} />
-                  {Array.from({ length: 8 }).map((_, i) => (
+              <div className={styles.sunflower}>
+                <div className={styles.sunflowerStem}></div>
+                <div className={styles.sunflowerHead}>
+                  {[...Array(12)].map((_, i) => (
+                    <div key={i} className={styles.sunflowerPetal}></div>
+                  ))}
+                  <div className={styles.sunflowerCenter}></div>
+                </div>
+              </div>
+
+              <div className={styles.mapleLeaf}>
+                <div className={styles.mapleTreeTrunk} />
+                <div className={styles.mapleTreeBranch} />
+                <div className={styles.mapleTreeBranch} />
+                <div className={styles.mapleTreeBranch} />
+                <div className={styles.mapleTreeBranch} />
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={styles.fallingLeaf}
+                    style={{
+                      left: `${20 + Math.random() * 60}%`,
+                      top: `${20 + Math.random() * 30}%`,
+                      '--x-end': `${-50 + Math.random() * 100}px`,
+                      '--y-end': `${100 + Math.random() * 50}px`,
+                      '--fall-delay': `${i * 0.5}s`
+                    } as React.CSSProperties}
+                  />
+                ))}
+              </div>
+
+              <div className={styles.snowflake}>
+                <div className={styles.mountainScene}>
+                  <div className={styles.mountain}></div>
+                  <div className={styles.mountain}></div>
+                  <div className={styles.mountain}></div>
+                  {[...Array(20)].map((_, i) => (
                     <div
                       key={i}
-                      className={styles.fallingLeaf}
+                      className={styles.snow}
                       style={{
-                        left: `${20 + Math.random() * 60}%`,
-                        top: `${20 + Math.random() * 30}%`,
-                        '--x-end': `${-50 + Math.random() * 100}px`,
-                        '--y-end': `${100 + Math.random() * 50}px`,
-                        '--fall-delay': `${i * 0.5}s`
+                        left: `${Math.random() * 100}%`,
+                        top: `${Math.random() * 100}%`,
+                        '--x-end': `${Math.random() * 60 - 30}px`,
+                        '--y-end': `${Math.random() * 60 + 30}px`,
+                        animationDelay: `${Math.random() * 3}s`,
+                        animationDuration: `${2 + Math.random() * 2}s`
                       } as React.CSSProperties}
-                    />
+                    ></div>
                   ))}
                 </div>
+              </div>
+            </div>
 
-                <div className={styles.snowflake}>
-                  <div className={styles.mountainScene}>
-                    <div className={styles.mountain}></div>
-                    <div className={styles.mountain}></div>
-                    <div className={styles.mountain}></div>
-                    {[...Array(20)].map((_, i) => (
-                      <div
-                        key={i}
-                        className={styles.snow}
-                        style={{
-                          left: `${Math.random() * 100}%`,
-                          top: `${Math.random() * 100}%`,
-                          '--x-end': `${Math.random() * 60 - 30}px`,
-                          '--y-end': `${Math.random() * 60 + 30}px`,
-                          animationDelay: `${Math.random() * 3}s`,
-                          animationDuration: `${2 + Math.random() * 2}s`
-                        } as React.CSSProperties}
-                      ></div>
+            <div className={styles.headerOverlay} style={{
+              background: `linear-gradient(
+                135deg,
+                rgba(0, 0, 0, 0.2) 0%,
+                rgba(0, 0, 0, 0.1) 50%,
+                rgba(0, 0, 0, 0.05) 100%
+              )`,
+              mixBlendMode: 'multiply'
+            }} />
+            <div className={styles.headerContent}>
+              <div className={styles.heroStats}>
+                <div className={styles.statBadge} style={{
+                  background: 'var(--state-primary-alpha-10)',
+                  color: 'var(--state-text-on-hero)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)'
+                }}>
+                  <span className={styles.statNumber}>{publicHolidays.length}</span>
+                  <span className={styles.statLabel}>Feiertage</span>
+                </div>
+                <div className={styles.statDivider} style={{ 
+                  background: 'var(--state-primary-alpha-20)'
+                }} />
+                <div className={styles.statBadge} style={{
+                  background: 'var(--state-primary-alpha-10)',
+                  color: 'var(--state-text-on-hero)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)'
+                }}>
+                  <span className={styles.statNumber}>{regionalHolidays.length}</span>
+                  <span className={styles.statLabel}>Regionale Feiertage</span>
+                </div>
+                <div className={styles.statDivider} style={{ 
+                  background: 'var(--state-primary-alpha-20)'
+                }} />
+                <div className={styles.statBadge} style={{
+                  background: 'var(--state-primary-alpha-10)',
+                  color: 'var(--state-text-on-hero)',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)'
+                }}>
+                  <span className={styles.statNumber}>{totalSchoolHolidayDays}</span>
+                  <span className={styles.statLabel}>Ferientage</span>
+                </div>
+              </div>
+              <h1 className={styles.heroTitle} style={{ 
+                color: 'var(--state-text-on-hero)',
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.15)'
+              }}>
+                Feiertage und Schulferien in {fullName} 2025
+              </h1>
+              <p className={styles.heroSubtitle} style={{ 
+                color: 'var(--state-text-on-hero)',
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+              }}>
+                Maximieren Sie Ihren Urlaub in {fullName} mit unserem intelligenten Urlaubsplaner.
+                Nutzen Sie {publicHolidays.length + regionalHolidays.length} Feiertage für optimale Brückentage.
+              </p>
+              <div className={styles.heroActions}>
+                <Link href="/planner" className={styles.primaryButton} style={{
+                  background: 'var(--state-primary-alpha-20)',
+                  color: 'var(--state-text-on-hero)',
+                  borderColor: 'var(--state-primary-alpha-10)',
+                  backdropFilter: 'blur(4px)',
+                  WebkitBackdropFilter: 'blur(4px)',
+                  '--hover-color': 'var(--state-hover-overlay)'
+                } as React.CSSProperties}>
+                  Urlaubsplaner starten
+                  <span className={styles.buttonIcon}>→</span>
+                </Link>
+                <ScrollButton className={styles.secondaryButton} />
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <section id="overview" className={styles.holidayOverview} style={{ 
+          marginTop: '1rem',
+          background: 'var(--state-background-subtle)'
+        }}>
+          <HolidayList
+            publicHolidays={publicHolidays}
+            regionalHolidays={regionalHolidays}
+            schoolHolidays={filteredSchoolHolidays}
+            totalSchoolHolidayDays={totalSchoolHolidayDays}
+            primaryColor="var(--state-primary-color)"
+            secondaryColor="var(--state-secondary-color)"
+          />
+
+          <div className={styles.plannerPromo} style={{
+            background: `linear-gradient(135deg, ${colorScheme.primary.main}, ${colorScheme.secondary.main})`,
+            borderRadius: '1.5rem',
+            padding: '3rem 2rem',
+            color: '#ffffff',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+            position: 'relative',
+            overflow: 'hidden',
+            isolation: 'isolate',
+            margin: '2rem 0'
+          }}>
+            <div className={styles.promoContent}>
+              <div className={styles.promoStats} style={{
+                display: 'flex',
+                justifyContent: 'center',
+                gap: '1.5rem',
+                marginBottom: '2.5rem'
+              }}>
+                <div className={styles.promoStat} style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '1.25rem',
+                  background: 'rgba(255, 255, 255, 0.12)',
+                  borderRadius: '1rem',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  cursor: 'default',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                  minWidth: '160px'
+                }}>
+                  <FontAwesomeIcon icon={faCalendarDays} style={{ fontSize: '2rem', color: '#ffffff' }} />
+                  <div style={{ textAlign: 'center', color: '#ffffff' }}>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>4x</div>
+                    <div style={{ fontSize: '0.95rem', opacity: '0.95', fontWeight: '500' }}>mehr freie Tage</div>
+                  </div>
+                </div>
+                <div className={styles.promoStat} style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '1.25rem',
+                  background: 'rgba(255, 255, 255, 0.12)',
+                  borderRadius: '1rem',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  cursor: 'default',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                  minWidth: '160px'
+                }}>
+                  <FontAwesomeIcon icon={faUsers} style={{ fontSize: '2rem', color: '#ffffff' }} />
+                  <div style={{ textAlign: 'center', color: '#ffffff' }}>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>5 Min</div>
+                    <div style={{ fontSize: '0.95rem', opacity: '0.95', fontWeight: '500' }}>schnelle Planung</div>
+                  </div>
+                </div>
+                <div className={styles.promoStat} style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  padding: '1.25rem',
+                  background: 'rgba(255, 255, 255, 0.12)',
+                  borderRadius: '1rem',
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  cursor: 'default',
+                  border: '1px solid rgba(255, 255, 255, 0.15)',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                  minWidth: '160px'
+                }}>
+                  <FontAwesomeIcon icon={faGraduationCap} style={{ fontSize: '2rem', color: '#ffffff' }} />
+                  <div style={{ textAlign: 'center', color: '#ffffff' }}>
+                    <div style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>100%</div>
+                    <div style={{ fontSize: '0.95rem', opacity: '0.95', fontWeight: '500' }}>kostenlos</div>
+                  </div>
+                </div>
+              </div>
+              <div className={styles.promoText} style={{ textAlign: 'center', color: '#ffffff', maxWidth: '800px', margin: '0 auto' }}>
+                <h2 style={{ 
+                  fontSize: '2rem', 
+                  fontWeight: '700',
+                  marginBottom: '1.25rem',
+                  textShadow: '0 2px 4px rgba(0,0,0,0.1)',
+                  color: '#ffffff',
+                  lineHeight: '1.3'
+                }}>
+                  Clever Urlaub planen in {fullName}
+                </h2>
+                <p style={{ 
+                  fontSize: '1.15rem',
+                  opacity: '0.95',
+                  maxWidth: '600px',
+                  margin: '0 auto 2.5rem',
+                  lineHeight: '1.6',
+                  fontWeight: '500'
+                }}>
+                  Nutzen Sie unseren intelligenten Urlaubsplaner, um das Beste aus Ihren Urlaubstagen herauszuholen.
+                  Finden Sie die optimalen Brückentage und verlängern Sie Ihren Urlaub effizient.
+                </p>
+                <Link href="/planner" className={styles.promoCTA} style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.75rem',
+                  background: 'rgba(255, 255, 255, 0.15)',
+                  color: '#ffffff',
+                  padding: '1rem 2rem',
+                  borderRadius: '0.75rem',
+                  fontSize: '1.15rem',
+                  fontWeight: '600',
+                  textDecoration: 'none',
+                  transition: 'all 0.3s ease',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  backdropFilter: 'blur(4px)',
+                  WebkitBackdropFilter: 'blur(4px)',
+                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                  '&:hover': {
+                    background: 'rgba(255, 255, 255, 0.2)',
+                    transform: 'translateY(-2px)',
+                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)'
+                  }
+                } as React.CSSProperties}>
+                  Jetzt Urlaub clever planen
+                  <FontAwesomeIcon icon={faArrowRight} style={{ 
+                    color: '#ffffff',
+                    fontSize: '1.1rem',
+                    transition: 'transform 0.3s ease'
+                  }} />
+                </Link>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {keyFacts && (
+          <section id="about" className={styles.stateOverviewSection} style={{
+            background: `linear-gradient(135deg, ${colorScheme.primary.main}, ${colorScheme.secondary.main})`,
+            padding: '4rem 2rem',
+            borderRadius: '1.5rem',
+            margin: '3rem auto',
+            maxWidth: '1200px',
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)'
+          }}>
+            <h2 style={{
+              fontSize: '2.25rem',
+              fontWeight: '700',
+              marginBottom: '2.5rem',
+              textAlign: 'center',
+              color: '#ffffff',
+              position: 'relative',
+              display: 'inline-block',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              padding: '0 1rem',
+              textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
+            }}>Über {fullName}</h2>
+            <div className={styles.microInfoBar} style={{
+              background: 'rgba(255, 255, 255, 0.95)',
+              padding: '2rem',
+              borderRadius: '1.25rem',
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '2rem',
+              justifyContent: 'center',
+              alignItems: 'stretch',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
+              margin: '0 auto 3rem',
+              maxWidth: '1000px',
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)'
+            }}>
+              <div className={styles.microInfoItem} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                padding: '1.25rem 1.75rem',
+                background: 'white',
+                borderRadius: '1rem',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
+                minWidth: '220px',
+                border: '1px solid var(--state-border-lighter)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+              }}>
+                <FontAwesomeIcon icon={faBuilding} className={styles.microInfoIcon} style={{
+                  color: 'var(--state-primary-color)',
+                  fontSize: '1.5rem',
+                  opacity: '0.9'
+                }} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span className={styles.microInfoLabel} style={{
+                    fontSize: '0.9rem',
+                    color: 'var(--state-text-muted)',
+                    marginBottom: '0.35rem',
+                    fontWeight: '500'
+                  }}>Hauptstadt</span>
+                  <span className={styles.microInfoValue} style={{
+                    fontSize: '1.1rem',
+                    fontWeight: '600',
+                    color: 'var(--state-text-primary)'
+                  }}>{keyFacts.capital}</span>
+                </div>
+              </div>
+              <div className={styles.microInfoItem} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                padding: '1.25rem 1.75rem',
+                background: 'white',
+                borderRadius: '1rem',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
+                minWidth: '220px',
+                border: '1px solid var(--state-border-lighter)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+              }}>
+                <FontAwesomeIcon icon={faUsers} className={styles.microInfoIcon} style={{
+                  color: 'var(--state-primary-color)',
+                  fontSize: '1.5rem',
+                  opacity: '0.9'
+                }} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span className={styles.microInfoLabel} style={{
+                    fontSize: '0.9rem',
+                    color: 'var(--state-text-muted)',
+                    marginBottom: '0.35rem',
+                    fontWeight: '500'
+                  }}>Einwohner</span>
+                  <span className={styles.microInfoValue} style={{
+                    fontSize: '1.1rem',
+                    fontWeight: '600',
+                    color: 'var(--state-text-primary)'
+                  }}>{keyFacts.population}</span>
+                </div>
+              </div>
+              <div className={styles.microInfoItem} style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '1rem',
+                padding: '1.25rem 1.75rem',
+                background: 'white',
+                borderRadius: '1rem',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
+                minWidth: '220px',
+                border: '1px solid var(--state-border-lighter)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+              }}>
+                <FontAwesomeIcon icon={faRulerCombined} className={styles.microInfoIcon} style={{
+                  color: 'var(--state-primary-color)',
+                  fontSize: '1.5rem',
+                  opacity: '0.9'
+                }} />
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  <span className={styles.microInfoLabel} style={{
+                    fontSize: '0.9rem',
+                    color: 'var(--state-text-muted)',
+                    marginBottom: '0.35rem',
+                    fontWeight: '500'
+                  }}>Fläche</span>
+                  <span className={styles.microInfoValue} style={{
+                    fontSize: '1.1rem',
+                    fontWeight: '600',
+                    color: 'var(--state-text-primary)'
+                  }}>{keyFacts.area}</span>
+                </div>
+              </div>
+              <div className={styles.microInfoItem} style={{
+                display: 'flex',
+                alignItems: 'flex-start',
+                gap: '1rem',
+                padding: '1.25rem 1.75rem',
+                background: 'white',
+                borderRadius: '1rem',
+                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
+                flex: '1 1 auto',
+                maxWidth: '100%',
+                border: '1px solid var(--state-border-lighter)',
+                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+              }}>
+                <FontAwesomeIcon icon={faIndustry} className={styles.microInfoIcon} style={{
+                  color: 'var(--state-primary-color)',
+                  fontSize: '1.5rem',
+                  opacity: '0.9',
+                  marginTop: '0.2rem'
+                }} />
+                <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <span className={styles.microInfoLabel} style={{
+                    fontSize: '0.9rem',
+                    color: 'var(--state-text-muted)',
+                    marginBottom: '0.5rem',
+                    fontWeight: '500'
+                  }}>Wirtschaftsstärken</span>
+                  <div className={styles.microInfoTags} style={{
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    gap: '0.5rem'
+                  }}>
+                  {keyFacts.economicStrength.map((strength, index) => (
+                      <span key={index} className={styles.microInfoTag} style={{
+                        fontSize: '0.9rem',
+                        padding: '0.35rem 1rem',
+                        borderRadius: '2rem',
+                        background: 'var(--state-gradient-subtle)',
+                        color: 'var(--state-text-primary)',
+                        fontWeight: '500',
+                        border: '1px solid var(--state-border-light)',
+                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                      }}>{strength}</span>
                     ))}
                   </div>
                 </div>
               </div>
-
-              <div className={styles.headerOverlay} style={{
-                background: `linear-gradient(
-                  135deg,
-                  rgba(0, 0, 0, 0.2) 0%,
-                  rgba(0, 0, 0, 0.1) 50%,
-                  rgba(0, 0, 0, 0.05) 100%
-                )`,
-                mixBlendMode: 'multiply'
-              }} />
-              <div className={styles.headerContent}>
-                <div className={styles.heroStats}>
-                  <div className={styles.statBadge} style={{
-                    background: 'var(--state-primary-alpha-10)',
-                    color: 'var(--state-text-on-hero)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)'
-                  }}>
-                    <span className={styles.statNumber}>{publicHolidays.length}</span>
-                    <span className={styles.statLabel}>Feiertage</span>
-                  </div>
-                  <div className={styles.statDivider} style={{ 
-                    background: 'var(--state-primary-alpha-20)'
-                  }} />
-                  <div className={styles.statBadge} style={{
-                    background: 'var(--state-primary-alpha-10)',
-                    color: 'var(--state-text-on-hero)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)'
-                  }}>
-                    <span className={styles.statNumber}>{regionalHolidays.length}</span>
-                    <span className={styles.statLabel}>Regionale Feiertage</span>
-                  </div>
-                  <div className={styles.statDivider} style={{ 
-                    background: 'var(--state-primary-alpha-20)'
-                  }} />
-                  <div className={styles.statBadge} style={{
-                    background: 'var(--state-primary-alpha-10)',
-                    color: 'var(--state-text-on-hero)',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)'
-                  }}>
-                    <span className={styles.statNumber}>{totalSchoolHolidayDays}</span>
-                    <span className={styles.statLabel}>Ferientage</span>
-                  </div>
-                </div>
-                <h1 className={styles.heroTitle} style={{ 
-                  color: 'var(--state-text-on-hero)',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.15)'
-                }}>
-                  Feiertage und Schulferien in {fullName} 2025
-                </h1>
-                <p className={styles.heroSubtitle} style={{ 
-                  color: 'var(--state-text-on-hero)',
-                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
-                }}>
-                  Maximieren Sie Ihren Urlaub in {fullName} mit unserem intelligenten Urlaubsplaner.
-                  Nutzen Sie {publicHolidays.length + regionalHolidays.length} Feiertage für optimale Brückentage.
-                </p>
-                <div className={styles.heroActions}>
-                  <Link href="/planner" className={styles.primaryButton} style={{
-                    background: 'var(--state-primary-alpha-20)',
-                    color: 'var(--state-text-on-hero)',
-                    borderColor: 'var(--state-primary-alpha-10)',
-                    backdropFilter: 'blur(4px)',
-                    WebkitBackdropFilter: 'blur(4px)',
-                    '--hover-color': 'var(--state-hover-overlay)'
-                  } as React.CSSProperties}>
-                    Urlaubsplaner starten
-                    <span className={styles.buttonIcon}>→</span>
-                  </Link>
-                  <ScrollButton className={styles.secondaryButton} />
-                </div>
-              </div>
             </div>
-          </header>
-
-          <section id="overview" className={styles.holidayOverview} style={{ 
-            marginTop: '1rem',
-            background: 'var(--state-background-subtle)'
-          }}>
-            <HolidayList
-              publicHolidays={publicHolidays}
-              regionalHolidays={regionalHolidays}
-              schoolHolidays={filteredSchoolHolidays}
-              totalSchoolHolidayDays={totalSchoolHolidayDays}
-              primaryColor="var(--state-primary-color)"
-              secondaryColor="var(--state-secondary-color)"
-            />
-
-            <div className={styles.plannerPromo} style={{
-              background: `linear-gradient(135deg, ${colorScheme.primary.main}, ${colorScheme.secondary.main})`,
-              borderRadius: '1.5rem',
-              padding: '3rem 2rem',
-              color: '#ffffff',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
-              position: 'relative',
-              overflow: 'hidden',
-              isolation: 'isolate',
-              margin: '2rem 0'
+            <div style={{
+              background: 'white',
+              borderRadius: '1rem',
+              padding: '2rem',
+              maxWidth: '900px',
+              margin: '0 auto',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
+              border: '1px solid var(--state-border-lighter)'
             }}>
-              <div className={styles.promoContent}>
-                <div className={styles.promoStats} style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: '1.5rem',
-                  marginBottom: '2.5rem'
-                }}>
-                  <div className={styles.promoStat} style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '1.25rem',
-                    background: 'rgba(255, 255, 255, 0.12)',
-                    borderRadius: '1rem',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    cursor: 'default',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                    minWidth: '160px'
-                  }}>
-                    <FontAwesomeIcon icon={faCalendarDays} style={{ fontSize: '2rem', color: '#ffffff' }} />
-                    <div style={{ textAlign: 'center', color: '#ffffff' }}>
-                      <div style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>4x</div>
-                      <div style={{ fontSize: '0.95rem', opacity: '0.95', fontWeight: '500' }}>mehr freie Tage</div>
-                    </div>
-                  </div>
-                  <div className={styles.promoStat} style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '1.25rem',
-                    background: 'rgba(255, 255, 255, 0.12)',
-                    borderRadius: '1rem',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    cursor: 'default',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                    minWidth: '160px'
-                  }}>
-                    <FontAwesomeIcon icon={faUsers} style={{ fontSize: '2rem', color: '#ffffff' }} />
-                    <div style={{ textAlign: 'center', color: '#ffffff' }}>
-                      <div style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>5 Min</div>
-                      <div style={{ fontSize: '0.95rem', opacity: '0.95', fontWeight: '500' }}>schnelle Planung</div>
-                    </div>
-                  </div>
-                  <div className={styles.promoStat} style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    padding: '1.25rem',
-                    background: 'rgba(255, 255, 255, 0.12)',
-                    borderRadius: '1rem',
-                    backdropFilter: 'blur(8px)',
-                    WebkitBackdropFilter: 'blur(8px)',
-                    transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                    cursor: 'default',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
-                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                    minWidth: '160px'
-                  }}>
-                    <FontAwesomeIcon icon={faGraduationCap} style={{ fontSize: '2rem', color: '#ffffff' }} />
-                    <div style={{ textAlign: 'center', color: '#ffffff' }}>
-                      <div style={{ fontSize: '1.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>100%</div>
-                      <div style={{ fontSize: '0.95rem', opacity: '0.95', fontWeight: '500' }}>kostenlos</div>
-                    </div>
-                  </div>
-                </div>
-                <div className={styles.promoText} style={{ textAlign: 'center', color: '#ffffff', maxWidth: '800px', margin: '0 auto' }}>
-                  <h2 style={{ 
-                    fontSize: '2rem', 
-                    fontWeight: '700',
-                    marginBottom: '1.25rem',
-                    textShadow: '0 2px 4px rgba(0,0,0,0.1)',
-                    color: '#ffffff',
-                    lineHeight: '1.3'
-                  }}>
-                    Clever Urlaub planen in {fullName}
-                  </h2>
-                  <p style={{ 
-                    fontSize: '1.15rem',
-                    opacity: '0.95',
-                    maxWidth: '600px',
-                    margin: '0 auto 2.5rem',
-                    lineHeight: '1.6',
-                    fontWeight: '500'
-                  }}>
-                    Nutzen Sie unseren intelligenten Urlaubsplaner, um das Beste aus Ihren Urlaubstagen herauszuholen.
-                    Finden Sie die optimalen Brückentage und verlängern Sie Ihren Urlaub effizient.
-                  </p>
-                  <Link href="/planner" className={styles.promoCTA} style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '0.75rem',
-                    background: 'rgba(255, 255, 255, 0.15)',
-                    color: '#ffffff',
-                    padding: '1rem 2rem',
-                    borderRadius: '0.75rem',
-                    fontSize: '1.15rem',
-                    fontWeight: '600',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                    border: '1px solid rgba(255, 255, 255, 0.2)',
-                    backdropFilter: 'blur(4px)',
-                    WebkitBackdropFilter: 'blur(4px)',
-                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                    '&:hover': {
-                      background: 'rgba(255, 255, 255, 0.2)',
-                      transform: 'translateY(-2px)',
-                      boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)'
-                    }
-                  } as React.CSSProperties}>
-                    Jetzt Urlaub clever planen
-                    <FontAwesomeIcon icon={faArrowRight} style={{ 
-                      color: '#ffffff',
-                      fontSize: '1.1rem',
-                      transition: 'transform 0.3s ease'
-                    }} />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          {keyFacts && (
-            <section id="about" className={styles.stateOverviewSection} style={{
-              background: `linear-gradient(135deg, ${colorScheme.primary.main}, ${colorScheme.secondary.main})`,
-              padding: '4rem 2rem',
-              borderRadius: '1.5rem',
-              margin: '3rem auto',
-              maxWidth: '1200px',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)'
-            }}>
-              <h2 style={{
-                fontSize: '2.25rem',
-                fontWeight: '700',
-                marginBottom: '2.5rem',
+              <p className={styles.stateDescription} style={{
+                fontSize: '1.15rem',
+                lineHeight: '1.7',
+                color: 'var(--state-text-primary)',
+                margin: '0',
                 textAlign: 'center',
-                color: '#ffffff',
-                position: 'relative',
-                display: 'inline-block',
-                left: '50%',
-                transform: 'translateX(-50%)',
-                padding: '0 1rem',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-              }}>Über {fullName}</h2>
-              <div className={styles.microInfoBar} style={{
-                background: 'rgba(255, 255, 255, 0.95)',
-                padding: '2rem',
-                borderRadius: '1.25rem',
-                display: 'flex',
-                flexWrap: 'wrap',
-                gap: '2rem',
-                justifyContent: 'center',
-                alignItems: 'stretch',
-                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                margin: '0 auto 3rem',
-                maxWidth: '1000px',
-                backdropFilter: 'blur(8px)',
-                WebkitBackdropFilter: 'blur(8px)'
-              }}>
-                <div className={styles.microInfoItem} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '1.25rem 1.75rem',
-                  background: 'white',
-                  borderRadius: '1rem',
-                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                  minWidth: '220px',
-                  border: '1px solid var(--state-border-lighter)',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                }}>
-                  <FontAwesomeIcon icon={faBuilding} className={styles.microInfoIcon} style={{
-                    color: 'var(--state-primary-color)',
-                    fontSize: '1.5rem',
-                    opacity: '0.9'
-                  }} />
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span className={styles.microInfoLabel} style={{
-                      fontSize: '0.9rem',
-                      color: 'var(--state-text-muted)',
-                      marginBottom: '0.35rem',
-                      fontWeight: '500'
-                    }}>Hauptstadt</span>
-                    <span className={styles.microInfoValue} style={{
-                      fontSize: '1.1rem',
-                      fontWeight: '600',
-                      color: 'var(--state-text-primary)'
-                    }}>{keyFacts.capital}</span>
-                  </div>
-                </div>
-                <div className={styles.microInfoItem} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '1.25rem 1.75rem',
-                  background: 'white',
-                  borderRadius: '1rem',
-                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                  minWidth: '220px',
-                  border: '1px solid var(--state-border-lighter)',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                }}>
-                  <FontAwesomeIcon icon={faUsers} className={styles.microInfoIcon} style={{
-                    color: 'var(--state-primary-color)',
-                    fontSize: '1.5rem',
-                    opacity: '0.9'
-                  }} />
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span className={styles.microInfoLabel} style={{
-                      fontSize: '0.9rem',
-                      color: 'var(--state-text-muted)',
-                      marginBottom: '0.35rem',
-                      fontWeight: '500'
-                    }}>Einwohner</span>
-                    <span className={styles.microInfoValue} style={{
-                      fontSize: '1.1rem',
-                      fontWeight: '600',
-                      color: 'var(--state-text-primary)'
-                    }}>{keyFacts.population}</span>
-                  </div>
-                </div>
-                <div className={styles.microInfoItem} style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '1rem',
-                  padding: '1.25rem 1.75rem',
-                  background: 'white',
-                  borderRadius: '1rem',
-                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                  minWidth: '220px',
-                  border: '1px solid var(--state-border-lighter)',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                }}>
-                  <FontAwesomeIcon icon={faRulerCombined} className={styles.microInfoIcon} style={{
-                    color: 'var(--state-primary-color)',
-                    fontSize: '1.5rem',
-                    opacity: '0.9'
-                  }} />
-                  <div style={{ display: 'flex', flexDirection: 'column' }}>
-                    <span className={styles.microInfoLabel} style={{
-                      fontSize: '0.9rem',
-                      color: 'var(--state-text-muted)',
-                      marginBottom: '0.35rem',
-                      fontWeight: '500'
-                    }}>Fläche</span>
-                    <span className={styles.microInfoValue} style={{
-                      fontSize: '1.1rem',
-                      fontWeight: '600',
-                      color: 'var(--state-text-primary)'
-                    }}>{keyFacts.area}</span>
-                  </div>
-                </div>
-                <div className={styles.microInfoItem} style={{
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  gap: '1rem',
-                  padding: '1.25rem 1.75rem',
-                  background: 'white',
-                  borderRadius: '1rem',
-                  boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                  flex: '1 1 auto',
-                  maxWidth: '100%',
-                  border: '1px solid var(--state-border-lighter)',
-                  transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                }}>
-                  <FontAwesomeIcon icon={faIndustry} className={styles.microInfoIcon} style={{
-                    color: 'var(--state-primary-color)',
-                    fontSize: '1.5rem',
-                    opacity: '0.9',
-                    marginTop: '0.2rem'
-                  }} />
-                  <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-                    <span className={styles.microInfoLabel} style={{
-                      fontSize: '0.9rem',
-                      color: 'var(--state-text-muted)',
-                      marginBottom: '0.5rem',
-                      fontWeight: '500'
-                    }}>Wirtschaftsstärken</span>
-                    <div className={styles.microInfoTags} style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: '0.5rem'
-                    }}>
-                    {keyFacts.economicStrength.map((strength, index) => (
-                        <span key={index} className={styles.microInfoTag} style={{
-                          fontSize: '0.9rem',
-                          padding: '0.35rem 1rem',
-                          borderRadius: '2rem',
-                          background: 'var(--state-gradient-subtle)',
-                          color: 'var(--state-text-primary)',
-                          fontWeight: '500',
-                          border: '1px solid var(--state-border-light)',
-                          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
-                        }}>{strength}</span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div style={{
-                background: 'white',
-                borderRadius: '1rem',
-                padding: '2rem',
-                maxWidth: '900px',
-                margin: '0 auto',
-                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                border: '1px solid var(--state-border-lighter)'
-              }}>
-                <p className={styles.stateDescription} style={{
-                  fontSize: '1.15rem',
-                  lineHeight: '1.7',
-                  color: 'var(--state-text-primary)',
-                  margin: '0',
-                  textAlign: 'center',
-                  fontWeight: '400'
-                }}>{description}</p>
-              </div>
-            </section>
-          )}
-
-          {culturalHighlights && culturalHighlights.length > 0 && (
-            <CulturalHighlights 
-              highlights={culturalHighlights}
-              primaryColor="var(--state-primary-color)"
-              secondaryColor="var(--state-secondary-color)"
-              tertiaryColor={colorScheme.accent.main ? 'var(--state-tertiary-color)' : undefined}
-            />
-          )}
-
-          {seasonalTraditions && seasonalTraditions.length > 0 && (
-            <SeasonalSection 
-              traditions={seasonalTraditions}
-              primaryColor="var(--state-primary-color)"
-              secondaryColor="var(--state-secondary-color)"
-              tertiaryColor={colorScheme.accent.main ? 'var(--state-tertiary-color)' : undefined}
-            />
-          )}
-
-          {regionalSpecialties && regionalSpecialties.length > 0 && (
-            <RegionalSpecialties 
-              specialties={regionalSpecialties}
-            />
-          )}
-
-          {vacationDestinations && vacationDestinations.length > 0 && (
-            <VacationDestinations 
-              destinations={vacationDestinations}
-              primaryColor="var(--state-primary-color)"
-              secondaryColor="var(--state-secondary-color)"
-              tertiaryColor={colorScheme.accent.main ? 'var(--state-tertiary-color)' : undefined}
-            />
-          )}
-
-          <section className={styles.ctaSection} style={{
-            background: 'var(--state-gradient-intense)',
-            position: 'relative',
-            overflow: 'hidden'
-          }}>
-            <div className={styles.ctaContent}>
-              <h2 className={styles.ctaTitle} style={{ color: 'var(--state-text-on-primary)' }}>
-                Bereit für die Urlaubsplanung?
-              </h2>
-              <p className={styles.ctaDescription} style={{ color: 'var(--state-text-on-primary-muted)' }}>
-                Optimiere deinen Urlaub mit unseren intelligenten Brückentage-Empfehlungen.
-              </p>
-              <Link href="/planner" className={styles.ctaButton} style={{
-                background: 'white',
-                color: 'var(--state-primary-color)'
-              }}>
-                Jetzt Urlaub planen <FontAwesomeIcon icon={faArrowRight} className={styles.ctaIcon} style={{ color: 'var(--state-primary-color)' }} />
-              </Link>
+                fontWeight: '400'
+              }}>{description}</p>
             </div>
           </section>
+        )}
 
-          <footer className={styles.footer} style={{
-            background: 'var(--state-background-accent)',
-            borderColor: 'var(--state-border-light)'
-          }}>
-            <p>© {new Date().getFullYear()} Holiday Planner. Alle Rechte vorbehalten.</p>
-            <nav aria-label="Footer Navigation">
-              <Link href="/datenschutz">Datenschutz</Link>
-              <Link href="/impressum">Impressum</Link>
-              <Link href="/kontakt">Kontakt</Link>
-            </nav>
-          </footer>
-        </div>
-      </div>
+        {culturalHighlights && culturalHighlights.length > 0 && (
+          <CulturalHighlights 
+            highlights={culturalHighlights}
+            primaryColor="var(--state-primary-color)"
+            secondaryColor="var(--state-secondary-color)"
+            tertiaryColor={colorScheme.accent.main ? 'var(--state-tertiary-color)' : undefined}
+          />
+        )}
+
+        {seasonalTraditions && seasonalTraditions.length > 0 && (
+          <SeasonalSection 
+            traditions={seasonalTraditions}
+            primaryColor="var(--state-primary-color)"
+            secondaryColor="var(--state-secondary-color)"
+            tertiaryColor={colorScheme.accent.main ? 'var(--state-tertiary-color)' : undefined}
+          />
+        )}
+
+        {regionalSpecialties && regionalSpecialties.length > 0 && (
+          <RegionalSpecialties 
+            specialties={regionalSpecialties}
+          />
+        )}
+
+        {vacationDestinations.length > 0 && (
+          <VacationDestinations
+            destinations={vacationDestinations}
+            primaryColor={colorScheme.primary.main}
+            secondaryColor={colorScheme.secondary.main}
+          />
+        )}
+
+        <section className={styles.ctaSection} style={{
+          background: 'var(--state-gradient-intense)',
+          position: 'relative',
+          overflow: 'hidden'
+        }}>
+          <div className={styles.ctaContent}>
+            <h2 className={styles.ctaTitle} style={{ color: 'var(--state-text-on-primary)' }}>
+              Bereit für die Urlaubsplanung?
+            </h2>
+            <p className={styles.ctaDescription} style={{ color: 'var(--state-text-on-primary-muted)' }}>
+              Optimiere deinen Urlaub mit unseren intelligenten Brückentage-Empfehlungen.
+            </p>
+            <Link href="/planner" className={styles.ctaButton} style={{
+              background: 'white',
+              color: 'var(--state-primary-color)'
+            }}>
+              Jetzt Urlaub planen <FontAwesomeIcon icon={faArrowRight} className={styles.ctaIcon} style={{ color: 'var(--state-primary-color)' }} />
+            </Link>
+          </div>
+        </section>
+
+        <footer className={styles.footer} style={{
+          background: 'var(--state-background-accent)',
+          borderColor: 'var(--state-border-light)'
+        }}>
+          <p>© {new Date().getFullYear()} Holiday Planner. Alle Rechte vorbehalten.</p>
+          <nav aria-label="Footer Navigation">
+            <Link href="/datenschutz">Datenschutz</Link>
+            <Link href="/impressum">Impressum</Link>
+            <Link href="/kontakt">Kontakt</Link>
+          </nav>
+        </footer>
+      </main>
     </>
   );
 } 

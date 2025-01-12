@@ -1,15 +1,34 @@
 import { holidays } from '../data/holidays';
-import { Holiday } from '../types/Holiday';
+import { Holiday, SingleDayHoliday, MultiDayHoliday } from '../types/holiday';
 import { GermanState } from '../types/GermanState';
 
 export function getStateHolidays(state: GermanState, year: number): Holiday[] {
   const stateHolidays = holidays.publicHolidays[year]?.[state] || [];
-  
-  return stateHolidays.map(holiday => ({
-    name: holiday.name,
-    date: holiday.start,
-    description: "", // State-specific descriptions will be added in state files
-    type: "public",
-    nationwide: false
-  }));
+  const nationalHolidays = holidays.publicHolidays[year]?.ALL || [];
+
+  const convertHoliday = (holiday: { name: string; start: string; end?: string; nationwide?: boolean }) => {
+    if (holiday.end) {
+      const multiDayHoliday: MultiDayHoliday = {
+        name: holiday.name,
+        type: 'public',
+        state,
+        start: holiday.start,
+        end: holiday.end
+      };
+      return multiDayHoliday;
+    } else {
+      const singleDayHoliday: SingleDayHoliday = {
+        name: holiday.name,
+        type: 'public',
+        state,
+        date: holiday.start
+      };
+      return singleDayHoliday;
+    }
+  };
+
+  return [
+    ...stateHolidays.map(convertHoliday),
+    ...nationalHolidays.map(convertHoliday)
+  ];
 } 

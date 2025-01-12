@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback, useMemo } from 'react';
 import styles from './HolidayTimeline.module.css';
 
 interface Holiday {
@@ -33,18 +33,18 @@ export const HolidayTimeline: React.FC<HolidayTimelineProps> = ({
   });
 
   // Calculate timeline positions
-  const startDate = new Date('2024-01-01');
-  const endDate = new Date('2026-12-31');
+  const startDate = useMemo(() => new Date('2024-01-01'), []);
+  const endDate = useMemo(() => new Date('2026-12-31'), []);
   const timelineWidth = 2000; // Fixed width for the timeline
 
-  const getHolidayPosition = (holiday: Holiday) => {
+  const getHolidayPosition = useCallback((holiday: Holiday) => {
     const date = holiday.date 
       ? new Date(holiday.date.split('.').reverse().join('-'))
       : new Date(holiday.start!);
     const totalDays = (endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
     const daysPassed = (date.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24);
     return (daysPassed / totalDays) * timelineWidth;
-  };
+  }, [timelineWidth, startDate, endDate]);
 
   // Handle mouse/touch events for dragging
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -100,7 +100,7 @@ export const HolidayTimeline: React.FC<HolidayTimelineProps> = ({
     };
 
     scrollToCurrentDate();
-  }, []);
+  }, [getHolidayPosition]);
 
   return (
     <div className={styles.timelineContainer}>

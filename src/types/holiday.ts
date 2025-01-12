@@ -2,31 +2,48 @@ import { GermanState } from './GermanState';
 
 export type HolidayType = 'public' | 'regional' | 'bridge' | 'school';
 
+export interface HolidayDetails {
+  description: string;
+  traditions?: string[];
+  culturalSignificance?: string;
+  locations?: string[];
+  familyActivities?: string[];
+}
+
 export interface BaseHoliday {
   name: string;
-  state: GermanState;
+  type: 'public' | 'school' | 'optional';
+  details?: HolidayDetails;
+  isRegional?: boolean;
+  nationwide?: boolean;
 }
 
 export interface SingleDayHoliday extends BaseHoliday {
-  date: Date;
-  type: 'public' | 'regional' | 'bridge';
-  endDate?: never;
+  date: string;
+  start?: never;
+  end?: never;
 }
 
 export interface MultiDayHoliday extends BaseHoliday {
-  date: Date;
-  endDate: Date;
-  type: 'school';
+  start: string;
+  end: string;
+  date?: never;
 }
 
 export type Holiday = SingleDayHoliday | MultiDayHoliday;
 
 export interface VacationPlan {
-  start: Date;
-  end: Date;
   id: string;
-  state: GermanState;
-  isVisible?: boolean;
+  start: string;
+  end: string;
+  days: number;
+  type: 'vacation' | 'bridge';
+  efficiency?: number;
+  bridgeDayCount?: number;
+  holidayCount?: number;
+  weekendCount?: number;
+  totalDays?: number;
+  description?: string;
 }
 
 export interface StateVacationInfo {
@@ -35,15 +52,19 @@ export interface StateVacationInfo {
   vacationPlans: VacationPlan[];
 }
 
-export interface BridgeDay extends SingleDayHoliday {
-  type: 'bridge';
-  connectedHolidays: Holiday[];
-  requiredVacationDays: number;
-  totalDaysOff: number;
+export interface BridgeDay {
+  start: string;
+  end: string;
+  days: number;
+  holidays: Holiday[];
   efficiency: number;
-  pattern: string;
-  periodStart: Date;
-  periodEnd: Date;
+  description?: string;
+  pattern?: string;
+  date?: string;
+  periodStart?: string;
+  periodEnd?: string;
+  requiredVacationDays?: number;
+  totalDaysOff?: number;
 }
 
 export interface VacationPeriod {
@@ -56,7 +77,12 @@ export interface VacationPeriod {
   efficiency: number;
 }
 
-// Raw data interfaces for the holidays.json/ts file
+export interface SeasonalTradition {
+  season: string;
+  description: string;
+}
+
+// Raw data interfaces
 export interface RawHolidayDate {
   start: string;
   end?: string;
@@ -74,31 +100,4 @@ export interface RawPublicHoliday extends RawHolidayDate {
 export interface HolidayData {
   schoolHolidays: Record<number, Record<GermanState, RawSchoolHoliday[]>>;
   publicHolidays: Record<number, Record<GermanState | 'ALL', RawPublicHoliday[]>>;
-}
-
-export interface Holiday {
-  name: string;
-  date?: string;
-  start?: string;
-  end?: string;
-  type?: 'public' | 'school';
-  isRegional?: boolean;
-  details?: {
-    description: string;
-    traditions?: string[];
-    locations?: string[];
-    culturalSignificance?: string;
-  };
-}
-
-export interface SeasonalTradition {
-  season: string;
-  description: string;
-}
-
-export interface HolidayDetails {
-  description: string;
-  traditions?: string[];
-  locations?: string[];
-  culturalSignificance?: string;
-}
+} 

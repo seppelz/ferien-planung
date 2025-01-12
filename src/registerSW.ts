@@ -16,8 +16,8 @@ export async function registerServiceWorker() {
 
       // Register service worker
       console.log('Registering service worker...');
-      const registration = await navigator.serviceWorker.register('/holiday/sw.js', {
-        scope: '/holiday/'
+      const registration = await navigator.serviceWorker.register('/app/sw.js', {
+        scope: '/app/'
       });
       console.log('ServiceWorker registration successful:', registration);
       

@@ -30,7 +30,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = ({
         {/* Logo section */}
         <div className={styles.logoSection}>
           <div className={styles.logo}>
-            <img src="/favicon.svg" alt="Logo" className={styles.logoImage} />
+            <img src="/app/favicon.svg" alt="Holiday Planner" className={styles.logoImage} />
             <span className={styles.logoText}>Holiday Planner</span>
           </div>
         </div>

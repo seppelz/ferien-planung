@@ -1,4 +1,4 @@
-import { Holiday } from './Holiday';
+import type { Holiday } from './holiday';
 
 export interface VacationDestination {
   name: string;

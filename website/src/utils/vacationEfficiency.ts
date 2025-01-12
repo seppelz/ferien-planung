@@ -3,7 +3,6 @@ import { differenceInBusinessDays, isWeekend, eachDayOfInterval } from 'date-fns
 
 export function calculateVacationEfficiency(vacation: VacationPlan): VacationPlan {
   const allDays = eachDayOfInterval({ start: vacation.start, end: vacation.end });
-  const totalDays = allDays.length;
   
   // Count required vacation days (excluding weekends)
   const requiredDays = differenceInBusinessDays(vacation.end, vacation.start) + 1;

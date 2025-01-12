@@ -1,6 +1,6 @@
-import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
-import { VacationDestination } from '../types/StateInfo';
+import { StateInfo } from '../../types/StateInfo';
+import { SeasonalTradition } from '../../types/holiday';
+import { VacationDestination } from '../../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
 const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
@@ -60,7 +60,7 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "Frühling",
     description: "Traditionelle Osterbräuche und Frühlingsfeste beleben die Region. Die Rheingauer Weinwochen beginnen."
   },
   {
@@ -129,6 +129,7 @@ const vacationDestinations: VacationDestination[] = [
 ];
 
 export const hessen: StateInfo = {
+  name: "Hessen",
   fullName: "Hessen",
   shortName: "HE",
   capital: "Wiesbaden",
@@ -143,6 +144,7 @@ export const hessen: StateInfo = {
   ],
   keyFacts: {
     population: "6,3 Millionen (2021)",
+    capital: "Wiesbaden",
     area: "21.115 km²",
     founded: "1945",
     economicStrength: [
@@ -153,19 +155,21 @@ export const hessen: StateInfo = {
   },
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: false,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Hessen ein gesetzlicher Feiertag.`
       }
     })),
     ...(holidays.publicHolidays["2025"]["HE"] || []).map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: true,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Hessen ein gesetzlicher Feiertag.`
       }
@@ -236,9 +240,11 @@ export const hessen: StateInfo = {
     };
 
     return {
-      ...holiday,
+      name: holiday.name,
       type: "school" as const,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
+      isRegional: true,
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities

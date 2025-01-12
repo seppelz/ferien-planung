@@ -1,7 +1,17 @@
-import { addDays, eachDayOfInterval, format, isWeekend, isSameDay, isSameMonth, isSameYear, differenceInDays, subDays, startOfDay } from 'date-fns';
+import { addDays, eachDayOfInterval, format, isWeekend, isSameDay, isSameMonth, isSameYear, differenceInDays, subDays, startOfDay, parseISO } from 'date-fns';
 import { Holiday, BridgeDay } from '../types/holiday';
 import { GermanState } from '../types/GermanState';
 import { bridgeDayService } from '../services/bridgeDayService';
+
+// Helper functions for date handling
+const toDate = (dateStr: string | undefined): Date | undefined => {
+  if (!dateStr) return undefined;
+  return parseISO(dateStr);
+};
+
+const toISOString = (date: Date): string => {
+  return format(date, 'yyyy-MM-dd');
+};
 
 export interface VacationRecommendation {
   startDate: Date;
@@ -33,7 +43,11 @@ const formatDateRange = (start: Date, end: Date): string => {
 
 const isPublicHoliday = (date: Date, holidays: Holiday[]): boolean => {
   if (isWeekend(date)) return false;
-  return holidays.some(h => h.type === 'public' && isSameDay(h.date, date));
+  return holidays.some(h => {
+    if (h.type !== 'public') return false;
+    const holidayDate = toDate(h.date);
+    return holidayDate ? isSameDay(date, holidayDate) : false;
+  });
 };
 
 const isFreeDay = (date: Date, holidays: Holiday[]): boolean => {
@@ -58,11 +72,12 @@ const findFreeDays = (start: Date, end: Date, holidays: Holiday[]): {
   const days = eachDayOfInterval({ start, end });
   return {
     weekendDays: days.filter(d => isWeekend(d)),
-    publicHolidays: holidays.filter(h => 
-      h.type === 'public' && 
-      days.some(d => isSameDay(d, h.date)) &&
-      !isWeekend(h.date)
-    )
+    publicHolidays: holidays.filter(h => {
+      if (h.type !== 'public') return false;
+      const holidayDate = toDate(h.date);
+      if (!holidayDate) return false;
+      return days.some(d => isSameDay(d, holidayDate)) && !isWeekend(holidayDate);
+    })
   };
 };
 
@@ -166,16 +181,23 @@ export function analyzeVacationOpportunities(
   const groupedBridgeDays: BridgeDay[][] = [];
   let currentGroup: BridgeDay[] = [];
   
-  const sortedBridgeDays = [...bridgeDays].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
-  );
+  const sortedBridgeDays = [...bridgeDays].sort((a, b) => {
+    const dateA = toDate(a.date);
+    const dateB = toDate(b.date);
+    if (!dateA || !dateB) return 0;
+    return dateA.getTime() - dateB.getTime();
+  });
 
   for (const bridgeDay of sortedBridgeDays) {
     if (currentGroup.length === 0) {
       currentGroup.push(bridgeDay);
     } else {
       const lastDay = currentGroup[currentGroup.length - 1];
-      const daysBetween = differenceInDays(bridgeDay.date, lastDay.date);
+      const bridgeDayDate = toDate(bridgeDay.date);
+      const lastDayDate = toDate(lastDay.date);
+      if (!bridgeDayDate || !lastDayDate) continue;
+      
+      const daysBetween = differenceInDays(bridgeDayDate, lastDayDate);
       
       if (daysBetween <= 3) {
         currentGroup.push(bridgeDay);
@@ -191,17 +213,20 @@ export function analyzeVacationOpportunities(
 
   // Analyze each group of bridge days
   for (const group of groupedBridgeDays) {
-    // For each group, try different combinations of start and end dates
     const firstDay = group[0];
     const lastDay = group[group.length - 1];
     
+    const firstDayDate = toDate(firstDay.date);
+    const lastDayDate = toDate(lastDay.date);
+    if (!firstDayDate || !lastDayDate) continue;
+    
     // Look at a window around the group
-    const windowStart = addDays(firstDay.date, -3);
-    const windowEnd = addDays(lastDay.date, 3);
+    const windowStart = addDays(firstDayDate, -3);
+    const windowEnd = addDays(lastDayDate, 3);
     
     // Try different period lengths
-    for (let start = windowStart; start <= firstDay.date; start = addDays(start, 1)) {
-      for (let end = lastDay.date; end <= windowEnd; end = addDays(end, 1)) {
+    for (let start = windowStart; start <= firstDayDate; start = addDays(start, 1)) {
+      for (let end = lastDayDate; end <= windowEnd; end = addDays(end, 1)) {
         const rec = analyzeBridgeDayOpportunity(start, end, holidays);
         if (rec) recommendations.push(rec);
       }
@@ -215,16 +240,23 @@ export function analyzeVacationOpportunities(
   const groupedHolidays: Holiday[][] = [];
   let currentHolidayGroup: Holiday[] = [];
   
-  const sortedHolidays = [...publicHolidays].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
-  );
+  const sortedHolidays = [...publicHolidays].sort((a, b) => {
+    const dateA = toDate(a.date);
+    const dateB = toDate(b.date);
+    if (!dateA || !dateB) return 0;
+    return dateA.getTime() - dateB.getTime();
+  });
 
   for (const holiday of sortedHolidays) {
     if (currentHolidayGroup.length === 0) {
       currentHolidayGroup.push(holiday);
     } else {
       const lastHoliday = currentHolidayGroup[currentHolidayGroup.length - 1];
-      const daysBetween = differenceInDays(holiday.date, lastHoliday.date);
+      const holidayDate = toDate(holiday.date);
+      const lastHolidayDate = toDate(lastHoliday.date);
+      if (!holidayDate || !lastHolidayDate) continue;
+      
+      const daysBetween = differenceInDays(holidayDate, lastHolidayDate);
       
       if (daysBetween <= 5) {
         currentHolidayGroup.push(holiday);
@@ -243,13 +275,17 @@ export function analyzeVacationOpportunities(
     const firstHoliday = group[0];
     const lastHoliday = group[group.length - 1];
     
+    const firstHolidayDate = toDate(firstHoliday.date);
+    const lastHolidayDate = toDate(lastHoliday.date);
+    if (!firstHolidayDate || !lastHolidayDate) continue;
+    
     // Look at a window around the group
-    const windowStart = addDays(firstHoliday.date, -5);
-    const windowEnd = addDays(lastHoliday.date, 5);
+    const windowStart = addDays(firstHolidayDate, -5);
+    const windowEnd = addDays(lastHolidayDate, 5);
     
     // Try different period lengths
-    for (let start = windowStart; start <= firstHoliday.date; start = addDays(start, 1)) {
-      for (let end = lastHoliday.date; end <= windowEnd; end = addDays(end, 1)) {
+    for (let start = windowStart; start <= firstHolidayDate; start = addDays(start, 1)) {
+      for (let end = lastHolidayDate; end <= windowEnd; end = addDays(end, 1)) {
         const rec = analyzeBridgeDayOpportunity(start, end, holidays);
         if (rec) recommendations.push(rec);
       }
@@ -270,7 +306,7 @@ export function analyzeVacationOpportunities(
   const addedPeriods = new Set<string>();
   
   for (const rec of recommendations) {
-    const periodKey = `${rec.periodStart.getTime()}-${rec.periodEnd.getTime()}`;
+    const periodKey = `${format(rec.periodStart, 'yyyy-MM-dd')}-${format(rec.periodEnd, 'yyyy-MM-dd')}`;
     if (addedPeriods.has(periodKey)) continue;
     
     const hasOverlap = uniqueRecommendations.some(existing => 

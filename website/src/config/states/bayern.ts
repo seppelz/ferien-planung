@@ -1,6 +1,6 @@
-import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
-import { VacationDestination } from '../types/StateInfo';
+import { StateInfo } from '../../types/StateInfo';
+import { SeasonalTradition } from '../../types/holiday';
+import { VacationDestination } from '../../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
 const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
@@ -147,7 +147,8 @@ const vacationDestinations: VacationDestination[] = [
 ];
 
 export const bayern: StateInfo = {
-  fullName: "Bayern",
+  name: "Bayern",
+  fullName: "Freistaat Bayern",
   shortName: "BY",
   capital: "München",
   description: "Bayern ist das flächengrößte deutsche Bundesland und vereint Tradition und Moderne. Von den Alpen bis zum Fichtelgebirge prägen unterschiedliche Landschaften und kulturelle Traditionen das Land.",
@@ -159,39 +160,42 @@ export const bayern: StateInfo = {
     "Oktoberfest"
   ],
   keyFacts: {
-    population: "13,1 Millionen",
-    area: "70.542 km²",
+    population: "13,2 Millionen",
+    capital: "München",
+    area: "70.550 km²",
     founded: "1806",
     economicStrength: [
       "Automobilindustrie",
+      "Maschinenbau",
       "Informationstechnologie",
-      "Luft- und Raumfahrt",
       "Tourismus",
       "Landwirtschaft"
     ]
   },
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public",
+      name: holiday.name,
+      type: "public" as const,
       isRegional: false,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Bayern ein gesetzlicher Feiertag.`
       }
     })),
     ...(holidays.publicHolidays["2025"]["BY"] || []).map(holiday => ({
-      ...holiday,
-      type: "public",
+      name: holiday.name,
+      type: "public" as const,
       isRegional: true,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Bayern ein gesetzlicher Feiertag.`
       }
     }))
   ],
   schoolHolidays: holidays.schoolHolidays["2025"]["BY"].map(holiday => {
-    const familyActivities = {
+    const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien in Bayern - perfekt für Skiurlaub und winterliche Aktivitäten",
         activities: [
@@ -248,30 +252,23 @@ export const bayern: StateInfo = {
       }
     };
 
-    console.log('Raw holiday name:', holiday.name);
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
-    console.log('Processed holiday name:', holidayName);
-    console.log('Available holiday keys:', Object.keys(familyActivities));
-    
+    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
     const holidayInfo = familyActivities[holidayName] || {
       description: `${holiday.name} in Bayern`,
       activities: []
     };
-    console.log('Found holiday info:', holidayInfo);
 
-    const mappedHoliday = {
-      ...holiday,
+    return {
+      name: holiday.name,
       type: "school" as const,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
+      isRegional: true,
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities
       }
     };
-    console.log('Final mapped holiday:', mappedHoliday);
-    
-    return mappedHoliday;
   }),
   uniqueHolidayInfo: "Bayern verbindet bei seinen Feiertagen katholische Traditionen mit regionalem Brauchtum und ist das Bundesland mit den meisten gesetzlichen Feiertagen.",
   traditionInfo: "Die Feiertage in Bayern sind stark von der katholischen Tradition geprägt und werden mit besonderer Festlichkeit begangen.",

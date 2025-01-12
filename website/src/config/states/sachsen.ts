@@ -1,6 +1,6 @@
-import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
-import { VacationDestination } from '../types/StateInfo';
+import { StateInfo } from '../../types/StateInfo';
+import { SeasonalTradition } from '../../types/holiday';
+import { VacationDestination } from '../../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
 const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
@@ -66,7 +66,7 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "Frühling",
     description: "Leipziger Buchmesse, Dresdner Musikfestspiele und erste Bergparaden im Erzgebirge."
   },
   {
@@ -135,6 +135,7 @@ const vacationDestinations: VacationDestination[] = [
 ];
 
 export const sachsen: StateInfo = {
+  name: "Sachsen",
   fullName: "Sachsen",
   shortName: "SN",
   capital: "Dresden",
@@ -149,6 +150,7 @@ export const sachsen: StateInfo = {
   ],
   keyFacts: {
     population: "4,0 Millionen (2021)",
+    capital: "Dresden",
     area: "18.450 km²",
     founded: "1990",
     economicStrength: [
@@ -160,19 +162,21 @@ export const sachsen: StateInfo = {
   },
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: false,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Sachsen ein gesetzlicher Feiertag.`
       }
     })),
     ...(holidays.publicHolidays["2025"]["SN"] || []).map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: true,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Sachsen ein gesetzlicher Feiertag.`
       }
@@ -236,17 +240,18 @@ export const sachsen: StateInfo = {
       }
     };
 
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
+    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
     const holidayInfo = familyActivities[holidayName] || {
       description: `${holiday.name} in Sachsen`,
       activities: []
     };
 
     return {
-      ...holiday,
+      name: holiday.name,
       type: "school" as const,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
+      isRegional: true,
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities

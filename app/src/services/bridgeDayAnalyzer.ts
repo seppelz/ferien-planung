@@ -1,6 +1,6 @@
-import { Holiday } from '../types/holiday';
+import { Holiday, SingleDayHoliday } from '../types/holiday';
 import { BridgeDayRecommendation } from '../types/vacationPlan';
-import { addDays, differenceInBusinessDays, isWeekend, isSameDay } from 'date-fns';
+import { addDays, differenceInBusinessDays, isWeekend, isSameDay, format, parseISO } from 'date-fns';
 
 export class BridgeDayAnalyzer {
   private holidays: Holiday[];
@@ -11,14 +11,39 @@ export class BridgeDayAnalyzer {
     this.maxVacationDays = maxVacationDays;
   }
 
+  private getHolidayDate(holiday: Holiday): string {
+    if ('date' in holiday && holiday.date) {
+      return holiday.date;
+    }
+    if ('start' in holiday && holiday.start) {
+      return holiday.start;
+    }
+    throw new Error('Invalid holiday object: missing date or start');
+  }
+
+  private toDate(dateStr: string): Date {
+    return parseISO(dateStr);
+  }
+
+  private toISOString(date: Date): string {
+    return format(date, 'yyyy-MM-dd');
+  }
+
   public analyzeYear(year: number): BridgeDayRecommendation[] {
     const recommendations: BridgeDayRecommendation[] = [];
-    const yearHolidays = this.holidays.filter(h => new Date(h.date).getFullYear() === year);
+    const yearHolidays = this.holidays.filter(h => {
+      try {
+        const date = this.getHolidayDate(h);
+        return this.toDate(date).getFullYear() === year;
+      } catch (e) {
+        return false;
+      }
+    });
 
     // Analysiere jede Kombination von Feiertagen
     for (let i = 0; i < yearHolidays.length; i++) {
       const holiday1 = yearHolidays[i];
-      const date1 = new Date(holiday1.date);
+      const date1 = this.toDate(this.getHolidayDate(holiday1));
 
       // Einzelner Feiertag Analyse
       this.analyzeSingleHoliday(date1, holiday1.name).forEach(rec => 
@@ -28,7 +53,7 @@ export class BridgeDayAnalyzer {
       // Kombinationen von zwei Feiertagen
       for (let j = i + 1; j < yearHolidays.length; j++) {
         const holiday2 = yearHolidays[j];
-        const date2 = new Date(holiday2.date);
+        const date2 = this.toDate(this.getHolidayDate(holiday2));
 
         this.analyzeHolidayPair(date1, date2, holiday1.name, holiday2.name).forEach(rec =>
           recommendations.push(rec)
@@ -118,7 +143,7 @@ export class BridgeDayAnalyzer {
     const efficiency = gainedFreeDays / requiredVacationDays;
 
     return {
-      dates: bridgeDays,
+      dates: bridgeDays.map(d => this.toISOString(d)),
       requiredVacationDays,
       gainedFreeDays,
       efficiency,
@@ -128,7 +153,14 @@ export class BridgeDayAnalyzer {
   }
 
   private isHoliday(date: Date): boolean {
-    return this.holidays.some(holiday => isSameDay(new Date(holiday.date), date));
+    return this.holidays.some(holiday => {
+      try {
+        const holidayDate = this.getHolidayDate(holiday);
+        return isSameDay(this.toDate(holidayDate), date);
+      } catch (e) {
+        return false;
+      }
+    });
   }
 
   private markOptimalRecommendations(recommendations: BridgeDayRecommendation[]): void {

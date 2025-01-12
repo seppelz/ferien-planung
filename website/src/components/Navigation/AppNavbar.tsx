@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 import { StateSelect } from '../StateSelect';
 import { GermanState } from '../../types/GermanState';
 import styles from './AppNavbar.module.css';
@@ -30,7 +31,14 @@ export const AppNavbar: React.FC<AppNavbarProps> = ({
         {/* Logo section */}
         <div className={styles.logoSection}>
           <div className={styles.logo}>
-            <img src="/images/logo.svg" alt="Ferien Planung" className={styles.logoImage} />
+            <Image 
+              src="/images/logo.svg" 
+              alt="Ferien Planung" 
+              className={styles.logoImage}
+              width={32}
+              height={32}
+              priority
+            />
             <span className={styles.logoText}>Ferien Planung</span>
           </div>
         </div>

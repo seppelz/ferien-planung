@@ -3,8 +3,8 @@ import { GermanState } from './GermanState';
 export interface VacationPlan {
   id: string;
   personId: 1 | 2;
-  start: Date;
-  end: Date;
+  start: string;
+  end: string;
   isVisible: boolean;
   state: GermanState;
   efficiency?: {
@@ -12,7 +12,7 @@ export interface VacationPlan {
     gainedDays: number;
     score: number;  // Gewonnene Tage / Urlaubstage
     bridgeDayBenefit?: {
-      dates: Date[];
+      dates: string[];
       description: string;
     };
     schoolHolidayOverlap?: {
@@ -23,10 +23,10 @@ export interface VacationPlan {
 }
 
 export interface BridgeDayRecommendation {
-  dates: Date[];
+  dates: string[];
   requiredVacationDays: number;
   gainedFreeDays: number;
   efficiency: number;
   description: string;
   isOptimal: boolean;  // Beste Option für diesen Zeitraum
-} 
+}

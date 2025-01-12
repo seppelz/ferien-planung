@@ -1,23 +1,9 @@
 /* Update color variables */
-:root {
-  /* Brand Colors - Enhanced contrast */
-  --ocean-blue: #0066cc;
-  --deep-ocean: #004d99;
-  --turquoise: #008b8b;
-  --light-turquoise: #20b2aa;
-
-  /* Background Colors - More contrast */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f0f4f8;
-  --bg-tertiary: #e2e8f0;
-  --bg-card: #ffffff;
-  --bg-card-hover: #f0f4f8;
-
-  /* Text Colors - Enhanced contrast */
-  --text-primary: #1a202c;
-  --text-secondary: #2d3748;
-  --text-tertiary: #4a5568;
-  --text-on-brand: #ffffff;
+.landingPage {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--bg-primary);
 }
 
 /* Base Layout */
@@ -205,7 +191,7 @@ section {
 }
 
 /* Enhanced accessibility focus states */
-:focus-visible {
+.focusOutline:focus-visible {
   outline: 3px solid var(--ocean-blue);
   outline-offset: 3px;
   border-radius: 4px;

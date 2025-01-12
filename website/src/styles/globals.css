@@ -42,6 +42,64 @@
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 350ms ease;
+
+  /* Dynamic State Colors - Injected from stateColorSchemes.ts */
+  --state-primary-main: var(--state-color-primary-main, #0077b6);
+  --state-primary-light: var(--state-color-primary-light, #0090d9);
+  --state-primary-dark: var(--state-color-primary-dark, #005d91);
+  
+  --state-secondary-main: var(--state-color-secondary-main, #f5f5f5);
+  --state-secondary-light: var(--state-color-secondary-light, #ffffff);
+  --state-secondary-dark: var(--state-color-secondary-dark, #e0e0e0);
+  
+  --state-accent-main: var(--state-color-accent-main, #004b93);
+  --state-accent-light: var(--state-color-accent-light, #0066cc);
+  --state-accent-dark: var(--state-color-accent-dark, #003366);
+
+  /* Background Colors */
+  --bg-default: var(--state-color-bg-default, #ffffff);
+  --bg-paper: var(--state-color-bg-paper, #f8f9fa);
+  --bg-subtle: var(--state-color-bg-subtle, #f0f2f5);
+
+  /* Text Colors */
+  --text-primary: var(--state-color-text-primary, #1a1a1a);
+  --text-secondary: var(--state-color-text-secondary, #4a4a4a);
+  --text-light: var(--state-color-text-light, #ffffff);
+  --text-dark: var(--state-color-text-dark, #000000);
+
+  /* Gradient Classes */
+  --gradient-primary: var(--state-gradient-primary, linear-gradient(135deg, var(--state-primary-main), var(--state-primary-light)));
+  --gradient-secondary: var(--state-gradient-secondary, linear-gradient(135deg, var(--state-secondary-main), var(--state-secondary-light)));
+  --gradient-accent: var(--state-gradient-accent, linear-gradient(135deg, var(--state-accent-main), var(--state-accent-light)));
+
+  /* Button Colors */
+  --button-primary-bg: var(--state-color-button-primary-bg, var(--state-primary-main));
+  --button-primary-hover: var(--state-color-button-primary-hover, var(--state-primary-dark));
+  --button-primary-text: var(--state-color-button-primary-text, var(--text-light));
+
+  --button-secondary-bg: var(--state-color-button-secondary-bg, var(--state-secondary-main));
+  --button-secondary-hover: var(--state-color-button-secondary-hover, var(--state-secondary-dark));
+  --button-secondary-text: var(--state-color-button-secondary-text, var(--text-dark));
+
+  --button-accent-bg: var(--state-color-button-accent-bg, var(--state-accent-main));
+  --button-accent-hover: var(--state-color-button-accent-hover, var(--state-accent-dark));
+  --button-accent-text: var(--state-color-button-accent-text, var(--text-light));
+
+  /* Border Colors */
+  --border-light: var(--state-color-border-light, #e0e0e0);
+  --border-medium: var(--state-color-border-medium, #bdbdbd);
+  --border-dark: var(--state-color-border-dark, #757575);
+
+  /* Shadows */
+  --shadow-small: var(--state-shadow-small, 0 2px 4px rgba(0, 0, 0, 0.1));
+  --shadow-medium: var(--state-shadow-medium, 0 4px 6px rgba(0, 0, 0, 0.1));
+  --shadow-large: var(--state-shadow-large, 0 8px 16px rgba(0, 0, 0, 0.1));
+
+  /* Landing Page Colors - Enhanced contrast */
+  --ocean-blue: #0066cc;
+  --deep-ocean: #004d99;
+  --turquoise: #008b8b;
+  --light-turquoise: #20b2aa;
 }
 
 /* Global styles */

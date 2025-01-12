@@ -1,5 +1,5 @@
+import { Holiday } from '../types/holiday';
 import { holidays } from '../data/holidays';
-import { Holiday } from '../types/Holiday';
 import { GermanState } from '../types/GermanState';
 
 export function getStateHolidays(state: GermanState, year: number): Holiday[] {
@@ -7,9 +7,12 @@ export function getStateHolidays(state: GermanState, year: number): Holiday[] {
   
   return stateHolidays.map(holiday => ({
     name: holiday.name,
-    date: holiday.start,
-    description: "", // State-specific descriptions will be added in state files
-    type: "public",
-    nationwide: false
+    start: holiday.start,
+    end: holiday.end,
+    type: "public" as const,
+    isRegional: true,
+    details: {
+      description: "" // State-specific descriptions will be added in state files
+    }
   }));
 } 

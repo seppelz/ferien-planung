@@ -32,4 +32,6 @@ export const StateSelector = React.forwardRef<HTMLSelectElement, StateSelectorPr
       </select>
     </div>
   )
-); 
+);
+
+StateSelector.displayName = 'StateSelector'; 

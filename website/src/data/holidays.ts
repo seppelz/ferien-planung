@@ -1,5 +1,4 @@
 // This file is auto-generated. Do not edit manually.
-import { GermanState } from '../types/GermanState';
 import { HolidayData } from '../types/holiday';
 
 export const holidays: HolidayData = {
@@ -1583,6 +1582,7 @@ export const holidays: HolidayData = {
           "start": "2026-04-06",
           "nationwide": true
         },
+
         {
           "name": "Tag der Arbeit",
           "start": "2026-05-01",
@@ -1761,3 +1761,4 @@ export const holidays: HolidayData = {
     }
   }
 };
+

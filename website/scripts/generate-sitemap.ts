@@ -2,7 +2,7 @@ import { writeFileSync } from 'fs';
 import { getStateIds } from '../src/utils/stateUtils';
 
 async function generateSitemap() {
-  const baseUrl = 'https://holiday-planner.de';
+  const baseUrl = 'https://ferien-planung.de';
   const date = new Date().toISOString();
   
   // Get all state IDs

@@ -1,6 +1,6 @@
-import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
-import { VacationDestination } from '../types/StateInfo';
+import { StateInfo } from '../../types/StateInfo';
+import { SeasonalTradition } from '../../types/holiday';
+import { VacationDestination } from '../../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
 const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
@@ -60,7 +60,7 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "Frühling",
     description: "Krokusse in der Lüneburger Heide, erste Wattwanderungen und Frühlingserwachen im Harz."
   },
   {
@@ -129,6 +129,7 @@ const vacationDestinations: VacationDestination[] = [
 ];
 
 export const niedersachsen: StateInfo = {
+  name: "Niedersachsen",
   fullName: "Niedersachsen",
   shortName: "NI",
   capital: "Hannover",
@@ -143,6 +144,7 @@ export const niedersachsen: StateInfo = {
   ],
   keyFacts: {
     population: "8,0 Millionen (2021)",
+    capital: "Hannover",
     area: "47.614 km²",
     founded: "1946",
     economicStrength: [
@@ -154,19 +156,21 @@ export const niedersachsen: StateInfo = {
   },
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: false,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Niedersachsen ein gesetzlicher Feiertag.`
       }
     })),
     ...(holidays.publicHolidays["2025"]["NI"] || []).map(holiday => ({
-      ...holiday,
+      name: holiday.name,
       type: "public" as const,
       isRegional: true,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Niedersachsen ein gesetzlicher Feiertag.`
       }
@@ -237,9 +241,11 @@ export const niedersachsen: StateInfo = {
     };
 
     return {
-      ...holiday,
+      name: holiday.name,
       type: "school" as const,
-      date: holiday.start,
+      start: holiday.start,
+      end: holiday.end,
+      isRegional: true,
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities

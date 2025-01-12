@@ -25,7 +25,6 @@ interface VacationDestinationsProps {
   destinations: VacationDestination[];
   primaryColor: string;
   secondaryColor: string;
-  tertiaryColor?: string;
 }
 
 const getDestinationIcon = (destinationName: string): IconDefinition => {
@@ -38,7 +37,7 @@ const getDestinationIcon = (destinationName: string): IconDefinition => {
   return faLandmark;
 };
 
-export default function VacationDestinations({ destinations, primaryColor, secondaryColor, tertiaryColor }: VacationDestinationsProps) {
+export default function VacationDestinations({ destinations, primaryColor, secondaryColor }: VacationDestinationsProps) {
   return (
     <section id="destinations" className={styles.vacationSection} style={{
       background: 'white',
