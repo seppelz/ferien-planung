@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx ts-node --project scripts/tsconfig.json scripts/generate-sitemap.ts && npx ts-node --project scripts/tsconfig.json scripts/verify-sitemap.ts && next build && node scripts/copy-app-build.js",
+    "build": "npx ts-node --project scripts/tsconfig.json scripts/generate-sitemap.ts && npx ts-node --project scripts/tsconfig.json scripts/verify-sitemap.ts && next build",
     "start": "next start",
     "lint": "next lint",
     "generate-sitemap": "npx ts-node --project scripts/tsconfig.json scripts/generate-sitemap.ts",
