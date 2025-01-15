@@ -1,7 +1,8 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
-import { holidays } from '../../data/holidays';
+import { holidays } from '@/data/holidays';
+import { convertRawPublicHoliday, convertRawSchoolHoliday } from '@/utils/dateUtils';
 
 const stateSpecificHolidayDetails: Record<string, { description: string, traditions?: string[], culturalSignificance?: string, locations?: string[] }> = {
   "Neujahr": {
@@ -72,19 +73,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühling",
+    season: "spring",
     description: "Fasnet im Schwarzwald, Stuttgarter Frühlingsfest, Spargelsaison in der Kurpfalz"
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Seenachtfest Konstanz, Stuttgarter Weindorf, Heidelberger Schlossbeleuchtung"
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Cannstatter Wasen, Herbstmesse Baden-Baden, Weinlese am Kaiserstuhl"
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Weihnachtsmärkte in historischen Altstädten, Fasnetsbeginn, Schwarzwälder Wintertraditionen"
   }
 ];
@@ -125,51 +126,34 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
-export const badenWuerttemberg: StateInfo = {
-  fullName: "Baden-Württemberg",
-  shortName: "BW",
-  capital: "Stuttgart",
-  description: "Baden-Württemberg vereint die historischen Regionen Baden, Württemberg und Hohenzollern. Das Bundesland ist bekannt für seine innovative Wirtschaft, reiche Kultur und vielfältige Landschaft vom Schwarzwald bis zum Bodensee.",
-  culturalHighlights: [
-    "UNESCO-Welterbe Kloster Maulbronn",
-    "Heidelberger Schloss",
-    "Schwarzwald und Bodensee",
-    "Schwäbische Alb",
-    "Fasnet-Traditionen"
-  ],
-  keyFacts: {
-    population: "11,1 Millionen",
-    area: "35.751 km²",
-    founded: "1952",
-    economicStrength: [
-      "Automobilindustrie",
-      "Maschinenbau",
-      "Informationstechnologie",
-      "Biotechnologie",
-      "Tourismus"
-    ]
-  },
-  holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public",
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const bwHolidays = holidays.publicHolidays[yearStr]?.["BW"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      ...convertRawPublicHoliday({ name: holiday.name, date: holiday.start, end: holiday.end, type: 'public' }),
       isRegional: false,
-      date: holiday.start,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Baden-Württemberg ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["BW"] || []).map(holiday => ({
-      ...holiday,
-      type: "public",
+    ...bwHolidays.map((holiday) => ({
+      ...convertRawPublicHoliday({ name: holiday.name, date: holiday.start, end: holiday.end, type: 'public' }),
       isRegional: true,
-      date: holiday.start,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Baden-Württemberg ein gesetzlicher Feiertag.`
       }
     }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["BW"].map(holiday => {
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const bwSchoolHolidays = holidays.schoolHolidays[yearStr]?.["BW"] || [];
+  
+  return bwSchoolHolidays.map((holiday) => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien in Baden-Württemberg - Wintersport und Naturerlebnisse",
@@ -235,15 +219,49 @@ export const badenWuerttemberg: StateInfo = {
     };
 
     return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
+      ...convertRawSchoolHoliday({ ...holiday, type: 'school' }),
       details: {
         description: holidayInfo.description,
         familyActivities: holidayInfo.activities
       }
     };
-  }),
+  });
+}
+
+export const badenWuerttemberg: StateInfo = {
+  fullName: "Baden-Württemberg",
+  shortName: "BW",
+  capital: "Stuttgart",
+  description: "Baden-Württemberg vereint die historischen Regionen Baden, Württemberg und Hohenzollern. Das Bundesland ist bekannt für seine innovative Wirtschaft, reiche Kultur und vielfältige Landschaft vom Schwarzwald bis zum Bodensee.",
+  culturalHighlights: [
+    "UNESCO-Welterbe Kloster Maulbronn",
+    "Heidelberger Schloss",
+    "Schwarzwald und Bodensee",
+    "Schwäbische Alb",
+    "Fasnet-Traditionen"
+  ],
+  keyFacts: {
+    population: "11,1 Millionen",
+    area: "35.751 km²",
+    founded: "1952",
+    economicStrength: [
+      "Automobilindustrie",
+      "Maschinenbau",
+      "Informationstechnologie",
+      "Biotechnologie",
+      "Tourismus"
+    ]
+  },
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Baden-Württemberg verbindet bei seinen Feiertagen alemannische und schwäbische Traditionen mit katholischem und evangelischem Brauchtum.",
   traditionInfo: "Die Feiertage in Baden-Württemberg sind geprägt von der reichen kulturellen Vielfalt des Landes, von der Fasnet bis zu den Weinfesten.",
   seasonalTraditions,

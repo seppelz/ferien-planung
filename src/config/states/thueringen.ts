@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -60,19 +60,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Kulturelle Frühlingsfeste, erste Wanderungen im Thüringer Wald und Bach-Festspiele."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Klassik-Festivals, mittelalterliche Burgfeste und Naturerlebnisse prägen den Sommer."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Kulturherbst mit Festivals, Wanderungen im bunten Thüringer Wald und regionale Feste."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Historische Weihnachtsmärkte, Wintersport im Thüringer Wald und kulturelle Veranstaltungen."
   }
 ];

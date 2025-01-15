@@ -1,4 +1,5 @@
-import { parse, parseISO } from 'date-fns';
+import { parse, parseISO, format } from 'date-fns';
+import { Holiday, RawPublicHoliday, RawSchoolHoliday, SingleDayHoliday, MultiDayHoliday } from '../types/holiday';
 
 /**
  * Parses a date string in YYYY-MM-DD format into a Date object,
@@ -25,5 +26,28 @@ export const parseDateString = (dateStr: string): Date => {
  * Formats a Date object into a YYYY-MM-DD string
  */
 export const formatDateString = (date: Date): string => {
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
+  return format(date, 'yyyy-MM-dd');
+};
+
+/**
+ * Converts a raw public holiday into a SingleDayHoliday
+ */
+export const convertRawPublicHoliday = (raw: RawPublicHoliday): SingleDayHoliday => {
+  return {
+    ...raw,
+    date: raw.date,
+    endDate: raw.end
+  };
+};
+
+/**
+ * Converts a raw school holiday into a MultiDayHoliday
+ */
+export const convertRawSchoolHoliday = (raw: RawSchoolHoliday): MultiDayHoliday => {
+  return {
+    ...raw,
+    start: raw.start,
+    end: raw.end,
+    date: raw.start // For compatibility
+  };
 }; 

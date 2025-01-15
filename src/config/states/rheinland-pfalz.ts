@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -66,19 +66,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Mandelblüte in der Pfalz, erste Weinfeste und römische Frühlingsfeste prägen die Jahreszeit."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Zahlreiche Weinfeste, Burgenfestspiele und Rhein in Flammen sind die Höhepunkte des Sommers."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Weinlese, traditionelle Weinfeste und römische Herbstfeste bestimmen die Jahreszeit."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Historische Weihnachtsmärkte, Glühweinwanderungen und Winterweinfeste prägen die kalte Jahreszeit."
   }
 ];

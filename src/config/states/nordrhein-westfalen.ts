@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -66,19 +66,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Rheinischer Karneval, Frühlingskirmes und erste Outdoor-Aktivitäten in den Naturparks."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Zahlreiche Stadtfeste, Schützenfeste und Open-Air-Events prägen den Sommer. Die Cranger Kirmes ist ein Höhepunkt."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Weinfeste am Rhein, traditionelle Erntedankfeste und Herbstkirmes bestimmen die Jahreszeit."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Berühmte Weihnachtsmärkte wie der Kölner und Dortmunder Weihnachtsmarkt, Wintersporthochsaison im Sauerland."
   }
 ];

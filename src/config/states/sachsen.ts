@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -66,19 +66,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Leipziger Buchmesse, Dresdner Musikfestspiele und erste Bergparaden im Erzgebirge."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Elbhangfest in Dresden, Bach-Fest Leipzig und Bergbautraditionen prägen den Sommer."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Filmfest Dresden, Leipziger Jazztage und traditionelle Bergparaden bestimmen die Jahreszeit."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Berühmte Weihnachtsmärkte, erzgebirgische Traditionen und Wintersport im Erzgebirge."
   }
 ];

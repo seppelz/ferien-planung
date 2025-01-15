@@ -1,4 +1,4 @@
-import { Holiday, SeasonalTradition } from './Holiday';
+import { Holiday, SeasonalTradition } from '../../types/holiday';
 
 export interface VacationDestination {
   name: string;
@@ -31,8 +31,12 @@ export interface StateInfo {
     founded: string;
     economicStrength: string[];
   };
-  holidays: Holiday[];
-  schoolHolidays: Holiday[];
+  publicHolidays: {
+    [year: number]: Holiday[];
+  };
+  schoolHolidays: {
+    [year: number]: Holiday[];
+  };
   uniqueHolidayInfo: string;
   traditionInfo: string;
   seasonalTraditions: SeasonalTradition[];

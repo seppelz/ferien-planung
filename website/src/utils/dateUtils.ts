@@ -1,4 +1,5 @@
-import { parseISO } from 'date-fns';
+import { parseISO, format } from 'date-fns';
+import { de } from 'date-fns/locale';
 
 /**
  * Parses a date string in YYYY-MM-DD format into a Date object,
@@ -25,24 +26,21 @@ export const parseDateString = (dateStr: string): Date => {
  * Formats a Date object into a YYYY-MM-DD string
  */
 export const formatDateString = (date: Date): string => {
-  return `${date.getUTCFullYear()}-${String(date.getUTCMonth() + 1).padStart(2, '0')}-${String(date.getUTCDate()).padStart(2, '0')}`;
+  return format(date, 'yyyy-MM-dd');
 };
 
-export const formatDate = (date: Date, locale: string = 'de-DE'): string => {
-  return date.toLocaleDateString(locale, {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric'
-  });
+/**
+ * Formats a date in a consistent way across server and client
+ */
+export const formatDate = (date: Date): string => {
+  return format(date, 'dd.MM.yyyy', { locale: de });
 };
 
-export const formatDateLong = (date: Date, locale: string = 'de-DE'): string => {
-  return date.toLocaleDateString(locale, {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+/**
+ * Formats a date with full month and weekday names
+ */
+export const formatDateLong = (date: Date): string => {
+  return format(date, 'EEEE, d. MMMM yyyy', { locale: de });
 };
 
 export const calculateDuration = (start: Date, end: Date): number => {

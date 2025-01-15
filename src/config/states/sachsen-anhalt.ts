@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -60,19 +60,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Mittelalterliche Frühlingsfeste, erste Wanderungen im Harz und Kulturveranstaltungen in den UNESCO-Welterbestätten."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Historische Festspiele, Schloss- und Burgenfeste und Open-Air-Events prägen den Sommer."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Weinfeste im Saale-Unstrut-Gebiet, mittelalterliche Herbstmärkte und Wanderungen im Harz."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Historische Weihnachtsmärkte in Fachwerkstädten, Harzer Wintertraditionen und kulturelle Veranstaltungen."
   }
 ];

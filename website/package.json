@@ -3,8 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "npx ts-node --project scripts/tsconfig.json scripts/generate-sitemap.ts && npx ts-node --project scripts/tsconfig.json scripts/verify-sitemap.ts && next build",
+    "dev": "next dev",
+    "build": "npx ts-node --project scripts/tsconfig.json scripts/generate-sitemap.ts && npx ts-node --project scripts/tsconfig.json scripts/verify-sitemap.ts && next build && node scripts/copy-app-build.js",
     "start": "next start",
     "lint": "next lint",
     "generate-sitemap": "npx ts-node --project scripts/tsconfig.json scripts/generate-sitemap.ts",
@@ -25,7 +25,8 @@
     "next": "15.1.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-icons": "^5.4.0"
+    "react-icons": "^5.4.0",
+    "fs-extra": "^11.2.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

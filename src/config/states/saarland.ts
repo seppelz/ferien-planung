@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -44,7 +44,7 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
     description: "Mariä Himmelfahrt wird als wichtiger katholischer Feiertag mit französischem Einfluss begangen.",
     traditions: ["Prozessionen", "Kräuterweihe", "Marienfeste"],
     culturalSignificance: "Bedeutender katholischer Feiertag mit regionaler Tradition",
-    locations: ["Saarbrücker Dom", "Basilika St. Johann", "Merziger Kirche"]
+    locations: ["Saarbrücken", "Merzig", "Saarlouis"]
   },
   "Tag der Deutschen Einheit": {
     description: "Das Saarland feiert die Deutsche Einheit mit Fokus auf deutsch-französische Freundschaft.",
@@ -72,19 +72,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Deutsch-französische Frühlingsfeste, erste Bergmannsfeste und Wanderungen im Bliesgau."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Industriekultur-Events, deutsch-französische Stadtfeste und Saar-Spektakel prägen den Sommer."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Erntedankfeste mit französischem Einfluss, Bergmannsfeste und kulinarische Wochen."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Französisch inspirierte Weihnachtsmärkte, Bergmannsweihnacht und winterliche Industriekultur."
   }
 ];

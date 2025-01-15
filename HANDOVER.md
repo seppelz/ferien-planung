@@ -1,47 +1,148 @@
-# Holiday Planner - Development Handover
+# Ferien-Planung Project Handover
 
-## Recent Progress (Latest First)
+## Project Overview
 
-### Navigation and UI Improvements (Latest)
-- Enhanced the application navbar with improved visual hierarchy
-- Implemented distinct color schemes for different functional areas (state selection, person 2 controls, additional controls)
-- Added hover states and visual feedback for better interactivity
-- Optimized component spacing and sizing for better usability
-- Improved responsive design and mobile layout
-- Standardized component heights and border radius for visual consistency
+This project consists of two main parts:
+1. Main Website (`ferien-planung.de`)
+2. Holiday Planning App (`app.ferien-planung.de`)
 
-### Previous Updates
-- Fixed state selection functionality in the menu
-- Updated all dates to 2025
-- Improved holiday name formatting and spacing
-- Implemented compact two-column layout for holidays and school holidays
-- Enhanced state pages with animations and decorative elements
-- Added comprehensive content structure with meta information and FAQs
-- Implemented SEO-friendly URLs and routing for state pages
+## Project Structure
 
-## Next Steps
+```
+ferien-planung/
+├── src/
+│   ├── components/         # Shared React components
+│   ├── config/            # Configuration and state data
+│   │   └── states/        # Individual German state configurations
+│   ├── data/             # Holiday data and utilities
+│   ├── hooks/            # Custom React hooks
+│   ├── layouts/          # Page layouts
+│   ├── pages/            # Page components
+│   │   ├── LandingPage/  # Main website landing page
+│   │   └── StatePage/    # Individual state pages
+│   ├── services/         # Business logic services
+│   ├── types/            # TypeScript type definitions
+│   └── utils/            # Utility functions
+```
 
-### 1. ListView Sidebar Optimization
-- Convert the "Geplante Urlaube" sidebar into a scrollable area
-- Implement proper scrolling behavior for list items
-- Ensure responsive design works well with the scrollable area
-- Add visual indicators for scroll position
-- Consider implementing virtual scrolling for performance with large lists
+## Key Features
 
-### 2. Baden-Württemberg State Page Template
-- Enhance the state page template using Baden-Württemberg as the reference implementation
-- Optimize content structure and layout
-- Add state-specific information and resources
-- Implement advanced animations and transitions
-- Ensure proper SEO optimization
-- Create reusable components that can be used for other states
-- Add comprehensive meta information and schema markup
+### Main Website (`ferien-planung.de`)
+- Landing page with state overview
+- Individual state pages with:
+  - Holiday information
+  - Cultural highlights
+  - Regional specialties
+  - Vacation destinations
+  - Seasonal traditions
 
-### 3. Future Considerations
-- Consider implementing caching for better performance
-- Add more interactive features to the holiday planning interface
-- Improve accessibility features
-- Consider adding more data visualization options
+### Holiday Planning App (`app.ferien-planung.de`)
+- Interactive calendar
+- Bridge day calculations
+- Vacation planning tools
+- Holiday efficiency analysis
+- Multi-state comparison
+
+## Deployment Plan
+
+### Vercel Setup
+1. Create two separate Vercel projects:
+   - Main website: `ferien-planung`
+   - App: `app-ferien-planung`
+
+2. Configure domains:
+   - Main website: `ferien-planung.de`
+   - App: `app.ferien-planung.de`
+
+3. Environment setup:
+   ```
+   NEXT_PUBLIC_APP_URL=https://app.ferien-planung.de
+   NEXT_PUBLIC_WEBSITE_URL=https://ferien-planung.de
+   ```
+
+### Build Configuration
+- The project uses TypeScript and React
+- Build command: `npm run build`
+- Output directory: `dist`
+- Node.js version: 18.x
+
+### Deployment Process
+1. Push changes to the main branch
+2. Vercel automatically triggers deployment
+3. Build process runs type checks and tests
+4. If successful, changes are deployed to production
+
+## Type System
+
+The project uses TypeScript with several key types:
+
+### Holiday Types
+```typescript
+type Holiday = SingleDayHoliday | MultiDayHoliday | BridgeDay;
+
+interface BaseHoliday {
+  type: 'public' | 'school' | 'bridge';
+  details?: {
+    description: string;
+    traditions?: string[];
+    culturalSignificance?: string;
+    locations?: string[];
+  };
+}
+```
+
+### State Information
+```typescript
+interface StateInfo {
+  fullName: string;
+  shortName: string;
+  capital: string;
+  description: string;
+  culturalHighlights: string[];
+  holidays: Holiday[];
+  schoolHolidays: Holiday[];
+  // ... additional state information
+}
+```
 
 ## Current Status
-The application is functional with a solid foundation. The navigation system has been significantly improved, making it more intuitive and visually appealing. The focus is now on enhancing the user experience in the list view and creating a stellar example of a state page with Baden-Württemberg. 
+
+1. Main Features:
+   - ✅ Holiday calculations
+   - ✅ State information
+   - ✅ Bridge day analysis
+   - ✅ Calendar integration
+
+2. In Progress:
+   - 🔄 Type system cleanup
+   - 🔄 Test removal
+   - 🔄 Build optimizations
+
+3. Next Steps:
+   - Set up Vercel projects
+   - Configure domains
+   - Deploy initial versions
+   - Monitor performance
+
+## Important Notes
+
+1. **Type System**: Currently cleaning up type definitions to ensure consistency between holiday types and state information.
+
+2. **Test Removal**: Removing test files and dependencies to optimize production build.
+
+3. **Build Process**: Addressing TypeScript errors before deployment:
+   - Holiday type definitions
+   - State information interfaces
+   - Date handling consistency
+
+4. **Performance**: The app uses:
+   - Date-fns for date calculations
+   - React memo for component optimization
+   - TypeScript for type safety
+
+
+
+
+
+
+

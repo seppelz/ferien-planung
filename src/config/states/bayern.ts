@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '../types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -78,15 +78,15 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühling",
+    season: "spring",
     description: "Maibaumaufstellen, Frühjahrs-Volksfeste, Osterbrunnen in der Fränkischen Schweiz"
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Bergfeste, Münchner Tollwood, Klassik Open Air in Nürnberg"
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Oktoberfest, Kirchweihfeste, Almabtrieb im Allgäu"
   },
   {

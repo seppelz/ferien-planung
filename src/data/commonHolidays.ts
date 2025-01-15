@@ -1,4 +1,5 @@
-import { Holiday, SingleDayHoliday } from '../types/Holiday';
+import { Holiday, SingleDayHoliday } from '../types/holiday';
+import { formatDateString } from '../utils/dateUtils';
 
 export const commonHolidays: Record<number, Holiday[]> = {
   2024: [

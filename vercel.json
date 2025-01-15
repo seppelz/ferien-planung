@@ -1,7 +1,10 @@
 {
-  "buildCommand": "cd website && npm install --force && npm run build",
+  "buildCommand": "cd website && npm install --force && npm run build && cd ../app && npm install --force && npm run build",
   "outputDirectory": "website/out",
   "installCommand": "echo 'Installing dependencies in individual directories'",
+  "rewrites": [
+    { "source": "/app/(.*)", "destination": "/app/_app/$1" }
+  ],
   "headers": [
     {
       "source": "/(.*)",

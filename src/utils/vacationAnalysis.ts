@@ -1,5 +1,5 @@
 import { VacationPlan, BridgeDayRecommendation } from '../types/vacationPlan';
-import { Holiday } from '../types/holiday';
+import { Holiday } from '../types';
 import { 
   addDays, 
   differenceInBusinessDays,
@@ -10,6 +10,7 @@ import {
   subDays,
   isWithinInterval
 } from 'date-fns';
+import { parseDateString, formatDateString, areSameDays } from './dateUtils';
 
 export interface VacationAnalysis {
   bridgeDayOpportunities: BridgeDayRecommendation[];
@@ -22,6 +23,121 @@ export interface VacationAnalysis {
     score: number;
     recommendations: string[];
   };
+}
+
+interface VacationPeriod {
+  startDate: string;
+  endDate: string;
+  days: number;
+  holidays: Holiday[];
+  weekends: number;
+  workdays: number;
+}
+
+function getValidDateString(holiday: Holiday): string {
+  return holiday.date || holiday.start || '';
+}
+
+function safeParseDate(dateStr: string | undefined): Date | null {
+  if (!dateStr) return null;
+  try {
+    return parseDateString(dateStr);
+  } catch {
+    return null;
+  }
+}
+
+export function getHolidayPeriods(holidays: Holiday[]): VacationPeriod[] {
+  const validHolidays = holidays
+    .filter(h => h.type === 'public' && (h.date || h.start))
+    .map(h => {
+      const start = getValidDateString(h);
+      const end = h.date || h.end || start;
+      return { start, end, holiday: h };
+    })
+    .filter(({ start }) => {
+      const date = safeParseDate(start);
+      return date !== null;
+    });
+
+  const sortedHolidays = [...validHolidays].sort((a, b) => {
+    const dateA = safeParseDate(a.start);
+    const dateB = safeParseDate(b.start);
+    if (!dateA || !dateB) return 0;
+    return dateA.getTime() - dateB.getTime();
+  });
+
+  const periods: VacationPeriod[] = [];
+  let currentPeriod: VacationPeriod | null = null;
+
+  for (const { start, end, holiday } of sortedHolidays) {
+    const startDate = safeParseDate(start);
+    if (!startDate) continue;
+    
+    if (!currentPeriod) {
+      currentPeriod = {
+        startDate: start,
+        endDate: end,
+        days: 1,
+        holidays: [holiday],
+        weekends: isWeekend(startDate) ? 1 : 0,
+        workdays: isWeekend(startDate) ? 0 : 1
+      };
+      continue;
+    }
+
+    const currentEndDate = safeParseDate(currentPeriod.endDate);
+    const nextStartDate = startDate;
+    if (!currentEndDate) continue;
+
+    const daysBetween = differenceInDays(nextStartDate, currentEndDate);
+
+    if (daysBetween <= 3) {
+      // Extend current period
+      currentPeriod.endDate = end;
+      currentPeriod.days += daysBetween + 1;
+      currentPeriod.holidays.push(holiday);
+      currentPeriod.weekends += isWeekend(nextStartDate) ? 1 : 0;
+      currentPeriod.workdays += isWeekend(nextStartDate) ? 0 : 1;
+    } else {
+      // Start new period
+      periods.push(currentPeriod);
+      currentPeriod = {
+        startDate: start,
+        endDate: end,
+        days: 1,
+        holidays: [holiday],
+        weekends: isWeekend(nextStartDate) ? 1 : 0,
+        workdays: isWeekend(nextStartDate) ? 0 : 1
+      };
+    }
+  }
+
+  if (currentPeriod) {
+    periods.push(currentPeriod);
+  }
+
+  return periods;
+}
+
+export function isHolidayOrWeekend(date: Date, publicHolidays: Holiday[]): boolean {
+  return publicHolidays.some(h => {
+    const dateStr = getValidDateString(h);
+    const holidayDate = safeParseDate(dateStr);
+    return holidayDate ? isSameDay(holidayDate, date) : false;
+  }) || isWeekend(date);
+}
+
+function getHolidayDate(holiday: Holiday): string {
+  if ('date' in holiday && holiday.date) {
+    return holiday.date;
+  }
+  if ('start' in holiday && holiday.start) {
+    return holiday.start;
+  }
+  // Fallback to current date as string - this should never happen in practice
+  // as our holiday data is validated, but TypeScript needs this
+  return new Date().toISOString().split('T')[0];
 }
 
 export function findBridgeDayOpportunities(
@@ -37,26 +153,31 @@ export function findBridgeDayOpportunities(
   const schoolHolidays = holidays.filter(h => h.name.toLowerCase().includes('ferien'));
 
   // Create intervals for school holidays to check overlaps
-  const schoolHolidayIntervals = schoolHolidays.map(h => ({
-    start: new Date(h.date),
-    end: new Date(h.date)
-  }));
+  const schoolHolidayIntervals = schoolHolidays.map(h => {
+    const date = getHolidayDate(h);
+    return {
+      start: new Date(date),
+      end: new Date(date)
+    };
+  });
 
   // Sort holidays chronologically
-  const sortedHolidays = publicHolidays.sort((a, b) => 
-    new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  const sortedHolidays = publicHolidays.sort((a, b) => {
+    const dateA = new Date(getHolidayDate(a));
+    const dateB = new Date(getHolidayDate(b));
+    return dateA.getTime() - dateB.getTime();
+  });
 
   // Helper function to check if a date is a holiday or school holiday
   const isHolidayOrSchoolHoliday = (date: Date) => {
-    return publicHolidays.some(h => isSameDay(new Date(h.date), date)) ||
+    return publicHolidays.some(h => isSameDay(new Date(getHolidayDate(h)), date)) ||
            schoolHolidayIntervals.some(interval => isWithinInterval(date, interval));
   };
 
   // Look for bridge day opportunities
   for (let i = 0; i < sortedHolidays.length; i++) {
     const holiday = sortedHolidays[i];
-    const holidayDate = new Date(holiday.date);
+    const holidayDate = new Date(getHolidayDate(holiday));
     
     if (holidayDate < startDate || holidayDate > endDate) continue;
 
@@ -67,7 +188,7 @@ export function findBridgeDayOpportunities(
 
     while (j < sortedHolidays.length) {
       const nextHoliday = sortedHolidays[j];
-      const nextHolidayDate = new Date(nextHoliday.date);
+      const nextHolidayDate = new Date(getHolidayDate(nextHoliday));
       const daysBetween = differenceInBusinessDays(nextHolidayDate, nextDate);
 
       if (daysBetween > 5) break;
@@ -140,7 +261,7 @@ export function analyzeSchoolHolidayOverlap(
 
     vacationDays.forEach(day => {
       if (schoolHolidays.some(holiday => 
-        isSameDay(new Date(holiday.date), day)
+        isSameDay(new Date(getHolidayDate(holiday)), day)
       )) {
         overlappingDays++;
       }

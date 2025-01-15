@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -60,19 +60,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Traditionelle Osterbräuche und Frühlingsfeste beleben die Region. Die Rheingauer Weinwochen beginnen."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Zahlreiche Stadtfeste, Kulturfestivals und Open-Air-Veranstaltungen prägen den Sommer. Das Museumsuferfest in Frankfurt ist ein Höhepunkt."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Erntedankfeste, traditionelle Herbstmärkte und Weinfeste bestimmen die Jahreszeit. Der Rheingauer Weinmarkt ist besonders beliebt."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Historische Weihnachtsmärkte wie der Frankfurter und Wiesbadener Weihnachtsmarkt und traditionelle Winterfeste prägen die Adventszeit."
   }
 ];

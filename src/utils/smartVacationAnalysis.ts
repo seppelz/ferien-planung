@@ -1,288 +1,163 @@
-import { addDays, eachDayOfInterval, format, isWeekend, isSameDay, isSameMonth, isSameYear, differenceInDays, subDays, startOfDay } from 'date-fns';
 import { Holiday, BridgeDay } from '../types/holiday';
-import { GermanState } from '../types/GermanState';
-import { bridgeDayService } from '../services/bridgeDayService';
+import { addDays, isWeekend, differenceInDays } from 'date-fns';
+import { parseDateString, formatDateString, areSameDays } from './dateUtils';
 
-export interface VacationRecommendation {
-  startDate: Date;
-  endDate: Date;
-  periodStart: Date;
-  periodEnd: Date;
+interface VacationRecommendation {
+  start: string;
+  end: string;
   requiredDays: number;
-  gainedDays: number;
+  totalDaysOff: number;
   efficiency: number;
-  efficiencyDisplay: string;
-  type: 'bridge' | 'extended';
-  publicHolidays: Holiday[];
-  weekendDays: Date[];
-  displayRange: string;
-  vacationDays: Date[];
+  holidays: Holiday[];
+  bridgeDays: BridgeDay[];
 }
 
-const formatEfficiency = (requiredDays: number, gainedDays: number): string => {
-  if (requiredDays === 0) return '0d = 0d';
-  return `${requiredDays}d = ${gainedDays}d`;
+// Helper to find a holiday on a specific date
+const findHolidayOnDate = (dateStr: string, holidays: Holiday[]): Holiday | undefined => {
+  return holidays.find(h => {
+    if (h.type === 'bridge') return false;
+    return h.type === 'public' && (h.date === dateStr || h.start === dateStr);
+  });
 };
 
-const formatDateRange = (start: Date, end: Date): string => {
-  if (isSameDay(start, end)) {
-    return format(start, 'dd.MM.yy');
-  }
-  return `${format(start, 'dd.MM.')} - ${format(end, 'dd.MM.yy')}`;
+// Helper to check if a date is a holiday
+const isHolidayOnDate = (dateStr: string, holidays: Holiday[]): boolean => {
+  return holidays.some(h => {
+    if (h.type === 'bridge') return false;
+    return h.type === 'public' && (h.date === dateStr || h.start === dateStr);
+  });
 };
 
-const isPublicHoliday = (date: Date, holidays: Holiday[]): boolean => {
-  if (isWeekend(date)) return false;
-  return holidays.some(h => h.type === 'public' && isSameDay(h.date, date));
-};
-
-const isFreeDay = (date: Date, holidays: Holiday[]): boolean => {
-  return isWeekend(date) || isPublicHoliday(date, holidays);
-};
-
-// Calculate workdays needed between two dates
+// Helper to calculate workdays between two dates
 const calculateWorkdays = (startDate: Date, endDate: Date, holidays: Holiday[]): number => {
-  const days = eachDayOfInterval({ start: startDate, end: endDate });
-  return days.filter(day => {
-    if (isWeekend(day)) return false;
-    if (isPublicHoliday(day, holidays)) return false;
-    return true;
-  }).length;
+  let workdays = 0;
+  let currentDate = startDate;
+
+  while (currentDate <= endDate) {
+    const currentDateStr = formatDateString(currentDate);
+    if (!isWeekend(currentDate) && !isHolidayOnDate(currentDateStr, holidays)) {
+      workdays++;
+    }
+    currentDate = addDays(currentDate, 1);
+  }
+
+  return workdays;
 };
 
-// Find all free days in a period (weekends and public holidays)
-const findFreeDays = (start: Date, end: Date, holidays: Holiday[]): {
-  weekendDays: Date[];
-  publicHolidays: Holiday[];
-} => {
-  const days = eachDayOfInterval({ start, end });
-  return {
-    weekendDays: days.filter(d => isWeekend(d)),
-    publicHolidays: holidays.filter(h => 
-      h.type === 'public' && 
-      days.some(d => isSameDay(d, h.date)) &&
-      !isWeekend(h.date)
-    )
-  };
-};
-
+// Helper to analyze a potential bridge day opportunity
 const analyzeBridgeDayOpportunity = (
-  start: Date,
-  end: Date,
+  startDate: Date,
+  endDate: Date,
   holidays: Holiday[]
-): VacationRecommendation | null => {
-  // Calculate required workdays
-  const requiredDays = calculateWorkdays(start, end, holidays);
-  if (requiredDays === 0) return null;
+): VacationRecommendation => {
+  const startStr = formatDateString(startDate);
+  const endStr = formatDateString(endDate);
+  const requiredDays = calculateWorkdays(startDate, endDate, holidays);
+  const totalDaysOff = differenceInDays(endDate, startDate) + 1;
 
-  // Get free days in the period
-  const { weekendDays, publicHolidays } = findFreeDays(start, end, holidays);
-  
-  // Calculate total days in period
-  const totalDays = differenceInDays(end, start) + 1;
-  
-  // Calculate actual free days (weekends + holidays + vacation days)
-  const freeDays = eachDayOfInterval({ start, end }).filter(d => 
-    isWeekend(d) || isPublicHoliday(d, holidays)
-  ).length;
-  
-  // Total gained days is the period length
-  const gainedDays = totalDays;
-  
-  // Calculate efficiency based on actual benefit
-  const efficiency = gainedDays / requiredDays;
+  const relevantHolidays = holidays.filter(h => {
+    if (h.type === 'bridge') return false;
+    const dateStr = h.date || h.start;
+    if (!dateStr) return false;
+    const holidayDate = parseDateString(dateStr);
+    return holidayDate >= startDate && holidayDate <= endDate;
+  });
 
-  // Only return if we gain more days than we take off
-  if (efficiency <= 1) return null;
-  
-  // Only return if there's at least one public holiday on a workday
-  if (publicHolidays.length === 0) return null;
-
-  // Find the actual vacation days (workdays)
-  const vacationDays = eachDayOfInterval({ start, end })
-    .filter(d => !isWeekend(d) && !isPublicHoliday(d, holidays));
-
-  // Find the display period (including surrounding weekends)
-  let displayStart = start;
-  let displayEnd = end;
-  
-  // Check if start date itself is a free day
-  if (isWeekend(start) || isPublicHoliday(start, holidays)) {
-    displayStart = start;
-  } else {
-    // Look backwards for connected free days
-    let currentDay = subDays(start, 1);
-    while (isWeekend(currentDay) || isPublicHoliday(currentDay, holidays)) {
-      displayStart = currentDay;
-      currentDay = subDays(currentDay, 1);
-    }
-  }
-  
-  // Check if end date itself is a free day
-  if (isWeekend(end) || isPublicHoliday(end, holidays)) {
-    displayEnd = end;
-  } else {
-    // Look forwards for connected free days
-    let currentDay = addDays(end, 1);
-    while (isWeekend(currentDay) || isPublicHoliday(currentDay, holidays)) {
-      displayEnd = currentDay;
-      currentDay = addDays(currentDay, 1);
-    }
-  }
-
-  // Ensure all dates are at the start of their respective days
-  const startOfDisplayStart = startOfDay(displayStart);
-  const startOfDisplayEnd = startOfDay(displayEnd);
-  const startOfStart = startOfDay(start);
-  const startOfEnd = startOfDay(end);
+  const relevantBridgeDays = holidays.filter((h): h is BridgeDay => {
+    if (h.type !== 'bridge') return false;
+    const bridgeDate = parseDateString(h.date);
+    return bridgeDate >= startDate && bridgeDate <= endDate;
+  });
 
   return {
-    startDate: startOfStart,
-    endDate: startOfEnd,
-    periodStart: startOfDisplayStart,
-    periodEnd: startOfDisplayEnd,
+    start: startStr,
+    end: endStr,
     requiredDays,
-    gainedDays,
-    efficiency,
-    efficiencyDisplay: formatEfficiency(requiredDays, gainedDays),
-    type: requiredDays === 1 ? 'bridge' : 'extended',
-    publicHolidays,
-    weekendDays,
-    displayRange: formatDateRange(startOfDisplayStart, startOfDisplayEnd),
-    vacationDays: vacationDays.map(d => startOfDay(d))
+    totalDaysOff,
+    efficiency: totalDaysOff / requiredDays,
+    holidays: relevantHolidays,
+    bridgeDays: relevantBridgeDays
   };
 };
 
-export function analyzeVacationOpportunities(
-  holidays: Holiday[],
-  state: GermanState
-): VacationRecommendation[] {
+// Main function to analyze vacation opportunities
+export const analyzeVacationOpportunities = (holidays: Holiday[]): VacationRecommendation[] => {
   const recommendations: VacationRecommendation[] = [];
-  
-  // Get bridge days from service
-  const bridgeDays = bridgeDayService.calculateBridgeDays(holidays, state);
-  
-  // Group bridge days that are close to each other (within 3 days)
-  const groupedBridgeDays: BridgeDay[][] = [];
-  let currentGroup: BridgeDay[] = [];
-  
-  const sortedBridgeDays = [...bridgeDays].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
-  );
 
-  for (const bridgeDay of sortedBridgeDays) {
-    if (currentGroup.length === 0) {
-      currentGroup.push(bridgeDay);
+  // Group holidays by proximity
+  const holidayGroups: Holiday[][] = [];
+  const sortedHolidays = holidays
+    .filter(h => h.type === 'public')
+    .sort((a, b) => {
+      const dateA = parseDateString(a.date || a.start || '');
+      const dateB = parseDateString(b.date || b.start || '');
+      return dateA.getTime() - dateB.getTime();
+    });
+
+  let currentGroup: Holiday[] = [];
+  for (let i = 0; i < sortedHolidays.length; i++) {
+    const holiday = sortedHolidays[i];
+    const lastHoliday = currentGroup[currentGroup.length - 1];
+
+    if (!lastHoliday) {
+      currentGroup.push(holiday);
+      continue;
+    }
+
+    const holidayDateStr = holiday.date || holiday.start;
+    const lastHolidayDateStr = lastHoliday.date || lastHoliday.start;
+    if (!holidayDateStr || !lastHolidayDateStr) continue;
+
+    const daysBetween = differenceInDays(
+      parseDateString(holidayDateStr),
+      parseDateString(lastHolidayDateStr)
+    );
+
+    if (daysBetween <= 5) {
+      currentGroup.push(holiday);
     } else {
-      const lastDay = currentGroup[currentGroup.length - 1];
-      const daysBetween = differenceInDays(bridgeDay.date, lastDay.date);
-      
-      if (daysBetween <= 3) {
-        currentGroup.push(bridgeDay);
-      } else {
-        groupedBridgeDays.push([...currentGroup]);
-        currentGroup = [bridgeDay];
-      }
+      holidayGroups.push([...currentGroup]);
+      currentGroup = [holiday];
     }
   }
+
   if (currentGroup.length > 0) {
-    groupedBridgeDays.push(currentGroup);
+    holidayGroups.push(currentGroup);
   }
 
-  // Analyze each group of bridge days
-  for (const group of groupedBridgeDays) {
-    // For each group, try different combinations of start and end dates
-    const firstDay = group[0];
-    const lastDay = group[group.length - 1];
-    
-    // Look at a window around the group
-    const windowStart = addDays(firstDay.date, -3);
-    const windowEnd = addDays(lastDay.date, 3);
-    
-    // Try different period lengths
-    for (let start = windowStart; start <= firstDay.date; start = addDays(start, 1)) {
-      for (let end = lastDay.date; end <= windowEnd; end = addDays(end, 1)) {
-        const rec = analyzeBridgeDayOpportunity(start, end, holidays);
-        if (rec) recommendations.push(rec);
-      }
-    }
-  }
-  
-  // Find holiday periods for extended opportunities
-  const publicHolidays = holidays.filter(h => h.type === 'public');
-  
-  // Group holidays that are close to each other
-  const groupedHolidays: Holiday[][] = [];
-  let currentHolidayGroup: Holiday[] = [];
-  
-  const sortedHolidays = [...publicHolidays].sort(
-    (a, b) => a.date.getTime() - b.date.getTime()
-  );
-
-  for (const holiday of sortedHolidays) {
-    if (currentHolidayGroup.length === 0) {
-      currentHolidayGroup.push(holiday);
-    } else {
-      const lastHoliday = currentHolidayGroup[currentHolidayGroup.length - 1];
-      const daysBetween = differenceInDays(holiday.date, lastHoliday.date);
-      
-      if (daysBetween <= 5) {
-        currentHolidayGroup.push(holiday);
-      } else {
-        groupedHolidays.push([...currentHolidayGroup]);
-        currentHolidayGroup = [holiday];
-      }
-    }
-  }
-  if (currentHolidayGroup.length > 0) {
-    groupedHolidays.push(currentHolidayGroup);
-  }
-
-  // Analyze each group of holidays
-  for (const group of groupedHolidays) {
+  // Analyze each group for vacation opportunities
+  for (const group of holidayGroups) {
     const firstHoliday = group[0];
     const lastHoliday = group[group.length - 1];
-    
-    // Look at a window around the group
-    const windowStart = addDays(firstHoliday.date, -5);
-    const windowEnd = addDays(lastHoliday.date, 5);
-    
-    // Try different period lengths
-    for (let start = windowStart; start <= firstHoliday.date; start = addDays(start, 1)) {
-      for (let end = lastHoliday.date; end <= windowEnd; end = addDays(end, 1)) {
+
+    const firstDateStr = firstHoliday.date || firstHoliday.start;
+    const lastDateStr = lastHoliday.date || lastHoliday.start;
+    if (!firstDateStr || !lastDateStr) continue;
+
+    const firstDate = parseDateString(firstDateStr);
+    const lastDate = parseDateString(lastDateStr);
+
+    const windowStart = addDays(firstDate, -5);
+    const windowEnd = addDays(lastDate, 5);
+
+    // Try different combinations of start and end dates
+    for (let start = windowStart; start <= firstDate; start = addDays(start, 1)) {
+      for (let end = lastDate; end <= windowEnd; end = addDays(end, 1)) {
         const rec = analyzeBridgeDayOpportunity(start, end, holidays);
-        if (rec) recommendations.push(rec);
+        if (rec.requiredDays > 0 && rec.requiredDays <= 5) {
+          recommendations.push(rec);
+        }
       }
     }
   }
-  
-  // Sort by efficiency and length
-  recommendations.sort((a, b) => {
-    const lengthDiff = (b.gainedDays / b.requiredDays) - (a.gainedDays / a.requiredDays);
-    if (Math.abs(lengthDiff) < 0.1) { // If efficiency is similar, prefer longer periods
-      return b.gainedDays - a.gainedDays;
-    }
-    return lengthDiff;
-  });
-  
-  // Remove overlapping recommendations, preferring longer/more efficient ones
-  const uniqueRecommendations: VacationRecommendation[] = [];
-  const addedPeriods = new Set<string>();
-  
-  for (const rec of recommendations) {
-    const periodKey = `${rec.periodStart.getTime()}-${rec.periodEnd.getTime()}`;
-    if (addedPeriods.has(periodKey)) continue;
-    
-    const hasOverlap = uniqueRecommendations.some(existing => 
-      (rec.periodStart <= existing.periodEnd && rec.periodEnd >= existing.periodStart)
+
+  // Sort by efficiency and remove duplicates
+  return recommendations
+    .sort((a, b) => b.efficiency - a.efficiency)
+    .filter((rec, index, self) =>
+      index === self.findIndex(r =>
+        areSameDays(r.start, rec.start) &&
+        areSameDays(r.end, rec.end)
+      )
     );
-    
-    if (!hasOverlap) {
-      uniqueRecommendations.push(rec);
-      addedPeriods.add(periodKey);
-    }
-  }
-  
-  // Sort by date
-  return uniqueRecommendations.sort((a, b) => a.startDate.getTime() - b.startDate.getTime());
-}
+};

@@ -35,6 +35,13 @@ const formatDate = (date: string) => {
   });
 };
 
+const formatSchoolHolidayName = (name: string): string => {
+  // Extract the base holiday name (e.g., "osterferien" from "osterferien baden-württemberg 2025")
+  const baseName = name.split(' ')[0];
+  // Capitalize first letter
+  return baseName.charAt(0).toUpperCase() + baseName.slice(1);
+};
+
 function getHeaderBackground(primary: string, secondary: string) {
   return `linear-gradient(135deg, ${primary}, ${secondary})`;
 }
@@ -73,7 +80,7 @@ export default function HolidayList({
   const secondColumnHolidays = allPublicHolidays.slice(midPoint);
 
   return (
-    <div className={styles.holidayGrid} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '1rem' }}>
+    <div className={styles.holidayGrid}>
       <div className={styles.holidayColumn}>
         <div className={styles.columnHeader} style={getHeaderStyles(primaryColor, secondaryColor)}>
           <FontAwesomeIcon icon={faCalendarDays} className={styles.headerIcon} style={{ 
@@ -99,15 +106,7 @@ export default function HolidayList({
             </p>
           </div>
         </div>
-        <div style={{ 
-          display: 'grid', 
-          gridTemplateColumns: '1fr 1fr', 
-          gap: '1rem', 
-          padding: '1.5rem',
-          background: '#ffffff',
-          borderBottomLeftRadius: '1rem',
-          borderBottomRightRadius: '1rem'
-        }}>
+        <div className={styles.holidayList}>
           <div>
             {firstColumnHolidays.map((holiday, index) => {
               if (!holiday.start) return null;
@@ -480,12 +479,7 @@ export default function HolidayList({
             </p>
           </div>
         </div>
-        <div style={{ 
-          padding: '1.5rem',
-          background: '#ffffff',
-          borderBottomLeftRadius: '1rem',
-          borderBottomRightRadius: '1rem'
-        }}>
+        <div className={styles.holidayList}>
           {schoolHolidays.map((holiday, index) => {
             if (!holiday.start || !holiday.end) return null;
             const isExpanded = expandedHolidays.includes(`school-${index}`);
@@ -518,7 +512,7 @@ export default function HolidayList({
                     alignItems: 'center',
                     gap: '0.5rem'
                   }}>
-                    {holiday.name}
+                    {formatSchoolHolidayName(holiday.name)}
                     <span style={{ 
                       fontSize: '0.75rem',
                       padding: '0.1rem 0.5rem',

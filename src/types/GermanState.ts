@@ -1,4 +1,5 @@
 export enum GermanState {
+  ALL = 'ALL',
   BE = 'BE',
   BW = 'BW',
   BY = 'BY',
@@ -18,6 +19,7 @@ export enum GermanState {
 }
 
 export const stateNames: Record<GermanState, string> = {
+  [GermanState.ALL]: 'Alle Bundesländer',
   [GermanState.BW]: 'Baden-Württemberg',
   [GermanState.BY]: 'Bayern',
   [GermanState.BE]: 'Berlin',

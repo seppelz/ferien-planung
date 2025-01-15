@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -60,19 +60,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühling",
+    season: "spring",
     description: "Osterwiese, Bremer Freimarkt Frühlingsflohmarkt, Maritime Woche an der Schlachte"
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Breminale, Musikfest Bremen, Maritime Woche, Vegesacker Hafenfest"
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Bremer Freimarkt, Maritimer Markt, Ischa Freimaak"
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Bremer Weihnachtsmarkt, Schlachte-Zauber, Winterlights im Bürgerpark"
   }
 ];

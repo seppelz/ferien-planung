@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -60,19 +60,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühling",
+    season: "spring",
     description: "Internationales Filmfestival Berlinale, Karneval der Kulturen, Gallery Weekend"
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Fête de la Musique, Christopher Street Day, Open Air Kinos und Konzerte"
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Festival of Lights, Berlin Art Week, Berliner Oktoberfest"
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Weihnachtsmärkte in allen Bezirken, Silvesterfeier am Brandenburger Tor"
   }
 ];
@@ -140,7 +140,7 @@ export const berlin: StateInfo = {
   holidays: [
     ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
       ...holiday,
-      type: "public",
+      type: "public" as const,
       isRegional: false,
       date: holiday.start,
       details: stateSpecificHolidayDetails[holiday.name] || {
@@ -149,8 +149,8 @@ export const berlin: StateInfo = {
     })),
     ...(holidays.publicHolidays["2025"]["BE"] || []).map(holiday => ({
       ...holiday,
-      type: "public",
-      isRegional: holiday.name === "Internationaler Frauentag",
+      type: "public" as const,
+      isRegional: true,
       date: holiday.start,
       details: stateSpecificHolidayDetails[holiday.name] || {
         description: `${holiday.name} ist in Berlin ein gesetzlicher Feiertag.`

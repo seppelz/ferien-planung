@@ -1,9 +1,9 @@
 import { GermanState } from './GermanState';
 
-export type HolidayType = 'public' | 'regional' | 'bridge' | 'school';
+export type HolidayType = 'public' | 'school' | 'vacation';
 
 export interface HolidayDetails {
-  description: string;
+  description?: string;
   traditions?: string[];
   culturalSignificance?: string;
   locations?: string[];
@@ -12,92 +12,77 @@ export interface HolidayDetails {
 
 export interface BaseHoliday {
   name: string;
-  type: 'public' | 'school' | 'optional';
+  type: HolidayType;
   details?: HolidayDetails;
   isRegional?: boolean;
   nationwide?: boolean;
+  state?: GermanState;
 }
 
 export interface SingleDayHoliday extends BaseHoliday {
   date: string;
-  start?: never;
-  end?: never;
+  endDate?: string;
 }
 
 export interface MultiDayHoliday extends BaseHoliday {
   start: string;
   end: string;
-  date?: never;
+  date?: string; // For compatibility with single day holiday interface
 }
 
 export type Holiday = SingleDayHoliday | MultiDayHoliday;
 
-export interface VacationPlan {
-  id: string;
+// Raw data interfaces (for API/storage)
+export interface RawHolidayDate {
+  date: string;
+  name: string;
+  type: HolidayType;
+  details?: HolidayDetails;
+  nationwide?: boolean;
+}
+
+export interface RawSchoolHoliday {
   start: string;
   end: string;
-  days: number;
-  type: 'vacation' | 'bridge';
-  efficiency?: number;
-  bridgeDayCount?: number;
-  holidayCount?: number;
-  weekendCount?: number;
-  totalDays?: number;
-  description?: string;
+  name: string;
+  type: 'school';
+  details?: HolidayDetails;
 }
 
-export interface StateVacationInfo {
-  state: GermanState;
-  availableVacationDays: number;
-  vacationPlans: VacationPlan[];
+export interface RawPublicHoliday {
+  date: string;
+  name: string;
+  type: 'public';
+  details?: HolidayDetails;
+  nationwide?: boolean;
+  end?: string;
 }
 
-export interface BridgeDay {
-  start: string;
-  end: string;
-  days: number;
-  holidays: Holiday[];
-  efficiency: number;
-  description?: string;
-  pattern?: string;
-  date?: string;
-  periodStart?: string;
-  periodEnd?: string;
-  requiredVacationDays?: number;
-  totalDaysOff?: number;
-}
-
-export interface VacationPeriod {
-  startDate: Date;
-  endDate: Date;
-  holidays: Holiday[];
-  bridgeDays: BridgeDay[];
-  requiredVacationDays: number;
-  totalDaysOff: number;
-  efficiency: number;
+export interface HolidayData {
+  publicHolidays: {
+    [year: string]: {
+      [state in GermanState]?: Array<{
+        name: string;
+        start: string;
+        end?: string;
+        type: 'public';
+      }>;
+    };
+  };
+  schoolHolidays: {
+    [year: string]: {
+      [state in GermanState]?: Array<{
+        name: string;
+        start: string;
+        end: string;
+        type: 'school';
+        details?: HolidayDetails;
+      }>;
+    };
+  };
 }
 
 export interface SeasonalTradition {
   season: string;
   description: string;
-}
-
-// Raw data interfaces
-export interface RawHolidayDate {
-  start: string;
-  end?: string;
-}
-
-export interface RawSchoolHoliday extends RawHolidayDate {
-  name: string;
-}
-
-export interface RawPublicHoliday extends RawHolidayDate {
-  name: string;
-  nationwide?: boolean;
-}
-
-export interface HolidayData {
-  schoolHolidays: Record<number, Record<GermanState, RawSchoolHoliday[]>>;
-  publicHolidays: Record<number, Record<GermanState | 'ALL', RawPublicHoliday[]>>;
 } 

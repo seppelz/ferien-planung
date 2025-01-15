@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -60,19 +60,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühjahr",
+    season: "spring",
     description: "Krokusse in der Lüneburger Heide, erste Wattwanderungen und Frühlingserwachen im Harz."
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Wattenmeerfestival, Heideblüte und Bergfeste im Harz prägen den Sommer."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Erntefeste in der Heide, Zugvogelbeobachtung im Wattenmeer und Indian Summer im Harz."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Wintervergnügen von Winterwanderungen im Watt bis zum Skifahren im Harz."
   }
 ];

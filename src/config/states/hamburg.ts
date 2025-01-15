@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -60,19 +60,19 @@ const stateSpecificHolidayDetails: Record<string, { description: string, traditi
 
 const seasonalTraditions: SeasonalTradition[] = [
   {
-    season: "Frühling",
+    season: "spring",
     description: "Kirschblütenfest in der Hafencity, Hafengeburtstag, Alstervergnügen"
   },
   {
-    season: "Sommer",
+    season: "summer",
     description: "Hamburger DOM, Altonale, Dockville Festival, Cruise Days"
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Hamburger Filmfest, Reeperbahn Festival, Laternenumzüge"
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Historischer Weihnachtsmarkt, Winterdom, Alstertanne"
   }
 ];

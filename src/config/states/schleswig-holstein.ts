@@ -1,5 +1,5 @@
 import { StateInfo } from '../types/StateInfo';
-import { Holiday, SeasonalTradition } from '../types/Holiday';
+import { Holiday, SeasonalTradition } from '@/types/holiday';
 import { VacationDestination } from '../types/StateInfo';
 import { holidays } from '../../data/holidays';
 
@@ -68,11 +68,11 @@ const seasonalTraditions: SeasonalTradition[] = [
     description: "Kieler Woche, Strandleben und Wassersport prägen den Sommer an Nord- und Ostsee."
   },
   {
-    season: "Herbst",
+    season: "autumn",
     description: "Herbststürme, Krabbenfang und gemütliche Teestuben bestimmen die Jahreszeit."
   },
   {
-    season: "Winter",
+    season: "winter",
     description: "Maritimes Winterflair mit Weihnachtsmärkten in historischen Hafenstädten."
   }
 ];
