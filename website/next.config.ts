@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   output: 'export',
   images: {
     unoptimized: false,
-    domains: ['ferien-planung.de'],
+    domains: ['ferien-planung.de', 'app.ferien-planung.de'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/webp'],
@@ -12,6 +12,10 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'ferien-planung.de',
+      },
+      {
+        protocol: 'https',
+        hostname: 'app.ferien-planung.de',
       },
     ],
   },
@@ -35,11 +39,17 @@ const nextConfig: NextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-  async rewrites() {
+  async redirects() {
     return [
       {
+        source: '/app',
+        destination: 'https://app.ferien-planung.de',
+        permanent: true,
+      },
+      {
         source: '/app/:path*',
-        destination: '/_app/:path*',
+        destination: 'https://app.ferien-planung.de/:path*',
+        permanent: true,
       },
     ];
   },
