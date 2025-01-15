@@ -2,8 +2,9 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'export',
+  distDir: 'out',
   images: {
-    unoptimized: false,
+    unoptimized: true,
     domains: ['ferien-planung.de', 'app.ferien-planung.de'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],

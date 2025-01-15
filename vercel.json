@@ -1,5 +1,5 @@
 {
   "buildCommand": "cd website && npm install --force && npm run build",
-  "outputDirectory": "website/.next",
+  "outputDirectory": "website/out",
   "rewrites": []
 } 
