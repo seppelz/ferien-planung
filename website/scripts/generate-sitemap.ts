@@ -11,10 +11,8 @@ async function generateSitemap() {
   // Define static routes with their priorities and change frequencies
   const staticRoutes = [
     { path: '/', priority: '1.0', changefreq: 'daily' },
-    { path: '/states', priority: '0.9', changefreq: 'weekly' },
     { path: '/datenschutz', priority: '0.3', changefreq: 'monthly' },
     { path: '/impressum', priority: '0.3', changefreq: 'monthly' },
-    { path: '/kontakt', priority: '0.3', changefreq: 'monthly' },
     ...stateIds.map(stateId => ({
       path: `/states/${stateId}`,
       priority: '0.8',
