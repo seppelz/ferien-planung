@@ -1,5 +1,6 @@
 import { writeFileSync } from 'fs';
 import { getStateIds } from '../src/utils/stateUtils';
+import path from 'path';
 
 async function generateSitemap() {
   const baseUrl = 'https://ferien-planung.de';
@@ -35,8 +36,18 @@ async function generateSitemap() {
     .join('')}
 </urlset>`;
 
-  // Write sitemap to public directory
-  writeFileSync('public/sitemap.xml', sitemap);
+  // Write sitemap to both public and out directories
+  const publicPath = path.join(process.cwd(), 'public', 'sitemap.xml');
+  const outPath = path.join(process.cwd(), 'out', 'sitemap.xml');
+  
+  writeFileSync(publicPath, sitemap);
+  // Also write to out directory if it exists (for static export)
+  try {
+    writeFileSync(outPath, sitemap);
+  } catch (error) {
+    console.log('Note: out directory not found, skipping secondary sitemap write');
+  }
+  
   console.log('Sitemap generated successfully!');
 }
 
