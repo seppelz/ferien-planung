@@ -134,25 +134,52 @@
 }
 
 .ctaButton {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background-color: var(--primary);
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 8px;
+  background: var(--state-primary-color);
   color: white;
   text-decoration: none;
-  border-radius: 0.5rem;
-  font-weight: 500;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .ctaButton:hover {
-  background-color: var(--primary-dark);
+  background: var(--state-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ctaButton:focus {
+  outline: none;
+  border-color: var(--state-primary-light);
+  box-shadow: 0 0 0 3px rgba(var(--state-primary-rgb), 0.3);
+}
+
+.ctaButton:focus:not(:focus-visible) {
+  border-color: transparent;
+  box-shadow: none;
+}
+
+.ctaButton:focus-visible {
+  outline: none;
+  border-color: var(--state-primary-light);
+  box-shadow: 0 0 0 3px rgba(var(--state-primary-rgb), 0.3);
 }
 
 .ctaIcon {
-  width: 1rem;
-  height: 1rem;
+  width: 20px;
+  height: 20px;
+  transition: transform 0.2s ease;
+}
+
+.ctaButton:hover .ctaIcon {
+  transform: translateX(4px);
 }
 
 @media (max-width: 768px) {
@@ -166,6 +193,11 @@
 
   .navLinks {
     gap: 1rem;
+  }
+
+  .ctaButton {
+    width: auto;
+    padding: 0.75rem 1.25rem;
   }
 }
 
