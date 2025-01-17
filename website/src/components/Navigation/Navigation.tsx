@@ -47,9 +47,6 @@ export default function Navigation() {
               </Link>
             </div>
           </div>
-          <Link href="/app" className={styles.holidayLink}>
-            Urlaubsplaner
-          </Link>
         </div>
 
         <div className={styles.navActions}>
