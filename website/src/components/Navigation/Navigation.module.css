@@ -141,24 +141,24 @@
   font-size: 1rem;
   font-weight: 600;
   border-radius: 8px;
-  background: var(--state-primary-color);
-  color: white;
+  background: #4F46E5;
+  color: #FFFFFF;
   text-decoration: none;
   transition: all 0.2s ease;
   border: 2px solid transparent;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
 }
 
 .ctaButton:hover {
-  background: var(--state-primary-dark);
+  background: #4338CA;
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
 }
 
 .ctaButton:focus {
   outline: none;
-  border-color: var(--state-primary-light);
-  box-shadow: 0 0 0 3px rgba(var(--state-primary-rgb), 0.3);
+  border-color: #818CF8;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
 }
 
 .ctaButton:focus:not(:focus-visible) {
@@ -168,14 +168,15 @@
 
 .ctaButton:focus-visible {
   outline: none;
-  border-color: var(--state-primary-light);
-  box-shadow: 0 0 0 3px rgba(var(--state-primary-rgb), 0.3);
+  border-color: #818CF8;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
 }
 
 .ctaIcon {
   width: 20px;
   height: 20px;
   transition: transform 0.2s ease;
+  color: #FFFFFF;
 }
 
 .ctaButton:hover .ctaIcon {
