@@ -433,7 +433,10 @@ export default async function StatePage({
               </div>
               <h1 className={styles.heroTitle} style={{ 
                 color: 'var(--state-text-on-hero)',
-                textShadow: '0 2px 4px rgba(0, 0, 0, 0.15)'
+                textShadow: '0 2px 4px rgba(0, 0, 0, 0.15)',
+                willChange: 'transform',
+                transform: 'translateZ(0)',
+                backfaceVisibility: 'hidden'
               }}>
                 Feiertage und Schulferien in {fullName} 2025
               </h1>

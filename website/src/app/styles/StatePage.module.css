@@ -169,11 +169,24 @@
 
 .heroTitle {
   font-size: 3rem;
-  font-weight: 800;
+  font-weight: 700;
   margin: 1.5rem 0;
+  text-align: center;
   line-height: 1.2;
-  animation: slideUp 0.8s ease-out;
-  color: var(--state-text-on-primary);
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  contain: layout;
+  contain-intrinsic-size: 1px 80px;
+  content-visibility: auto;
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 2rem;
+    margin: 1rem 0;
+    contain-intrinsic-size: 1px 60px;
+  }
 }
 
 .heroSubtitle {
