@@ -448,14 +448,18 @@ export default async function StatePage({
                 Nutzen Sie {publicHolidays.length + regionalHolidays.length} Feiertage für optimale Brückentage.
               </p>
               <div className={styles.heroActions}>
-                <Link href="/planner" className={styles.primaryButton} style={{
-                  background: 'var(--state-primary-alpha-20)',
-                  color: 'var(--state-text-on-hero)',
-                  borderColor: 'var(--state-primary-alpha-10)',
-                  backdropFilter: 'blur(4px)',
-                  WebkitBackdropFilter: 'blur(4px)',
-                  '--hover-color': 'var(--state-hover-overlay)'
-                } as React.CSSProperties}>
+                <Link 
+                  href="https://app.ferien-planung.de" 
+                  className={styles.primaryButton}
+                  style={{
+                    background: 'var(--state-primary-alpha-20)',
+                    color: 'var(--state-text-on-hero)',
+                    borderColor: 'var(--state-primary-alpha-10)',
+                    backdropFilter: 'blur(4px)',
+                    WebkitBackdropFilter: 'blur(4px)',
+                    '--hover-color': 'var(--state-hover-overlay)'
+                  } as React.CSSProperties}
+                >
                   Urlaubsplaner starten
                   <span className={styles.buttonIcon}>→</span>
                 </Link>
@@ -585,28 +589,32 @@ export default async function StatePage({
                   Nutzen Sie unseren intelligenten Urlaubsplaner, um das Beste aus Ihren Urlaubstagen herauszuholen.
                   Finden Sie die optimalen Brückentage und verlängern Sie Ihren Urlaub effizient.
                 </p>
-                <Link href="/planner" className={styles.promoCTA} style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '0.75rem',
-                  background: 'rgba(255, 255, 255, 0.15)',
-                  color: '#ffffff',
-                  padding: '1rem 2rem',
-                  borderRadius: '0.75rem',
-                  fontSize: '1.15rem',
-                  fontWeight: '600',
-                  textDecoration: 'none',
-                  transition: 'all 0.3s ease',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                  backdropFilter: 'blur(4px)',
-                  WebkitBackdropFilter: 'blur(4px)',
-                  boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
-                  '&:hover': {
-                    background: 'rgba(255, 255, 255, 0.2)',
-                    transform: 'translateY(-2px)',
-                    boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)'
-                  }
-                } as React.CSSProperties}>
+                <Link 
+                  href="https://app.ferien-planung.de" 
+                  className={styles.promoCTA}
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    background: 'rgba(255, 255, 255, 0.15)',
+                    color: '#ffffff',
+                    padding: '1rem 2rem',
+                    borderRadius: '0.75rem',
+                    fontSize: '1.15rem',
+                    fontWeight: '600',
+                    textDecoration: 'none',
+                    transition: 'all 0.3s ease',
+                    border: '1px solid rgba(255, 255, 255, 0.2)',
+                    backdropFilter: 'blur(4px)',
+                    WebkitBackdropFilter: 'blur(4px)',
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.1)',
+                    '&:hover': {
+                      background: 'rgba(255, 255, 255, 0.2)',
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 6px 20px rgba(0, 0, 0, 0.15)'
+                    }
+                  } as React.CSSProperties}
+                >
                   Jetzt Urlaub clever planen
                   <FontAwesomeIcon icon={faArrowRight} style={{ 
                     color: '#ffffff',

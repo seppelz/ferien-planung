@@ -16,7 +16,7 @@ export default function NotFound() {
             <Link href="/" className={styles.button}>
               Zur Startseite
             </Link>
-            <Link href="/planner" className={styles.button}>
+            <Link href="https://app.ferien-planung.de" className={styles.button}>
               Zum Urlaubsplaner
             </Link>
           </div>

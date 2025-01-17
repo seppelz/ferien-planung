@@ -21,7 +21,7 @@ export default function Footer() {
             <h4>Navigation</h4>
             <ul>
               <li><Link href="/">Startseite</Link></li>
-              <li><Link href="/planner">Urlaubsplaner</Link></li>
+              <li><Link href="https://app.ferien-planung.de">Urlaubsplaner</Link></li>
               <li><Link href="/#features">Funktionen</Link></li>
             </ul>
           </div>

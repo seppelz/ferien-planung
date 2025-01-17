@@ -10,27 +10,22 @@ async function generateSitemap() {
 
   // Define static routes with their priorities and change frequencies
   const staticRoutes = [
-    { path: '', priority: '1.0', changefreq: 'daily' },  // homepage
-    { path: '/planner', priority: '0.9', changefreq: 'weekly' },
+    { path: '/', priority: '1.0', changefreq: 'daily' },
     { path: '/states', priority: '0.9', changefreq: 'weekly' },
     { path: '/datenschutz', priority: '0.3', changefreq: 'monthly' },
-    { path: '/impressum', priority: '0.3', changefreq: 'monthly' }
+    { path: '/impressum', priority: '0.3', changefreq: 'monthly' },
+    { path: '/kontakt', priority: '0.3', changefreq: 'monthly' },
+    ...stateIds.map(stateId => ({
+      path: `/states/${stateId}`,
+      priority: '0.8',
+      changefreq: 'weekly'
+    }))
   ];
-
-  // Generate state routes
-  const stateRoutes = stateIds.map(stateId => ({
-    path: `/states/${stateId}`,
-    priority: '0.8',
-    changefreq: 'weekly'
-  }));
-
-  // Combine all routes
-  const allRoutes = [...staticRoutes, ...stateRoutes];
 
   // Generate sitemap XML
   const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  ${allRoutes
+  ${staticRoutes
     .map(route => `
     <url>
       <loc>${baseUrl}${route.path}</loc>

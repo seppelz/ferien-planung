@@ -51,7 +51,7 @@ export default function Navigation() {
 
         <div className={styles.navActions}>
           <Link 
-            href="/app/" 
+            href="https://app.ferien-planung.de" 
             className={styles.ctaButton}
             aria-label="Urlaubsplaner öffnen - Planen Sie Ihren Urlaub mit unserer App"
             role="button"
