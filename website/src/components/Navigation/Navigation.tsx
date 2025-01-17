@@ -54,8 +54,9 @@ export default function Navigation() {
 
         <div className={styles.navActions}>
           <Link 
-            href="/app"
+            href="/app/" 
             className={styles.ctaButton}
+            aria-label="Zur Holiday Planner App wechseln"
           >
             <span>Urlaub planen</span>
             <svg className={styles.ctaIcon} viewBox="0 0 20 20" fill="currentColor">

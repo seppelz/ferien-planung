@@ -3879,34 +3879,39 @@
 
 /* Footer */
 .footer {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(10px);
   padding: 2rem;
-  margin-top: 4rem;
   text-align: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-top: 1px solid var(--state-border-light);
+  margin-top: 4rem;
+  background: var(--state-background-paper);
 }
 
 .footer p {
-  color: #4a5568;
-  margin-bottom: 1rem;
+  margin: 0 0 1rem;
+  color: var(--state-text-primary);
+  opacity: 0.9;
 }
 
 .footer nav {
   display: flex;
-  justify-content: center;
   gap: 2rem;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .footer a {
-  color: var(--landing-primary);
+  color: var(--state-text-primary);
   text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.2s;
+  font-weight: 500;
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+  padding: 0.5rem;
+  border-radius: 4px;
 }
 
 .footer a:hover {
-  color: var(--landing-secondary);
+  opacity: 1;
+  background: var(--state-primary-alpha-10);
 }
 
 /* Responsive adjustments */
