@@ -12,6 +12,7 @@ async function generateSitemap() {
   // Define static routes with their priorities and change frequencies
   const staticRoutes = [
     { path: '/', priority: '1.0', changefreq: 'daily' },
+    { path: 'https://app.ferien-planung.de', priority: '1.0', changefreq: 'daily', isExternal: true },
     { path: '/datenschutz', priority: '0.3', changefreq: 'monthly' },
     { path: '/impressum', priority: '0.3', changefreq: 'monthly' },
     ...stateIds.map(stateId => ({
@@ -27,7 +28,7 @@ async function generateSitemap() {
   ${staticRoutes
     .map(route => `
     <url>
-      <loc>${baseUrl}${route.path}</loc>
+      <loc>${route.isExternal ? route.path : `${baseUrl}${route.path}`}</loc>
       <lastmod>${date}</lastmod>
       <changefreq>${route.changefreq}</changefreq>
       <priority>${route.priority}</priority>
