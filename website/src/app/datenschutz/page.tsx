@@ -57,10 +57,9 @@ export default function PrivacyPolicy() {
             </p>
             <h3>Verantwortliche Stelle</h3>
             <p>
-              Müller & Söcker GbR<br />
-              c/o VELT STUDIO GmbH<br />
-              Urbanstraße 71<br />
-              10967 Berlin<br />
+              Sebastian Söcker<br />
+              Hülshoffstr. 22<br />
+              46342 Velen<br />
               E-Mail: info@ferien-planung.de
             </p>
           </section>
