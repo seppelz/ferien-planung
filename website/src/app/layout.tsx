@@ -8,7 +8,7 @@ const inter = Inter({
   subsets: ['latin'],
 });
 
-const GA_MEASUREMENT_ID = 'G-VXXPTVL7PT'; // Replace with your GA measurement ID
+const GA_MEASUREMENT_ID = 'G-L10QKDMWNF'; // Replace with your GA measurement ID
 
 export const metadata = {
   title: 'Holiday Planner - Intelligente Urlaubsplanung für Deutschland',
