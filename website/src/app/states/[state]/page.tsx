@@ -399,7 +399,7 @@ export default async function StatePage({
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'flex-start',
-              height: '400px',
+              height: '380px',
               position: 'relative',
               zIndex: 1
             }}>
@@ -410,7 +410,7 @@ export default async function StatePage({
                 gap: '0.5rem',
                 margin: '0',
                 maxWidth: '100%',
-                padding: '0.5rem'
+                padding: '0.75rem 0.5rem'
               }}>
                 <div className={styles.statBadge} style={{
                   background: 'var(--state-primary-alpha-10)',
@@ -470,7 +470,7 @@ export default async function StatePage({
                   }}>Ferientage</span>
                 </div>
               </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0 }}>
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0, marginTop: '0.75rem' }}>
                 <h1 className={styles.heroTitle} style={{ 
                   color: 'var(--state-text-on-hero)',
                   textShadow: '0 2px 4px rgba(0, 0, 0, 0.15)',
@@ -503,7 +503,7 @@ export default async function StatePage({
                 gap: '0.5rem',
                 justifyContent: 'center',
                 alignItems: 'center',
-                padding: '0.5rem 1rem 1rem',
+                padding: '0.5rem 1rem 0.75rem',
                 width: '100%',
                 maxWidth: '100%'
               }}>
