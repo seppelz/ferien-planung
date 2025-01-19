@@ -29,10 +29,10 @@ const calculateDuration = (start: string, end: string): number => {
 };
 
 const formatDate = (date: string) => {
-  return new Date(date).toLocaleDateString('de-DE', {
-    day: '2-digit',
-    month: '2-digit'
-  });
+  const d = new Date(date);
+  const day = String(d.getDate()).padStart(2, '0');
+  const month = String(d.getMonth() + 1).padStart(2, '0');
+  return `${day}.${month}`;
 };
 
 const formatSchoolHolidayName = (name: string): string => {

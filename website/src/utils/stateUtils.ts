@@ -18,7 +18,7 @@ import { GermanState } from '../types/GermanState';
 import type { StateInfo } from '../types/StateInfo';
 
 // Map of state slugs to their data
-const STATE_DATA: Record<string, StateInfo> = {
+export const STATE_DATA: Record<string, StateInfo> = {
   'berlin': berlin,
   'bayern': bayern,
   'baden-wuerttemberg': badenWuerttemberg,

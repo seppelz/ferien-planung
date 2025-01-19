@@ -240,8 +240,18 @@ export const nordrheinWestfalen: StateInfo = {
       }
     };
 
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
+    // Extract the base holiday name and capitalize it
+    const baseHolidayName = holiday.name
+      .split(" ")  // Split on spaces
+      .filter(part => !part.includes("nordrhein") && !part.includes("westfalen") && !part.includes("2025") && !part.includes("("))  // Remove state, year, and extra info
+      .join(" ");  // Join remaining parts
+    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
+
+    // Find the matching holiday info case-insensitively
+    const matchingKey = Object.keys(familyActivities).find(
+      key => key.toLowerCase() === holidayName.toLowerCase()
+    );
+    const holidayInfo = matchingKey ? familyActivities[matchingKey] : {
       description: `${holiday.name} in Nordrhein-Westfalen`,
       activities: []
     };

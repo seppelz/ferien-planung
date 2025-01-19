@@ -47,7 +47,7 @@ export default function Footer() {
           <div className={styles.footerLinks}>
             <Link href="/impressum">Impressum</Link>
             <Link href="/datenschutz">Datenschutz</Link>
-            <Link href="/kontakt">Kontakt</Link>
+            <span>Kontakt: <a href="mail: info@ferien-planung.de">info@ferien-planung.de</a></span>
           </div>
         </div>
       </div>

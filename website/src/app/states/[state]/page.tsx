@@ -113,7 +113,7 @@ const generateStructuredData = (stateInfo: StateInfo): Record<string, unknown> =
 export async function generateMetadata(
   { params }: Props
 ): Promise<Metadata> {
-  const stateId = params.state;
+  const { state: stateId } = await params;
   const stateInfo = await getStateInfo(stateId);
   if (!stateInfo) return { title: 'Bundesland nicht gefunden' };
 
@@ -180,7 +180,7 @@ export async function generateMetadata(
 export default async function StatePage({
   params,
 }: Pick<Props, 'params'>): Promise<JSX.Element> {
-  const stateId = params.state;
+  const { state: stateId } = await params;
   const stateInfo = await getStateInfo(stateId);
   const stateEnum = getStateEnum(stateId);
 
@@ -630,67 +630,58 @@ export default async function StatePage({
         {keyFacts && (
           <section id="about" className={styles.stateOverviewSection} style={{
             background: `linear-gradient(135deg, ${colorScheme.primary.main}, ${colorScheme.secondary.main})`,
-            padding: '4rem 2rem',
+            padding: '3rem 1.5rem',
             borderRadius: '1.5rem',
-            margin: '3rem auto',
+            margin: '2rem auto',
             maxWidth: '1200px',
-            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.05)'
+            boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)'
           }}>
             <h2 style={{
-              fontSize: '2.25rem',
+              fontSize: '2rem',
               fontWeight: '700',
-              marginBottom: '2.5rem',
+              marginBottom: '2rem',
               textAlign: 'center',
               color: '#ffffff',
-              position: 'relative',
-              display: 'inline-block',
-              left: '50%',
-              transform: 'translateX(-50%)',
-              padding: '0 1rem',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)'
-            }}>Über {fullName}</h2>
+            }}>{fullName}</h2>
             <div className={styles.microInfoBar} style={{
-              background: 'rgba(255, 255, 255, 0.95)',
-              padding: '2rem',
-              borderRadius: '1.25rem',
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '2rem',
+              background: 'rgba(255, 255, 255, 0.98)',
+              padding: '1.5rem',
+              borderRadius: '1rem',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+              gap: '1.5rem',
               justifyContent: 'center',
-              alignItems: 'stretch',
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              margin: '0 auto 3rem',
-              maxWidth: '1000px',
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)'
+              alignItems: 'start',
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+              border: '1px solid rgba(255, 255, 255, 0.3)',
+              margin: '0 auto 2rem',
+              maxWidth: '1000px'
             }}>
               <div className={styles.microInfoItem} style={{
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1rem',
-                padding: '1.25rem 1.75rem',
+                padding: '1rem 1.25rem',
                 background: 'white',
-                borderRadius: '1rem',
-                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                minWidth: '220px',
-                border: '1px solid var(--state-border-lighter)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                borderRadius: '0.75rem',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                border: '1px solid var(--state-border-lighter)'
               }}>
                 <FontAwesomeIcon icon={faBuilding} className={styles.microInfoIcon} style={{
-                  color: 'var(--state-primary-color)',
-                  fontSize: '1.5rem',
+                  color: colorScheme.primary.main,
+                  fontSize: '1.25rem',
                   opacity: '0.9'
                 }} />
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span className={styles.microInfoLabel} style={{
-                    fontSize: '0.9rem',
+                    fontSize: '0.85rem',
                     color: 'var(--state-text-muted)',
-                    marginBottom: '0.35rem',
+                    marginBottom: '0.25rem',
                     fontWeight: '500'
                   }}>Hauptstadt</span>
                   <span className={styles.microInfoValue} style={{
-                    fontSize: '1.1rem',
+                    fontSize: '1rem',
                     fontWeight: '600',
                     color: 'var(--state-text-primary)'
                   }}>{keyFacts.capital}</span>
@@ -700,28 +691,26 @@ export default async function StatePage({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1rem',
-                padding: '1.25rem 1.75rem',
+                padding: '1rem 1.25rem',
                 background: 'white',
-                borderRadius: '1rem',
-                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                minWidth: '220px',
-                border: '1px solid var(--state-border-lighter)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                borderRadius: '0.75rem',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                border: '1px solid var(--state-border-lighter)'
               }}>
                 <FontAwesomeIcon icon={faUsers} className={styles.microInfoIcon} style={{
-                  color: 'var(--state-primary-color)',
-                  fontSize: '1.5rem',
+                  color: colorScheme.primary.main,
+                  fontSize: '1.25rem',
                   opacity: '0.9'
                 }} />
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span className={styles.microInfoLabel} style={{
-                    fontSize: '0.9rem',
+                    fontSize: '0.85rem',
                     color: 'var(--state-text-muted)',
-                    marginBottom: '0.35rem',
+                    marginBottom: '0.25rem',
                     fontWeight: '500'
                   }}>Einwohner</span>
                   <span className={styles.microInfoValue} style={{
-                    fontSize: '1.1rem',
+                    fontSize: '1rem',
                     fontWeight: '600',
                     color: 'var(--state-text-primary)'
                   }}>{keyFacts.population}</span>
@@ -731,28 +720,26 @@ export default async function StatePage({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '1rem',
-                padding: '1.25rem 1.75rem',
+                padding: '1rem 1.25rem',
                 background: 'white',
-                borderRadius: '1rem',
-                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                minWidth: '220px',
-                border: '1px solid var(--state-border-lighter)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                borderRadius: '0.75rem',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                border: '1px solid var(--state-border-lighter)'
               }}>
                 <FontAwesomeIcon icon={faRulerCombined} className={styles.microInfoIcon} style={{
-                  color: 'var(--state-primary-color)',
-                  fontSize: '1.5rem',
+                  color: colorScheme.primary.main,
+                  fontSize: '1.25rem',
                   opacity: '0.9'
                 }} />
                 <div style={{ display: 'flex', flexDirection: 'column' }}>
                   <span className={styles.microInfoLabel} style={{
-                    fontSize: '0.9rem',
+                    fontSize: '0.85rem',
                     color: 'var(--state-text-muted)',
-                    marginBottom: '0.35rem',
+                    marginBottom: '0.25rem',
                     fontWeight: '500'
                   }}>Fläche</span>
                   <span className={styles.microInfoValue} style={{
-                    fontSize: '1.1rem',
+                    fontSize: '1rem',
                     fontWeight: '600',
                     color: 'var(--state-text-primary)'
                   }}>{keyFacts.area}</span>
@@ -762,24 +749,22 @@ export default async function StatePage({
                 display: 'flex',
                 alignItems: 'flex-start',
                 gap: '1rem',
-                padding: '1.25rem 1.75rem',
+                padding: '1rem 1.25rem',
                 background: 'white',
-                borderRadius: '1rem',
-                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
-                flex: '1 1 auto',
-                maxWidth: '100%',
-                border: '1px solid var(--state-border-lighter)',
-                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
+                borderRadius: '0.75rem',
+                boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
+                gridColumn: '1 / -1',
+                border: '1px solid var(--state-border-lighter)'
               }}>
                 <FontAwesomeIcon icon={faIndustry} className={styles.microInfoIcon} style={{
-                  color: 'var(--state-primary-color)',
-                  fontSize: '1.5rem',
+                  color: colorScheme.primary.main,
+                  fontSize: '1.25rem',
                   opacity: '0.9',
                   marginTop: '0.2rem'
                 }} />
                 <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
                   <span className={styles.microInfoLabel} style={{
-                    fontSize: '0.9rem',
+                    fontSize: '0.85rem',
                     color: 'var(--state-text-muted)',
                     marginBottom: '0.5rem',
                     fontWeight: '500'
@@ -789,16 +774,17 @@ export default async function StatePage({
                     flexWrap: 'wrap',
                     gap: '0.5rem'
                   }}>
-                  {keyFacts.economicStrength.map((strength, index) => (
+                    {keyFacts.economicStrength.map((strength, index) => (
                       <span key={index} className={styles.microInfoTag} style={{
-                        fontSize: '0.9rem',
-                        padding: '0.35rem 1rem',
-                        borderRadius: '2rem',
-                        background: 'var(--state-gradient-subtle)',
+                        fontSize: '0.85rem',
+                        padding: '0.35rem 0.75rem',
+                        borderRadius: '1rem',
+                        background: `${colorScheme.primary.main}10`,
                         color: 'var(--state-text-primary)',
                         fontWeight: '500',
                         border: '1px solid var(--state-border-light)',
-                        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)'
+                        boxShadow: '0 1px 2px rgba(0, 0, 0, 0.05)',
+                        whiteSpace: 'nowrap'
                       }}>{strength}</span>
                     ))}
                   </div>
@@ -808,15 +794,15 @@ export default async function StatePage({
             <div style={{
               background: 'white',
               borderRadius: '1rem',
-              padding: '2rem',
+              padding: '1.5rem',
               maxWidth: '900px',
               margin: '0 auto',
-              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.04)',
+              boxShadow: '0 2px 12px rgba(0, 0, 0, 0.06)',
               border: '1px solid var(--state-border-lighter)'
             }}>
               <p className={styles.stateDescription} style={{
-                fontSize: '1.15rem',
-                lineHeight: '1.7',
+                fontSize: '1.1rem',
+                lineHeight: '1.6',
                 color: 'var(--state-text-primary)',
                 margin: '0',
                 textAlign: 'center',

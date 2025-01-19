@@ -41,33 +41,23 @@ export default function Imprint() {
           <section>
             <h2>Angaben gemäß § 5 TMG</h2>
             <p>
-              Müller & Söcker GbR<br />
-              c/o VELT STUDIO GmbH<br />
-              Urbanstraße 71<br />
-              10967 Berlin
+              Sebastian Söcker<br />
+              Hülshoffstr. 22<br />
+              46342 Velen
             </p>
           </section>
 
           <section>
             <h2>Vertreten durch</h2>
             <p>
-              Sebastian Söcker, M.A.<br />
-              Thomas Müller, M.A.
+              Sebastian Söcker<br />
             </p>
           </section>
 
           <section>
             <h2>Kontakt</h2>
             <p>
-              E-Mail: info@ferien-planung.de
-            </p>
-          </section>
-
-          <section>
-            <h2>Umsatzsteuer-ID</h2>
-            <p>
-              Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br />
-              DE335581492
+              E-Mail: <a href="mail: info@ferien-planung.de">info@ferien-planung.de</a>
             </p>
           </section>
 
