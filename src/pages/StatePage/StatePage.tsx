@@ -756,7 +756,7 @@ const StatePage: React.FC = () => {
         <div className={styles.ctaContent}>
           <h2 className={styles.ctaTitle}>Bereit für die Urlaubsplanung?</h2>
           <p className={styles.ctaDescription}>
-            Optimiere deinen Urlaub mit unseren intelligenten Brückentage-Empfehlungen.
+            Optimieren Sie Ihren Urlaub mit unseren intelligenten Brückentage-Empfehlungen.
           </p>
           <Link to="/app" className={styles.ctaButton}>
             Jetzt Urlaub planen <FaArrowRight className={styles.ctaIcon} />
