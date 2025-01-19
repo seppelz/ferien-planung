@@ -398,12 +398,12 @@ export default async function StatePage({
             <div className={styles.headerContent}>
               <div className={styles.heroStats} style={{
                 display: 'flex',
-                flexWrap: 'wrap',
+                flexWrap: 'nowrap',
                 justifyContent: 'center',
-                gap: '1rem',
-                margin: '0 auto 2rem',
+                gap: '0.5rem',
+                margin: '1rem auto',
                 maxWidth: '100%',
-                padding: '0 1rem'
+                padding: '0 0.5rem'
               }}>
                 <div className={styles.statBadge} style={{
                   background: 'var(--state-primary-alpha-10)',
@@ -411,41 +411,56 @@ export default async function StatePage({
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                   flex: '1 1 auto',
-                  minWidth: '120px',
-                  maxWidth: '200px'
+                  minWidth: '90px',
+                  maxWidth: '120px',
+                  padding: '0.75rem 0.5rem'
                 }}>
-                  <span className={styles.statNumber}>{publicHolidays.length}</span>
-                  <span className={styles.statLabel}>Feiertage</span>
+                  <span className={styles.statNumber} style={{
+                    fontSize: 'clamp(1.25rem, 4vw, 1.5rem)',
+                    lineHeight: '1.2'
+                  }}>{publicHolidays.length}</span>
+                  <span className={styles.statLabel} style={{
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                    lineHeight: '1.2'
+                  }}>Feiertage</span>
                 </div>
-                <div className={styles.statDivider} style={{ 
-                  background: 'var(--state-primary-alpha-20)'
-                }} />
                 <div className={styles.statBadge} style={{
                   background: 'var(--state-primary-alpha-10)',
                   color: 'var(--state-text-on-hero)',
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                   flex: '1 1 auto',
-                  minWidth: '120px',
-                  maxWidth: '200px'
+                  minWidth: '90px',
+                  maxWidth: '120px',
+                  padding: '0.75rem 0.5rem'
                 }}>
-                  <span className={styles.statNumber}>{regionalHolidays.length}</span>
-                  <span className={styles.statLabel}>Regionale Feiertage</span>
+                  <span className={styles.statNumber} style={{
+                    fontSize: 'clamp(1.25rem, 4vw, 1.5rem)',
+                    lineHeight: '1.2'
+                  }}>{regionalHolidays.length}</span>
+                  <span className={styles.statLabel} style={{
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                    lineHeight: '1.2'
+                  }}>Regional</span>
                 </div>
-                <div className={styles.statDivider} style={{ 
-                  background: 'var(--state-primary-alpha-20)'
-                }} />
                 <div className={styles.statBadge} style={{
                   background: 'var(--state-primary-alpha-10)',
                   color: 'var(--state-text-on-hero)',
                   backdropFilter: 'blur(8px)',
                   WebkitBackdropFilter: 'blur(8px)',
                   flex: '1 1 auto',
-                  minWidth: '120px',
-                  maxWidth: '200px'
+                  minWidth: '90px',
+                  maxWidth: '120px',
+                  padding: '0.75rem 0.5rem'
                 }}>
-                  <span className={styles.statNumber}>{totalSchoolHolidayDays}</span>
-                  <span className={styles.statLabel}>Ferientage</span>
+                  <span className={styles.statNumber} style={{
+                    fontSize: 'clamp(1.25rem, 4vw, 1.5rem)',
+                    lineHeight: '1.2'
+                  }}>{totalSchoolHolidayDays}</span>
+                  <span className={styles.statLabel} style={{
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                    lineHeight: '1.2'
+                  }}>Ferientage</span>
                 </div>
               </div>
               <h1 className={styles.heroTitle} style={{ 
@@ -454,21 +469,21 @@ export default async function StatePage({
                 willChange: 'transform',
                 transform: 'translateZ(0)',
                 backfaceVisibility: 'hidden',
-                fontSize: 'clamp(1.75rem, 5vw, 2.5rem)',
-                lineHeight: '1.3',
+                fontSize: 'clamp(1.5rem, 4vw, 2.5rem)',
+                lineHeight: '1.2',
                 padding: '0 1rem',
-                marginBottom: '1rem'
+                margin: '0.5rem 0 1rem'
               }}>
                 Feiertage und Schulferien in {fullName} 2025
               </h1>
               <p className={styles.heroSubtitle} style={{ 
                 color: 'var(--state-text-on-hero)',
                 textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-                fontSize: 'clamp(1rem, 3vw, 1.25rem)',
-                lineHeight: '1.5',
+                fontSize: 'clamp(0.875rem, 2.5vw, 1.25rem)',
+                lineHeight: '1.4',
                 padding: '0 1rem',
                 maxWidth: '800px',
-                margin: '0 auto 2rem'
+                margin: '0 auto 1.5rem'
               }}>
                 Maximieren Sie Ihren Urlaub in {fullName} mit unserem intelligenten Urlaubsplaner.
                 Nutzen Sie {publicHolidays.length + regionalHolidays.length} Feiertage für optimale Brückentage.
@@ -476,11 +491,11 @@ export default async function StatePage({
               <div className={styles.heroActions} style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '1rem',
+                gap: '0.75rem',
                 justifyContent: 'center',
-                padding: '1rem',
-                marginTop: '2rem',
-                marginBottom: '2rem'
+                padding: '0.75rem 1rem',
+                marginTop: '1rem',
+                marginBottom: '3rem'
               }}>
                 <Link 
                   href="https://app.ferien-planung.de" 
