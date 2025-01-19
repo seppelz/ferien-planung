@@ -1226,55 +1226,33 @@
   }
 
   .heroStats {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    justify-content: center;
+    flex-wrap: nowrap;
+    margin: 0 -0.5rem;
   }
 
   .statBadge {
-    width: 100%;
+    padding: 0.5rem;
+    min-width: 0;
+    flex: 1;
+  }
+
+  .statNumber {
+    font-size: 1.5rem;
+  }
+
+  .statLabel {
+    font-size: 0.75rem;
+    white-space: nowrap;
   }
 
   .statDivider {
-    display: none;
-    width: 80%;
-    height: 1px;
-  }
-
-  .promoStats {
-    flex-direction: column;
-  }
-
-  .promoFeatures {
-    grid-template-columns: 1fr;
-  }
-
-  .holidayOverview {
-    margin-top: -50px;
-    padding: 0 1rem;
-  }
-
-  .holidayGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-
-  .seasonGrid {
-    grid-template-columns: 1fr;
-  }
-
-  .holidayDate {
-    min-width: 100px;
-    font-size: 0.8rem;
-  }
-
-  .holidayName {
-    font-size: 0.9rem;
-  }
-
-  .duration {
-    font-size: 0.75rem;
-    padding: 0.15rem 0.4rem;
+    display: block;
+    width: 1px;
+    height: 40px;
   }
 } 
 
@@ -2705,12 +2683,14 @@
   );
   border-radius: 16px;
   padding: 1rem;
-  margin: 0.5rem 0;
+  margin: 0.5rem auto;
   box-shadow: 
     0 4px 12px rgba(26, 54, 93, 0.03),
     0 2px 4px rgba(26, 54, 93, 0.02);
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  max-width: 1200px;
+  width: 100%;
 }
 
 .microInfoItem {
@@ -2721,7 +2701,13 @@
   border-radius: 8px;
   transition: all var(--transition-normal);
   min-width: fit-content;
-  flex: 0 1 auto;
+  max-width: calc(33.33% - 1rem);
+  flex: 1 1 auto;
+}
+
+.microInfoItem:last-child {
+  max-width: 100%;
+  width: 100%;
 }
 
 .microInfoIcon {
@@ -2748,6 +2734,7 @@
   display: flex;
   gap: 0.35rem;
   flex-wrap: wrap;
+  max-width: 100%;
 }
 
 .microInfoTag {
@@ -2783,23 +2770,33 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .microInfoBar {
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding: 1rem;
-    gap: 1rem;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    margin: 0 -1rem;
-  }
-
-  .microInfoBar::-webkit-scrollbar {
-    display: none;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0.75rem;
   }
 
   .microInfoItem {
-    min-width: 200px;
-    flex: 0 0 auto;
-    padding: 1rem;
+    width: 100%;
+    padding: 0.875rem 1rem;
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .microInfoItem:last-child {
+    grid-template-columns: auto 1fr;
+  }
+
+  .microInfoTags {
+    grid-column: 1 / -1;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--state-border-light);
   }
 
   .microInfoIcon {
@@ -4630,26 +4627,100 @@
 
 @media (max-width: 768px) {
   .plannerPromo {
-    padding: 2rem 1rem;
-    margin: 2rem auto;
-    width: calc(100% - 2rem);
+    padding: 1.5rem 1rem;
+    margin: 1rem 0;
+    width: 100%;
+    border-radius: 1rem;
   }
 
   .promoStats {
     flex-direction: column;
+    gap: 1rem;
+    padding: 0;
+    margin-bottom: 1.5rem;
   }
 
-  .promoFeatures {
-    grid-template-columns: 1fr;
+  .promoStat {
+    width: 100%;
+    padding: 1rem;
+    min-height: auto;
+  }
+
+  .promoText {
+    padding: 1rem;
   }
 
   .promoText h2 {
-    font-size: 1.75rem;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .promoText p {
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
   }
 
   .promoCTA {
     width: 100%;
     justify-content: center;
+    padding: 0.875rem 1.5rem;
+  }
+
+  /* About State section improvements */
+  .stateOverviewSection {
+    margin: 1rem 0;
+    padding: 1.5rem 1rem;
+    border-radius: 1rem;
+  }
+
+  .stateOverviewSection h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    padding: 0;
+  }
+
+  .microInfoBar {
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    margin: 0 0 1.5rem 0;
+  }
+
+  .microInfoItem {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    margin: 0;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .microInfoIcon {
+    font-size: 1.25rem !important;
+  }
+
+  .microInfoTags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: flex-start;
+  }
+
+  .microInfoTag {
+    font-size: 0.875rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .stateDescription {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    padding: 1rem;
+    margin: 0;
+    text-align: left;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
   }
 }
 
@@ -5049,5 +5120,56 @@
   .attractionsSection li {
     font-size: 0.875rem;
     padding: 0.5rem 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .microInfoItem {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 1rem;
+    background: white;
+    border-radius: 0.75rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+
+  .microInfoIcon {
+    font-size: 1.25rem !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: var(--state-background-subtle);
+    border-radius: 0.5rem;
+  }
+
+  .microInfoItem > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .microInfoLabel {
+    font-size: 0.875rem;
+    color: var(--state-text-muted);
+    font-weight: 500;
+  }
+
+  .microInfoValue {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--state-text-primary);
+  }
+
+  .microInfoTags {
+    grid-column: 1 / -1;
+    padding-top: 0.5rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid var(--state-border-light);
   }
 }
