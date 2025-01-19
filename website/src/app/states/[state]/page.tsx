@@ -395,7 +395,15 @@ export default async function StatePage({
               )`,
               mixBlendMode: 'multiply'
             }} />
-            <div className={styles.headerContent}>
+            <div className={styles.headerContent} style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              minHeight: '100vh',
+              padding: '4rem 0',
+              position: 'relative',
+              zIndex: 1
+            }}>
               <div className={styles.heroStats} style={{
                 display: 'flex',
                 flexWrap: 'nowrap',
@@ -490,18 +498,16 @@ export default async function StatePage({
               </p>
               <div className={styles.heroActions} style={{
                 display: 'flex',
-                flexWrap: 'nowrap',
+                flexDirection: 'column',
                 gap: '0.75rem',
                 justifyContent: 'center',
+                alignItems: 'center',
                 padding: '0.75rem 1rem',
                 marginTop: '1rem',
                 marginBottom: '3rem',
                 width: '100%',
                 maxWidth: '100%',
-                overflowX: 'auto',
-                WebkitOverflowScrolling: 'touch',
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
+                minHeight: '120px'
               }}>
                 <Link 
                   href="https://app.ferien-planung.de" 
@@ -514,14 +520,15 @@ export default async function StatePage({
                     WebkitBackdropFilter: 'blur(4px)',
                     '--hover-color': 'var(--state-hover-overlay)',
                     margin: '0',
-                    whiteSpace: 'nowrap',
-                    flex: '0 0 auto'
+                    width: '100%',
+                    maxWidth: '300px',
+                    justifyContent: 'center'
                   } as React.CSSProperties}
                 >
                   Urlaubsplaner starten
                   <span className={styles.buttonIcon}>→</span>
                 </Link>
-                <ScrollButton className={`${styles.secondaryButton} ${styles.noWrap}`} />
+                <ScrollButton className={styles.secondaryButton} />
               </div>
             </div>
           </div>
