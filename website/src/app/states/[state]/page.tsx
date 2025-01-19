@@ -396,12 +396,23 @@ export default async function StatePage({
               mixBlendMode: 'multiply'
             }} />
             <div className={styles.headerContent}>
-              <div className={styles.heroStats}>
+              <div className={styles.heroStats} style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                justifyContent: 'center',
+                gap: '1rem',
+                margin: '0 auto 2rem',
+                maxWidth: '100%',
+                padding: '0 1rem'
+              }}>
                 <div className={styles.statBadge} style={{
                   background: 'var(--state-primary-alpha-10)',
                   color: 'var(--state-text-on-hero)',
                   backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)'
+                  WebkitBackdropFilter: 'blur(8px)',
+                  flex: '1 1 auto',
+                  minWidth: '120px',
+                  maxWidth: '200px'
                 }}>
                   <span className={styles.statNumber}>{publicHolidays.length}</span>
                   <span className={styles.statLabel}>Feiertage</span>
@@ -413,7 +424,10 @@ export default async function StatePage({
                   background: 'var(--state-primary-alpha-10)',
                   color: 'var(--state-text-on-hero)',
                   backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)'
+                  WebkitBackdropFilter: 'blur(8px)',
+                  flex: '1 1 auto',
+                  minWidth: '120px',
+                  maxWidth: '200px'
                 }}>
                   <span className={styles.statNumber}>{regionalHolidays.length}</span>
                   <span className={styles.statLabel}>Regionale Feiertage</span>
@@ -425,7 +439,10 @@ export default async function StatePage({
                   background: 'var(--state-primary-alpha-10)',
                   color: 'var(--state-text-on-hero)',
                   backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)'
+                  WebkitBackdropFilter: 'blur(8px)',
+                  flex: '1 1 auto',
+                  minWidth: '120px',
+                  maxWidth: '200px'
                 }}>
                   <span className={styles.statNumber}>{totalSchoolHolidayDays}</span>
                   <span className={styles.statLabel}>Ferientage</span>
@@ -436,18 +453,35 @@ export default async function StatePage({
                 textShadow: '0 2px 4px rgba(0, 0, 0, 0.15)',
                 willChange: 'transform',
                 transform: 'translateZ(0)',
-                backfaceVisibility: 'hidden'
+                backfaceVisibility: 'hidden',
+                fontSize: 'clamp(1.75rem, 5vw, 2.5rem)',
+                lineHeight: '1.3',
+                padding: '0 1rem',
+                marginBottom: '1rem'
               }}>
                 Feiertage und Schulferien in {fullName} 2025
               </h1>
               <p className={styles.heroSubtitle} style={{ 
                 color: 'var(--state-text-on-hero)',
-                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)'
+                textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
+                fontSize: 'clamp(1rem, 3vw, 1.25rem)',
+                lineHeight: '1.5',
+                padding: '0 1rem',
+                maxWidth: '800px',
+                margin: '0 auto 2rem'
               }}>
                 Maximieren Sie Ihren Urlaub in {fullName} mit unserem intelligenten Urlaubsplaner.
                 Nutzen Sie {publicHolidays.length + regionalHolidays.length} Feiertage für optimale Brückentage.
               </p>
-              <div className={styles.heroActions}>
+              <div className={styles.heroActions} style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '1rem',
+                justifyContent: 'center',
+                padding: '1rem',
+                marginTop: '2rem',
+                marginBottom: '2rem'
+              }}>
                 <Link 
                   href="https://app.ferien-planung.de" 
                   className={styles.primaryButton}
@@ -457,7 +491,8 @@ export default async function StatePage({
                     borderColor: 'var(--state-primary-alpha-10)',
                     backdropFilter: 'blur(4px)',
                     WebkitBackdropFilter: 'blur(4px)',
-                    '--hover-color': 'var(--state-hover-overlay)'
+                    '--hover-color': 'var(--state-hover-overlay)',
+                    margin: '0.5rem'
                   } as React.CSSProperties}
                 >
                   Urlaubsplaner starten
@@ -871,9 +906,8 @@ export default async function StatePage({
         }}>
           <p>© {new Date().getFullYear()} Holiday Planner. Alle Rechte vorbehalten.</p>
           <nav aria-label="Footer Navigation">
-            <Link href="/datenschutz">Datenschutz</Link>
             <Link href="/impressum">Impressum</Link>
-            <Link href="/kontakt">Kontakt</Link>
+            <Link href="/datenschutz">Datenschutz</Link>
           </nav>
         </footer>
       </main>

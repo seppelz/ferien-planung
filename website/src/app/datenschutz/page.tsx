@@ -67,12 +67,8 @@ export default function PrivacyPolicy() {
           <section>
             <h2>3. Wie erfassen wir Ihre Daten?</h2>
             <p>
-              Ihre Daten werden zum einen dadurch erhoben, dass Sie uns diese mitteilen. Hierbei kann es sich z.B. um Daten handeln, 
-              die Sie in ein Kontaktformular eingeben.
-            </p>
-            <p>
-              Andere Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst. Das sind vor allem technische 
-              Daten (z.B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs).
+              Ihre Daten werden automatisch beim Besuch der Website durch unsere IT-Systeme erfasst. 
+              Das sind vor allem technische Daten (z.B. Internetbrowser, Betriebssystem oder Uhrzeit des Seitenaufrufs).
             </p>
           </section>
 
