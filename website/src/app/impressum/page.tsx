@@ -39,7 +39,7 @@ export default function Imprint() {
           <h1>Impressum</h1>
 
           <section>
-            <h2>Angaben gemäß § 5 TMG</h2>
+            <h2>Angaben gemäß § 5 DDG</h2>
             <p>
               Sebastian Söcker<br />
               Hülshoffstr. 22<br />
