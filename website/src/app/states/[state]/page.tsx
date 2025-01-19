@@ -490,12 +490,18 @@ export default async function StatePage({
               </p>
               <div className={styles.heroActions} style={{
                 display: 'flex',
-                flexWrap: 'wrap',
+                flexWrap: 'nowrap',
                 gap: '0.75rem',
                 justifyContent: 'center',
                 padding: '0.75rem 1rem',
                 marginTop: '1rem',
-                marginBottom: '3rem'
+                marginBottom: '3rem',
+                width: '100%',
+                maxWidth: '100%',
+                overflowX: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none'
               }}>
                 <Link 
                   href="https://app.ferien-planung.de" 
@@ -507,13 +513,15 @@ export default async function StatePage({
                     backdropFilter: 'blur(4px)',
                     WebkitBackdropFilter: 'blur(4px)',
                     '--hover-color': 'var(--state-hover-overlay)',
-                    margin: '0.5rem'
+                    margin: '0',
+                    whiteSpace: 'nowrap',
+                    flex: '0 0 auto'
                   } as React.CSSProperties}
                 >
                   Urlaubsplaner starten
                   <span className={styles.buttonIcon}>→</span>
                 </Link>
-                <ScrollButton className={styles.secondaryButton} />
+                <ScrollButton className={`${styles.secondaryButton} ${styles.noWrap}`} />
               </div>
             </div>
           </div>
