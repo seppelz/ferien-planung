@@ -128,6 +128,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const bbHolidays = holidays.publicHolidays[yearStr]?.["BB"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Brandenburg ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...bbHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Brandenburg ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const bbSchoolHolidays = holidays.schoolHolidays[yearStr]?.["BB"] || [];
+  
+  return bbSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Brandenburg`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const brandenburg: StateInfo = {
   fullName: "Brandenburg",
   shortName: "BB",
@@ -151,100 +194,16 @@ export const brandenburg: StateInfo = {
       "Tourismus und Landwirtschaft"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Brandenburg ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["BB"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Brandenburg ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["BB"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien in Brandenburg - Naturerlebnisse und Indoor-Abenteuer",
-        activities: [
-          "Tropical Islands Resort besuchen",
-          "Winterwanderungen im Naturpark Hoher Fläming",
-          "Filmpark Babelsberg Indoor-Attraktionen",
-          "Eislaufen auf den Seen"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien in Brandenburg - Frühlingserwachen in der Natur",
-        activities: [
-          "Ostereiertradition im Spreewald",
-          "Frühlingserwachen in den Schlossparks",
-          "Erste Kahnfahrten der Saison",
-          "Tierpark Cottbus besuchen"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in Brandenburg - Aktiv in der Natur",
-        activities: [
-          "Radtouren auf dem Gurkenradweg",
-          "Kletterwald im Spreewald",
-          "Wassersport am Scharmützelsee",
-          "Naturerkundungen im Nationalpark Unteres Odertal"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien in Brandenburg - Sechs Wochen Natur und Kultur",
-        activities: [
-          "Badespaß an den Märkischen Seen",
-          "Kahnfahrten im Spreewald",
-          "Schlössertour in Potsdam",
-          "Erlebnispark Paaren im Glien"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in Brandenburg - Bunte Naturerlebnisse",
-        activities: [
-          "Drachensteigen auf dem Gollenberg",
-          "Kürbisfeste im Spreewald",
-          "Herbstwanderungen im Naturpark Dahme-Heideseen",
-          "Kartoffelfeste auf den Bauernhöfen"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien in Brandenburg - Winterzauber und Tradition",
-        activities: [
-          "Historische Weihnachtsmärkte besuchen",
-          "Schlittschuhlaufen auf den Seen",
-          "Winterwanderungen durch verschneite Wälder",
-          "Weihnachtliche Schlossführungen"
-        ]
-      }
-    };
-
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Brandenburg`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Brandenburg verbindet preußische Traditionen mit regionalen Festen. Die Reformationsgeschichte und die Naturverbundenheit prägen das Festjahr.",
   traditionInfo: "Die brandenburgischen Traditionen sind geprägt von der preußischen Geschichte und dem ländlichen Erbe. Handwerk, Naturverbundenheit und regionale Bräuche bestimmen das kulturelle Leben.",
   seasonalTraditions,

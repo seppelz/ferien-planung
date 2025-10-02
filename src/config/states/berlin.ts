@@ -113,6 +113,113 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const beHolidays = holidays.publicHolidays[yearStr]?.["BE"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Berlin ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...beHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Berlin ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const beSchoolHolidays = holidays.schoolHolidays[yearStr]?.["BE"] || [];
+  
+  return beSchoolHolidays.map((holiday) => {
+    const familyActivities: Record<string, { description: string, activities: string[] }> = {
+      "Winterferien": {
+        description: "Winterferien in Berlin - Kultur und Indoor-Abenteuer",
+        activities: [
+          "Besuch der Kindermuseen auf der Museumsinsel",
+          "Eislaufen im Horst-Dohm-Eisstadion",
+          "Naturkundemuseum mit Dinosaurierskeletten",
+          "Indoor-Spielplätze wie das Legoland Discovery Centre"
+        ]
+      },
+      "Osterferien": {
+        description: "Osterferien in Berlin - Frühling in der Hauptstadt",
+        activities: [
+          "Ostereisuche im Britzer Garten",
+          "Tierpark und Zoo Berlin",
+          "Domäne Dahlem mit Osterprogramm",
+          "Familien-Workshops in den Museen"
+        ]
+      },
+      "Pfingstferien": {
+        description: "Pfingstferien in Berlin - Frühsommer und Outdoor-Aktivitäten",
+        activities: [
+          "Picknick im Tempelhofer Feld",
+          "Bootstouren auf der Spree",
+          "Kletterpark Wuhlheide",
+          "Karneval der Kulturen"
+        ]
+      },
+      "Sommerferien": {
+        description: "Sommerferien in Berlin - Badeseen und Stadtabenteuer",
+        activities: [
+          "Baden am Wannsee oder Müggelsee",
+          "FEZ-Berlin Sommerprogramm",
+          "Outdoor-Kino und Open-Air-Konzerte",
+          "Tagesausflüge nach Potsdam"
+        ]
+      },
+      "Herbstferien": {
+        description: "Herbstferien in Berlin - Kulturprogramm und Herbstfarben",
+        activities: [
+          "Festival of Lights",
+          "Herbstwanderungen im Grunewald",
+          "Theaterprogramm für Kinder",
+          "Herbstmärkte besuchen"
+        ]
+      },
+      "Weihnachtsferien": {
+        description: "Weihnachtsferien in Berlin - Weihnachtszauber in der Hauptstadt",
+        activities: [
+          "Weihnachtsmärkte auf dem Gendarmenmarkt",
+          "Eislaufen vorm Brandenburger Tor",
+          "Weihnachtsprogramme in den Theatern",
+          "Silvesterfeier am Brandenburger Tor"
+        ]
+      }
+    };
+
+    const holidayName = Object.keys(familyActivities).find(key => 
+      holiday.name.toLowerCase().includes(key.toLowerCase())
+    );
+    const activities = holidayName ? familyActivities[holidayName] : null;
+
+    return {
+      name: holiday.name,
+      date: holiday.start,
+      type: "school" as const,
+      period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+      details: {
+        description: activities?.description || `Schulferien in Berlin`,
+        familyActivities: activities?.activities || []
+      }
+    };
+  });
+}
+
 export const berlin: StateInfo = {
   fullName: "Berlin",
   shortName: "BE",
@@ -137,101 +244,16 @@ export const berlin: StateInfo = {
       "Medien"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Berlin ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["BE"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Berlin ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["BE"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien in Berlin - Kultur und Indoor-Abenteuer",
-        activities: [
-          "Besuch der Kindermuseen auf der Museumsinsel",
-          "Eislaufen im Horst-Dohm-Eisstadion",
-          "Naturkundemuseum mit Dinosaurierskeletten",
-          "Indoor-Spielplätze wie das Legoland Discovery Centre"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien in Berlin - Frühling in der Hauptstadt",
-        activities: [
-          "Ostereisuche im Britzer Garten",
-          "Tierpark und Zoo Berlin",
-          "Domäne Dahlem mit Osterprogramm",
-          "Familien-Workshops in den Museen"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in Berlin - Outdoor-Aktivitäten und Festivals",
-        activities: [
-          "Karneval der Kulturen für Kinder",
-          "Bootstouren auf der Spree",
-          "Kletterwald im Jungfernheide",
-          "FEZ-Berlin Kinderprogramm"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien in Berlin - Sechs Wochen Großstadtabenteuer",
-        activities: [
-          "Strandbad Wannsee und Badeschiff",
-          "Kinderbauernhof im Mauerpark",
-          "Open-Air-Kino für Familien",
-          "Tempelhofer Feld mit Picknick und Sport"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in Berlin - Bunte Kulturerlebnisse",
-        activities: [
-          "Festival of Lights mit Kinderführungen",
-          "Drachensteigen auf dem Tempelhofer Feld",
-          "Herbstaktionen im Botanischen Garten",
-          "Science Center Spectrum"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien in Berlin - Winterzauber in der Metropole",
-        activities: [
-          "Weihnachtsmärkte für Familien",
-          "Winterwelt am Potsdamer Platz",
-          "Kinderprogramm in der Staatsoper",
-          "Eisbahn am Neptunbrunnen"
-        ]
-      }
-    };
-
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Berlin`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Berlin verbindet bei seinen Feiertagen internationale Weltoffenheit mit deutscher Geschichte und Tradition.",
   traditionInfo: "Die Feiertage in Berlin spiegeln die Vielfalt der Metropole wider, von traditionellen Festen bis zu modernen Kulturveranstaltungen.",
   seasonalTraditions,
