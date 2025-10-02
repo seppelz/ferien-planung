@@ -2,7 +2,7 @@ const fs = require('fs-extra');
 const path = require('path');
 
 async function copyAppBuild() {
-  const appBuildDir = path.join(__dirname, '../app/dist');
+  const appBuildDir = path.join(__dirname, '../dist');
   const websiteAppDir = path.join(__dirname, '../website/out/app');
 
   try {
