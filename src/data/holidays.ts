@@ -1994,191 +1994,219 @@ export const holidays: HolidayData = {
         {
           "name": "Neujahr",
           "start": "2026-01-01",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "Karfreitag",
           "start": "2026-04-03",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "Ostermontag",
           "start": "2026-04-06",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "Tag der Arbeit",
           "start": "2026-05-01",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "Christi Himmelfahrt",
           "start": "2026-05-14",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "Pfingstmontag",
           "start": "2026-05-25",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "Tag der Deutschen Einheit",
           "start": "2026-10-03",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "1. Weihnachtstag",
           "start": "2026-12-25",
-          "nationwide": true
+          "type": "public"
         },
         {
           "name": "2. Weihnachtstag",
           "start": "2026-12-26",
-          "nationwide": true
+          "type": "public"
         }
       ],
       "BW": [
         {
           "name": "Heilige Drei Könige",
-          "start": "2026-01-06"
+          "start": "2026-01-06",
+          "type": "public"
         },
         {
           "name": "Fronleichnam",
-          "start": "2026-06-04"
+          "start": "2026-06-04",
+          "type": "public"
         },
         {
           "name": "Allerheiligen",
-          "start": "2026-11-01"
+          "start": "2026-11-01",
+          "type": "public"
         }
       ],
       "BY": [
         {
           "name": "Heilige Drei Könige",
-          "start": "2026-01-06"
+          "start": "2026-01-06",
+          "type": "public"
         },
         {
           "name": "Fronleichnam",
-          "start": "2026-06-04"
+          "start": "2026-06-04",
+          "type": "public"
         },
         {
           "name": "Mariä Himmelfahrt",
-          "start": "2026-08-15"
+          "start": "2026-08-15",
+          "type": "public"
         },
         {
           "name": "Allerheiligen",
-          "start": "2026-11-01"
+          "start": "2026-11-01",
+          "type": "public"
         }
       ],
       "BE": [
         {
           "name": "Internationaler Frauentag",
-          "start": "2026-03-08"
+          "start": "2026-03-08",
+          "type": "public"
         }
       ],
       "BB": [
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ],
       "HB": [
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ],
       "HH": [
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ],
       "HE": [
         {
           "name": "Fronleichnam",
-          "start": "2026-06-04"
+          "start": "2026-06-04",
+          "type": "public"
         }
       ],
       "MV": [
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ],
       "NI": [
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ],
       "NW": [
         {
           "name": "Fronleichnam",
-          "start": "2026-06-04"
+          "start": "2026-06-04",
+          "type": "public"
         },
         {
           "name": "Allerheiligen",
-          "start": "2026-11-01"
+          "start": "2026-11-01",
+          "type": "public"
         }
       ],
       "RP": [
         {
           "name": "Fronleichnam",
-          "start": "2026-06-04"
+          "start": "2026-06-04",
+          "type": "public"
         },
         {
           "name": "Allerheiligen",
-          "start": "2026-11-01"
+          "start": "2026-11-01",
+          "type": "public"
         }
       ],
       "SL": [
         {
           "name": "Fronleichnam",
-          "start": "2026-06-04"
+          "start": "2026-06-04",
+          "type": "public"
         },
         {
           "name": "Mariä Himmelfahrt",
-          "start": "2026-08-15"
+          "start": "2026-08-15",
+          "type": "public"
         },
         {
           "name": "Allerheiligen",
-          "start": "2026-11-01"
+          "start": "2026-11-01",
+          "type": "public"
         }
       ],
       "SN": [
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         },
         {
           "name": "Buß- und Bettag",
-          "start": "2026-11-18"
+          "start": "2026-11-18",
+          "type": "public"
         }
       ],
       "ST": [
         {
           "name": "Heilige Drei Könige",
-          "start": "2026-01-06"
+          "start": "2026-01-06",
+          "type": "public"
         },
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ],
       "SH": [
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ],
       "TH": [
         {
           "name": "Weltkindertag",
-          "start": "2026-09-20"
+          "start": "2026-09-20",
+          "type": "public"
         },
         {
           "name": "Reformationstag",
-          "start": "2026-10-31"
+          "start": "2026-10-31",
+          "type": "public"
         }
       ]
     }
