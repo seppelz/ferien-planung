@@ -122,6 +122,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const MVHolidays = holidays.publicHolidays[yearStr]?.["MV"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Mecklenburg-Vorpommern ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...MVHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Mecklenburg-Vorpommern ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const MVSchoolHolidays = holidays.schoolHolidays[yearStr]?.["MV"] || [];
+  
+  return MVSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Mecklenburg-Vorpommern`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const mecklenburgVorpommern: StateInfo = {
   fullName: "Mecklenburg-Vorpommern",
   shortName: "MV",
@@ -146,101 +189,16 @@ export const mecklenburgVorpommern: StateInfo = {
       "Erneuerbare Energien"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Mecklenburg-Vorpommern ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["MV"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Mecklenburg-Vorpommern ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["MV"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien an der Ostsee - Maritimes Wintervergnügen",
-        activities: [
-          "Winterwandern am Strand",
-          "Ozeaneum Stralsund",
-          "Wellnessangebote in Seebädern",
-          "Eisangeln an der Seenplatte"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien im Küstenland - Frühlingserwachen an der See",
-        activities: [
-          "Kreidefelsen erkunden",
-          "Frühlingsradtouren",
-          "Störtebeker Festspiele",
-          "Ostseebäder entdecken"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien an der Küste - Maritime Abenteuer",
-        activities: [
-          "Segeltörns",
-          "Wasserwandern",
-          "Hansestädte erkunden",
-          "Strandaktivitäten"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien im Urlaubsparadies - Sechs Wochen Küstenglück",
-        activities: [
-          "Wassersport an der Ostsee",
-          "Hanse Sail erleben",
-          "Nationalpark-Touren",
-          "Inselhüpfen"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien an der Küste - Kraniche und Bernstein",
-        activities: [
-          "Kranichbeobachtung",
-          "Bernsteinsuche",
-          "Drachensteigen am Strand",
-          "Maritimes Museum"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien am Meer - Winterzauber an der Küste",
-        activities: [
-          "Maritime Weihnachtsmärkte",
-          "Leuchtturm-Touren",
-          "Winterwellness",
-          "Neujahrsschwimmen"
-        ]
-      }
-    };
-
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Mecklenburg-Vorpommern`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Mecklenburg-Vorpommern verbindet maritime Festkultur mit Naturerlebnissen. Die Kombination aus Strand, Hansestädten und Seenplatte prägt das Festjahr.",
   traditionInfo: "Die Traditionen Mecklenburg-Vorpommerns sind stark von der maritimen Geschichte und dem Leben an der Küste geprägt. Fischerei, Seefahrt und Bäderkultur bestimmen das kulturelle Leben.",
   seasonalTraditions,

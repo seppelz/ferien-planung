@@ -134,6 +134,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const SNHolidays = holidays.publicHolidays[yearStr]?.["SN"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Sachsen ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...SNHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Sachsen ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const SNSchoolHolidays = holidays.schoolHolidays[yearStr]?.["SN"] || [];
+  
+  return SNSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Sachsen`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const sachsen: StateInfo = {
   fullName: "Sachsen",
   shortName: "SN",
@@ -158,101 +201,16 @@ export const sachsen: StateInfo = {
       "Mikroelektronik"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Sachsen ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["SN"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Sachsen ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["SN"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien zwischen Kultur und Sport - Vielfältiges Vergnügen",
-        activities: [
-          "Skifahren im Erzgebirge",
-          "Museumsbesuche",
-          "Bergbautraditionen",
-          "Indoor-Aktivitäten"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien im Kulturland - Zwischen Tradition und Moderne",
-        activities: [
-          "Ostermärkte besuchen",
-          "Frühlingsradtouren",
-          "Kulturerbe erkunden",
-          "Naturerlebnisse"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in der Kulturregion - Aktiv zwischen Stadt und Natur",
-        activities: [
-          "Stadtführungen",
-          "Wandern in der Sächsischen Schweiz",
-          "Museumsbesuche",
-          "Kletterparks"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien im Kulturparadies - Sechs Wochen Entdeckungen",
-        activities: [
-          "Elbschifffahrt",
-          "Wanderungen",
-          "Freibäder besuchen",
-          "Kulturveranstaltungen"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in bunter Vielfalt - Kultur und Natur",
-        activities: [
-          "Herbstwanderungen",
-          "Museumsbesuche",
-          "Bergbautraditionen",
-          "Indoor-Aktivitäten"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien im Lichterglanz - Festliche Zeit in Sachsen",
-        activities: [
-          "Weihnachtsmärkte besuchen",
-          "Wintersport im Erzgebirge",
-          "Bergparaden erleben",
-          "Kulturgenuss"
-        ]
-      }
-    };
-
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Sachsen`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Sachsen verbindet barocke Festkultur mit erzgebirgischen Traditionen. Die Vielfalt der Regionen von Dresden über Leipzig bis zum Erzgebirge spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen Sachsens sind geprägt von barocker Kultur, Musikgeschichte und Bergbautradition. Klassische Musik, erzgebirgisches Brauchtum und lebendige Stadtkultur prägen das kulturelle Leben.",
   seasonalTraditions,

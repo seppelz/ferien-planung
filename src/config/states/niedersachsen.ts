@@ -128,6 +128,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const NIHolidays = holidays.publicHolidays[yearStr]?.["NI"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Niedersachsen ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...NIHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Niedersachsen ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const NISchoolHolidays = holidays.schoolHolidays[yearStr]?.["NI"] || [];
+  
+  return NISchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Niedersachsen`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const niedersachsen: StateInfo = {
   fullName: "Niedersachsen",
   shortName: "NI",
@@ -152,100 +195,16 @@ export const niedersachsen: StateInfo = {
       "Tourismus"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Niedersachsen ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["NI"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Niedersachsen ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["NI"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien zwischen Küste und Harz - Vielfältiges Wintervergnügen",
-        activities: [
-          "Skifahren im Harz",
-          "Winterwandern im Watt",
-          "Robbenbabys beobachten",
-          "Winterwellness an der Küste"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien im Frühlingsland - Von der Küste bis zum Harz",
-        activities: [
-          "Osterfeuer erleben",
-          "Frühlingsradtouren",
-          "Lamm-Safari in der Heide",
-          "Bergwerksmuseen erkunden"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in der Naturvielfalt - Aktiv zwischen Meer und Bergen",
-        activities: [
-          "Wattwanderungen",
-          "Harzer Wandernadel sammeln",
-          "Kutschfahrten in der Heide",
-          "Kletterparks erkunden"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien im Urlaubsparadies - Sechs Wochen Naturerlebnis",
-        activities: [
-          "Inselhopping",
-          "Sommerrodelbahn im Harz",
-          "Heideblüte erleben",
-          "Freizeitparks besuchen"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in bunter Vielfalt - Zugvögel und Herbstfarben",
-        activities: [
-          "Zugvögel beobachten",
-          "Indian Summer im Harz",
-          "Drachensteigen am Strand",
-          "Herbstwanderungen"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien im Winterland - Festliche Zeit an Küste und Bergen",
-        activities: [
-          "Weihnachtsmärkte besuchen",
-          "Winterwandern im Harz",
-          "Silvester am Strand",
-          "Schlittschuhlaufen"
-        ]
-      }
-    };
-
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Niedersachsen`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Niedersachsen verbindet maritime Festkultur der Küste mit Bergbautraditionen des Harzes. Die Vielfalt der Landschaften spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen Niedersachsens sind geprägt von der Vielfalt seiner Landschaften: Maritime Bräuche der Küste, Heidetraditionen und Bergbaukultur des Harzes prägen das kulturelle Leben.",
   seasonalTraditions,

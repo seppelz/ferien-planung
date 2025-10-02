@@ -140,6 +140,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const SLHolidays = holidays.publicHolidays[yearStr]?.["SL"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Saarland ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...SLHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Saarland ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const SLSchoolHolidays = holidays.schoolHolidays[yearStr]?.["SL"] || [];
+  
+  return SLSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Saarland`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const saarland: StateInfo = {
   fullName: "Saarland",
   shortName: "SL",
@@ -164,100 +207,16 @@ export const saarland: StateInfo = {
       "Kulturwirtschaft"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist im Saarland ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["SL"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist im Saarland ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["SL"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien zwischen Industrie und Natur - Vielfältiges Vergnügen",
-        activities: [
-          "Industriekultur erkunden",
-          "Winterwanderungen",
-          "Indoor-Spielwelten",
-          "Museumsbesuche"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien im Grenzland - Deutsch-französische Traditionen",
-        activities: [
-          "Ostermärkte besuchen",
-          "Frühlingsradtouren",
-          "Industriekultur erleben",
-          "Naturerkundungen"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in der Kulturregion - Aktiv zwischen Geschichte und Natur",
-        activities: [
-          "Völklinger Hütte erkunden",
-          "Wandern im Bliesgau",
-          "Saarschleife besuchen",
-          "Kulturtouren"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien im Grenzland - Sechs Wochen Kultur und Natur",
-        activities: [
-          "Saar-Spektakel erleben",
-          "Freibäder besuchen",
-          "Naturparks erkunden",
-          "Industriekultur entdecken"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in bunter Vielfalt - Kultur und Natur",
-        activities: [
-          "Herbstwanderungen",
-          "Industriekultur erleben",
-          "Kulinarische Touren",
-          "Museumsbesuche"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien im Lichterglanz - Festliche Zeit im Grenzland",
-        activities: [
-          "Weihnachtsmärkte besuchen",
-          "Bergmannsweihnacht erleben",
-          "Winterwanderungen",
-          "Indoor-Aktivitäten"
-        ]
-      }
-    };
-
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} im Saarland`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Das Saarland verbindet deutsch-französische Festkultur mit Industrietraditionen. Die Vielfalt der Regionen und die Nähe zu Frankreich spiegeln sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen des Saarlandes sind geprägt von deutsch-französischer Lebensart, Industriegeschichte und katholischen Bräuchen. Bergmannsfeste, französisch inspirierte Feiern und regionale Traditionen prägen das kulturelle Leben.",
   seasonalTraditions,

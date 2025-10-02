@@ -128,6 +128,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const HHHolidays = holidays.publicHolidays[yearStr]?.["HH"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Hamburg ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...HHHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Hamburg ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const HHSchoolHolidays = holidays.schoolHolidays[yearStr]?.["HH"] || [];
+  
+  return HHSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Hamburg`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const hamburg: StateInfo = {
   fullName: "Hamburg",
   shortName: "HH",
@@ -152,101 +195,16 @@ export const hamburg: StateInfo = {
       "Tourismus"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Hamburg ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["HH"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Hamburg ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["HH"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien in Hamburg - Maritime Indoor-Abenteuer",
-        activities: [
-          "Miniatur Wunderland entdecken",
-          "Internationales Maritimes Museum",
-          "Dialog im Dunkeln erleben",
-          "Planetarium Hamburg besuchen"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien in Hamburg - Frühlingserwachen an Alster und Elbe",
-        activities: [
-          "Hagenbecks Tierpark mit Osteraktionen",
-          "Kirschblütenfest in der HafenCity",
-          "Alstervergnügen für Familien",
-          "Frühlingserwachen in Planten un Blomen"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in Hamburg - Maritimes Flair",
-        activities: [
-          "Hafengeburtstag mit Kinderprogramm",
-          "Museumsschiff Cap San Diego",
-          "Wasserlichtspiele in Planten un Blomen",
-          "Ausflugsschifffahrt auf der Alster"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien in Hamburg - Sechs Wochen Großstadtabenteuer",
-        activities: [
-          "Strandperle und Elbstrand",
-          "Hamburger DOM-Besuch",
-          "Alsterkanal-Kanufahrten",
-          "Wildpark Schwarze Berge"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in Hamburg - Kulturelle Entdeckungen",
-        activities: [
-          "Hamburger Kinderbuchhaus",
-          "Herbst-DOM mit Attraktionen",
-          "Laternenumzüge in den Stadtteilen",
-          "Kindertheater im Schmidt Theater"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien in Hamburg - Maritimer Winterzauber",
-        activities: [
-          "Historischer Weihnachtsmarkt am Rathaus",
-          "Eisvergnügen in Planten un Blomen",
-          "Weihnachtsparade in der HafenCity",
-          "Märchenschiffe an den Landungsbrücken"
-        ]
-      }
-    };
-
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Hamburg`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Hamburg verbindet bei seinen Feiertagen hanseatische Tradition mit maritimem Flair und weltoffener Modernität.",
   traditionInfo: "Die Feiertage in Hamburg sind geprägt von der protestantischen Tradition und der engen Verbindung zum Hafen und zur Seefahrt.",
   seasonalTraditions,

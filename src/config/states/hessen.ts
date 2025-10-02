@@ -128,6 +128,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const HEHolidays = holidays.publicHolidays[yearStr]?.["HE"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Hessen ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...HEHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Hessen ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const HESchoolHolidays = holidays.schoolHolidays[yearStr]?.["HE"] || [];
+  
+  return HESchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Hessen`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const hessen: StateInfo = {
   fullName: "Hessen",
   shortName: "HE",
@@ -151,100 +194,16 @@ export const hessen: StateInfo = {
       "Logistik und Verkehr"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Hessen ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["HE"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Hessen ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["HE"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien in Hessen - Zwischen Großstadt und Naturerlebnis",
-        activities: [
-          "Winterwandern im Taunus",
-          "Dialogmuseum Frankfurt erleben",
-          "Experiminta Science Center",
-          "Schlittenfahren am Hoherodskopf"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien in Hessen - Frühlingserwachen in Stadt und Land",
-        activities: [
-          "Ostereiersuche im Palmengarten",
-          "Tierpark Sababurg besuchen",
-          "Märchenpfade erkunden",
-          "Frühlingsblüte an der Bergstraße"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in Hessen - Aktiv in der Natur",
-        activities: [
-          "Wasserspiele im Bergpark Wilhelmshöhe",
-          "Kletterwald im Taunus",
-          "Schifffahrt auf dem Edersee",
-          "Hessenpark entdecken"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien in Hessen - Sechs Wochen Abenteuer",
-        activities: [
-          "Museumsuferfest Frankfurt",
-          "Sommerrodelbahn Taunus",
-          "Lochmühle Freizeitpark",
-          "Naturerlebnisse im Vogelsberg"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in Hessen - Bunte Kulturerlebnisse",
-        activities: [
-          "Grimmwelt Kassel besuchen",
-          "Weinlese im Rheingau",
-          "Herbstwanderungen im Odenwald",
-          "Kürbisfest auf Burg Frankenstein"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien in Hessen - Winterzauber und Tradition",
-        activities: [
-          "Frankfurter Weihnachtsmarkt",
-          "Winterwanderung zur Saalburg",
-          "Schlittschuhlaufen in der Eissporthalle",
-          "Märchenweihnacht in Steinau"
-        ]
-      }
-    };
-
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Hessen`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Hessen verbindet urbane Festkultur mit ländlichen Traditionen. Die Finanzmetropole Frankfurt und die historischen Kulturstädte prägen das Festjahr.",
   traditionInfo: "Die hessischen Traditionen sind geprägt von der Vielfalt zwischen Stadt und Land. Märchen der Brüder Grimm, Weinkultur und moderne Stadtfeste bestimmen das kulturelle Leben.",
   seasonalTraditions,

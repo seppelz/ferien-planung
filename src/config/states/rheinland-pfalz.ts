@@ -134,6 +134,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const RPHolidays = holidays.publicHolidays[yearStr]?.["RP"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Rheinland-Pfalz ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...RPHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Rheinland-Pfalz ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const RPSchoolHolidays = holidays.schoolHolidays[yearStr]?.["RP"] || [];
+  
+  return RPSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Rheinland-Pfalz`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const rheinlandPfalz: StateInfo = {
   fullName: "Rheinland-Pfalz",
   shortName: "RP",
@@ -158,100 +201,16 @@ export const rheinlandPfalz: StateInfo = {
       "Kulturwirtschaft"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Rheinland-Pfalz ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["RP"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Rheinland-Pfalz ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["RP"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien im Weinland - Zwischen Geschichte und Genuss",
-        activities: [
-          "Winterwanderungen in Weinbergen",
-          "Römische Museen erkunden",
-          "Burgenbesichtigungen",
-          "Indoor-Spielwelten"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien im Frühling - Blütezeit an Rhein und Mosel",
-        activities: [
-          "Mandelblüte erleben",
-          "Osterbräuche entdecken",
-          "Frühlingsradtouren",
-          "Schifffahrten"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in der Naturregion - Aktiv zwischen Wein und Wald",
-        activities: [
-          "Burgenfeste besuchen",
-          "Wandern im Pfälzerwald",
-          "Weinfeste erleben",
-          "Kletterparks erkunden"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien im Urlaubsparadies - Sechs Wochen Kultur und Natur",
-        activities: [
-          "Rhein in Flammen",
-          "Burgenfestspiele",
-          "Weinbergtouren",
-          "Freibäder besuchen"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien zur Weinlese - Farbenprächtige Weinberge",
-        activities: [
-          "Weinlese erleben",
-          "Herbstwanderungen",
-          "Weinfeste besuchen",
-          "Burgentouren"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien im Lichterglanz - Festliche Zeit am Rhein",
-        activities: [
-          "Weihnachtsmärkte besuchen",
-          "Glühweinwanderungen",
-          "Winterliche Burgentouren",
-          "Römische Weihnacht"
-        ]
-      }
-    };
-
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Rheinland-Pfalz`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Rheinland-Pfalz verbindet Weinfestkultur mit römischer Geschichte. Die Vielfalt der Regionen von Rhein über Mosel bis zur Pfalz spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen von Rheinland-Pfalz sind geprägt von Weinbau, römischer Geschichte und rheinischer Lebensart. Weinfeste, römische Feiern und mittelalterliche Burgenfeste prägen das kulturelle Leben.",
   seasonalTraditions,

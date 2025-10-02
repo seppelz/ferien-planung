@@ -128,6 +128,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const HBHolidays = holidays.publicHolidays[yearStr]?.["HB"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Bremen ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...HBHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Bremen ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const HBSchoolHolidays = holidays.schoolHolidays[yearStr]?.["HB"] || [];
+  
+  return HBSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Bremen`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const bremen: StateInfo = {
   fullName: "Bremen",
   shortName: "HB",
@@ -152,101 +195,16 @@ export const bremen: StateInfo = {
       "Lebensmittelindustrie"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Bremen ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["HB"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Bremen ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["HB"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien in Bremen - Maritime Entdeckungen und Indoor-Abenteuer",
-        activities: [
-          "Klimahaus 8° Ost in Bremerhaven",
-          "Universum Bremen Science Center",
-          "Überseemuseum mit Kinderführungen",
-          "Schlittschuhlaufen in der Eisarena"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien in Bremen - Frühlingserwachen in der Hansestadt",
-        activities: [
-          "Osterwiese auf der Bürgerweide",
-          "Stadtmusikantenführungen",
-          "Zoo am Meer Bremerhaven",
-          "Osteraktionen im Bürgerpark"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in Bremen - Maritime Erlebnisse",
-        activities: [
-          "Hafenrundfahrten an der Schlachte",
-          "Deutsches Schifffahrtsmuseum",
-          "Seehundstation Nationalpark-Haus",
-          "Wasserspielplatz im Rhododendronpark"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien in Bremen - Sechs Wochen Hanseatische Abenteuer",
-        activities: [
-          "Breminale am Osterdeich",
-          "Badespaß am Stadtwaldsee",
-          "Maritime Woche an der Schlachte",
-          "Vegesacker Hafenfest"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in Bremen - Traditionelle Volksfeste",
-        activities: [
-          "Freimarkt auf der Bürgerweide",
-          "Maritimer Markt",
-          "Kürbisschnitzen im Rhododendronpark",
-          "Herbstaktionen im Universum"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien in Bremen - Maritimer Winterzauber",
-        activities: [
-          "Historischer Weihnachtsmarkt",
-          "Schlachte-Zauber am Weserufer",
-          "Winterlights im Bürgerpark",
-          "Weihnachtszirkus"
-        ]
-      }
-    };
-
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Bremen`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: 'school' as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Bremen verbindet bei seinen Feiertagen hanseatische Tradition mit norddeutscher Lebensart und maritimem Flair.",
   traditionInfo: "Die Feiertage in Bremen sind geprägt von der protestantischen Tradition und der engen Verbindung zur Seefahrt und zum Handel.",
   seasonalTraditions,

@@ -128,6 +128,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const STHolidays = holidays.publicHolidays[yearStr]?.["ST"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Sachsen-Anhalt ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...STHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Sachsen-Anhalt ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const STSchoolHolidays = holidays.schoolHolidays[yearStr]?.["ST"] || [];
+  
+  return STSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Sachsen-Anhalt`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const sachsenAnhalt: StateInfo = {
   fullName: "Sachsen-Anhalt",
   shortName: "ST",
@@ -152,100 +195,16 @@ export const sachsenAnhalt: StateInfo = {
       "Landwirtschaft"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Sachsen-Anhalt ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["ST"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Sachsen-Anhalt ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["ST"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien zwischen Kultur und Natur - Vielfältiges Vergnügen",
-        activities: [
-          "Wintersport im Harz",
-          "Museumsbesuche",
-          "Stadtführungen",
-          "Indoor-Aktivitäten"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien im Geschichtsland - Zwischen Tradition und Natur",
-        activities: [
-          "Ostermärkte besuchen",
-          "Frühlingsradtouren",
-          "UNESCO-Stätten erkunden",
-          "Wanderungen"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in der Kulturregion - Aktiv zwischen Geschichte und Natur",
-        activities: [
-          "Burgen erkunden",
-          "Wandern im Harz",
-          "Stadtführungen",
-          "Gartenreich entdecken"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien im Erlebnisland - Sechs Wochen Entdeckungen",
-        activities: [
-          "Dampflokfahrten",
-          "Freibäder besuchen",
-          "Mittelalter erleben",
-          "Naturparks erkunden"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in bunter Vielfalt - Kultur und Natur",
-        activities: [
-          "Herbstwanderungen",
-          "Weinfeste besuchen",
-          "Museumstouren",
-          "Burgenbesichtigungen"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien im Lichterglanz - Festliche Zeit in historischer Kulisse",
-        activities: [
-          "Weihnachtsmärkte besuchen",
-          "Winterwandern im Harz",
-          "Stadtführungen",
-          "Kulturgenuss"
-        ]
-      }
-    };
-
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Sachsen-Anhalt`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Sachsen-Anhalt verbindet mittelalterliche Festkultur mit Reformationsgeschichte. Die Vielfalt der Regionen von der Altmark über den Harz bis zur Saale-Unstrut spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen Sachsen-Anhalts sind geprägt von mittelalterlicher Geschichte, Reformationsgeschichte und regionaler Kultur. Historische Feste, Luthergedenken und lebendiges Brauchtum prägen das kulturelle Leben.",
   seasonalTraditions,

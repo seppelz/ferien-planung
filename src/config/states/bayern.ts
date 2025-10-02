@@ -146,6 +146,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const BYHolidays = holidays.publicHolidays[yearStr]?.["BY"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Bayern ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...BYHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Bayern ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const BYSchoolHolidays = holidays.schoolHolidays[yearStr]?.["BY"] || [];
+  
+  return BYSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Bayern`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const bayern: StateInfo = {
   fullName: "Bayern",
   shortName: "BY",
@@ -170,109 +213,16 @@ export const bayern: StateInfo = {
       "Landwirtschaft"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public",
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Bayern ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["BY"] || []).map(holiday => ({
-      ...holiday,
-      type: "public",
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Bayern ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["BY"].map(holiday => {
-    const familyActivities = {
-      "Winterferien": {
-        description: "Winterferien in Bayern - perfekt für Skiurlaub und winterliche Aktivitäten",
-        activities: [
-          "Skifahren und Rodeln in den bayerischen Alpen",
-          "Besuch der Winterwanderwege im Bayerischen Wald",
-          "Familienausflüge zu den Schlössern mit Winterprogramm",
-          "Indoor-Aktivitäten wie das Deutsche Museum München"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien in Bayern - Zeit für Frühlingsaktivitäten und Osterbräuche",
-        activities: [
-          "Besuch der berühmten Osterbrunnen in der Fränkischen Schweiz",
-          "Familienausflüge zu Tierparks und Wildgehegen",
-          "Frühlingserwachen in den botanischen Gärten",
-          "Osterprogramme in den Freilichtmuseen"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien in Bayern - ideal für Outdoor-Aktivitäten",
-        activities: [
-          "Wanderungen zu Berghütten mit Familienrogramm",
-          "Besuch der Pfingstfeste und traditionellen Umzüge",
-          "Radtouren entlang der Flüsse",
-          "Ausflüge zu Erlebnisbauernhöfen"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien in Bayern - sechs Wochen voller Abenteuer und Erlebnisse",
-        activities: [
-          "Badespaß an den bayerischen Seen",
-          "Familienfreundliche Bergbahnen und Sommerrodelbahnen",
-          "Besuch der Sommervolksfeste und Mittelalter-Spektakel",
-          "Entdeckungstouren in den Naturparks"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien in Bayern - Zeit für bunte Naturerlebnisse",
-        activities: [
-          "Drachsteigen auf den Herbstwiesen",
-          "Besuch der Kürbisfeste und Erntedankfeiern",
-          "Wanderungen durch herbstliche Wälder",
-          "Indoor-Kletterhallen und Erlebnismuseen"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien in Bayern - festliche Stimmung und Winterzauber",
-        activities: [
-          "Besuch der traditionellen Christkindlmärkte",
-          "Winterwanderungen zu verschneiten Berghütten",
-          "Schlittschuhlaufen auf Natureis oder in Eishallen",
-          "Weihnachtliche Konzerte und Krippenspiele"
-        ]
-      }
-    };
-
-    console.log('Raw holiday name:', holiday.name);
-    const baseHolidayName = holiday.name.split(" ")[0];
-    const holidayName = baseHolidayName.charAt(0).toUpperCase() + baseHolidayName.slice(1);
-    console.log('Processed holiday name:', holidayName);
-    console.log('Available holiday keys:', Object.keys(familyActivities));
-    
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Bayern`,
-      activities: []
-    };
-    console.log('Found holiday info:', holidayInfo);
-
-    const mappedHoliday = {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-    console.log('Final mapped holiday:', mappedHoliday);
-    
-    return mappedHoliday;
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Bayern verbindet bei seinen Feiertagen katholische Traditionen mit regionalem Brauchtum und ist das Bundesland mit den meisten gesetzlichen Feiertagen.",
   traditionInfo: "Die Feiertage in Bayern sind stark von der katholischen Tradition geprägt und werden mit besonderer Festlichkeit begangen.",
   seasonalTraditions,

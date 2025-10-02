@@ -128,6 +128,49 @@ const vacationDestinations: VacationDestination[] = [
   }
 ];
 
+function getHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const allHolidays = holidays.publicHolidays[yearStr]?.["ALL"] || [];
+  const SHHolidays = holidays.publicHolidays[yearStr]?.["SH"] || [];
+  
+  return [
+    ...allHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: false,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Schleswig-Holstein ein gesetzlicher Feiertag.`
+      }
+    })),
+    ...SHHolidays.map((holiday) => ({
+      name: holiday.name,
+      date: holiday.start,
+      type: "public" as const,
+      isRegional: true,
+      details: stateSpecificHolidayDetails[holiday.name] || {
+        description: `${holiday.name} ist in Schleswig-Holstein ein gesetzlicher Feiertag.`
+      }
+    }))
+  ];
+}
+
+function getSchoolHolidaysForYear(year: number): Holiday[] {
+  const yearStr = year.toString();
+  const SHSchoolHolidays = holidays.schoolHolidays[yearStr]?.["SH"] || [];
+  
+  return SHSchoolHolidays.map((holiday) => ({
+    name: holiday.name,
+    date: holiday.start,
+    type: "school" as const,
+    period: holiday.end ? `${holiday.start} - ${holiday.end}` : holiday.start,
+    details: {
+      description: `Schulferien in Schleswig-Holstein`,
+      familyActivities: []
+    }
+  }));
+}
+
 export const schleswigHolstein: StateInfo = {
   fullName: "Schleswig-Holstein",
   shortName: "SH",
@@ -152,100 +195,16 @@ export const schleswigHolstein: StateInfo = {
       "Landwirtschaft"
     ]
   },
-  holidays: [
-    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: false,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Schleswig-Holstein ein gesetzlicher Feiertag.`
-      }
-    })),
-    ...(holidays.publicHolidays["2026"]["SH"] || []).map(holiday => ({
-      ...holiday,
-      type: "public" as const,
-      isRegional: true,
-      date: holiday.start,
-      details: stateSpecificHolidayDetails[holiday.name] || {
-        description: `${holiday.name} ist in Schleswig-Holstein ein gesetzlicher Feiertag.`
-      }
-    }))
-  ],
-  schoolHolidays: holidays.schoolHolidays["2026"]["SH"].map(holiday => {
-    const familyActivities: Record<string, { description: string, activities: string[] }> = {
-      "Winterferien": {
-        description: "Winterferien zwischen Küste und Seen - Maritime Entdeckungen",
-        activities: [
-          "Winterwanderungen am Strand",
-          "Museumsbesuche",
-          "Indoor-Wasserwelten",
-          "Wellness"
-        ]
-      },
-      "Osterferien": {
-        description: "Osterferien an der Küste - Frühlingserwachen am Meer",
-        activities: [
-          "Strandwanderungen",
-          "Wattwanderungen",
-          "Inselausflüge",
-          "Maritime Museen"
-        ]
-      },
-      "Pfingstferien": {
-        description: "Pfingstferien am Meer - Aktiv zwischen den Küsten",
-        activities: [
-          "Segeln lernen",
-          "Strandaktivitäten",
-          "Radtouren",
-          "Wassersport"
-        ]
-      },
-      "Sommerferien": {
-        description: "Sommerferien im Küstenparadies - Sechs Wochen Meer",
-        activities: [
-          "Strandleben",
-          "Wassersport",
-          "Inselhopping",
-          "Naturerkundung"
-        ]
-      },
-      "Herbstferien": {
-        description: "Herbstferien an der See - Herbstliche Küstenromantik",
-        activities: [
-          "Drachensteigen",
-          "Bernsteinsuche",
-          "Wattwanderungen",
-          "Wellness"
-        ]
-      },
-      "Weihnachtsferien": {
-        description: "Weihnachtsferien im Norden - Maritime Winterstimmung",
-        activities: [
-          "Weihnachtsmärkte besuchen",
-          "Winterstrandwanderungen",
-          "Wellness",
-          "Kulturgenuss"
-        ]
-      }
-    };
-
-    const holidayName = holiday.name.split(" ")[0] as keyof typeof familyActivities;
-    const holidayInfo = familyActivities[holidayName] || {
-      description: `${holiday.name} in Schleswig-Holstein`,
-      activities: []
-    };
-
-    return {
-      ...holiday,
-      type: "school" as const,
-      date: holiday.start,
-      details: {
-        description: holidayInfo.description,
-        familyActivities: holidayInfo.activities
-      }
-    };
-  }),
+  publicHolidays: {
+    2024: getHolidaysForYear(2024),
+    2025: getHolidaysForYear(2025),
+    2026: getHolidaysForYear(2026)
+  },
+  schoolHolidays: {
+    2024: getSchoolHolidaysForYear(2024),
+    2025: getSchoolHolidaysForYear(2025),
+    2026: getSchoolHolidaysForYear(2026)
+  },
   uniqueHolidayInfo: "Schleswig-Holstein verbindet maritime Festkultur mit nordischen Traditionen. Die Vielfalt der Regionen von der Nordsee über die Ostsee bis zur Holsteinischen Schweiz spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen Schleswig-Holsteins sind geprägt von maritimer Geschichte, hanseatischem Erbe und nordischer Kultur. Hafenfeste, Segelsport und Küstenbrauchtum prägen das kulturelle Leben.",
   seasonalTraditions,
