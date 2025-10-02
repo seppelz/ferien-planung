@@ -153,7 +153,7 @@ export const hamburg: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: false,
@@ -162,7 +162,7 @@ export const hamburg: StateInfo = {
         description: `${holiday.name} ist in Hamburg ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["HH"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["HH"] || []).map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: true,
@@ -172,7 +172,7 @@ export const hamburg: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["HH"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["HH"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien in Hamburg - Maritime Indoor-Abenteuer",

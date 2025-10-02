@@ -167,7 +167,7 @@ export const saarland: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: false,
@@ -177,7 +177,7 @@ export const saarland: StateInfo = {
         description: `${holiday.name} ist im Saarland ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["SL"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["SL"] || []).map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: true,
@@ -188,7 +188,7 @@ export const saarland: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["SL"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["SL"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien zwischen Industrie und Natur - Vielfältiges Vergnügen",

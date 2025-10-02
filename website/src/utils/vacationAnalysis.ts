@@ -25,8 +25,8 @@ export interface VacationAnalysis {
 export function findBridgeDayOpportunities(
   holidays: Holiday[],
   existingVacations: VacationPlan[],
-  startDate: Date = new Date(2025, 0, 1),
-  endDate: Date = new Date(2025, 11, 31)
+  startDate: Date = new Date(2026, 0, 1),
+  endDate: Date = new Date(2026, 11, 31)
 ): BridgeDayRecommendation[] {
   const opportunities: BridgeDayRecommendation[] = [];
   

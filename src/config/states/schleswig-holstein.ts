@@ -153,7 +153,7 @@ export const schleswigHolstein: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: false,
@@ -162,7 +162,7 @@ export const schleswigHolstein: StateInfo = {
         description: `${holiday.name} ist in Schleswig-Holstein ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["SH"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["SH"] || []).map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: true,
@@ -172,7 +172,7 @@ export const schleswigHolstein: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["SH"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["SH"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien zwischen Küste und Seen - Maritime Entdeckungen",

@@ -155,7 +155,7 @@ export const bremen: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: false,
@@ -165,7 +165,7 @@ export const bremen: StateInfo = {
         description: `${holiday.name} ist in Bremen ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["HB"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["HB"] || []).map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: true,
@@ -176,7 +176,7 @@ export const bremen: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["HB"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["HB"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien in Bremen - Maritime Entdeckungen und Indoor-Abenteuer",

@@ -152,7 +152,7 @@ export const brandenburg: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: false,
@@ -161,7 +161,7 @@ export const brandenburg: StateInfo = {
         description: `${holiday.name} ist in Brandenburg ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["BB"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["BB"] || []).map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: true,
@@ -171,7 +171,7 @@ export const brandenburg: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["BB"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["BB"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien in Brandenburg - Naturerlebnisse und Indoor-Abenteuer",

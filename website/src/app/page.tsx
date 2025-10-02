@@ -169,8 +169,8 @@ const structuredData = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ferien-planung.de'),
-  title: 'Holiday Planner - Intelligente Urlaubsplanung & Brückentag-Analyse 2025',
-  description: 'Optimieren Sie Ihren Urlaub 2025 mit unserem kostenlosen Urlaubsplaner. Brückentage effizient nutzen, Feiertage analysieren und bis zu 24 zusätzliche freie Tage gewinnen. Jetzt clever planen!',
+  title: 'Holiday Planner - Intelligente Urlaubsplanung & Brückentag-Analyse 2026',
+  description: 'Optimieren Sie Ihren Urlaub 2026 mit unserem kostenlosen Urlaubsplaner. Brückentage effizient nutzen, Feiertage analysieren und bis zu 24 zusätzliche freie Tage gewinnen. Jetzt clever planen!',
   keywords: [
     'Urlaubsplaner',
     'Brückentage',
@@ -181,7 +181,7 @@ export const metadata: Metadata = {
     'Urlaubstage',
     'Feiertagskalender',
     'Schulferien',
-    '2025'
+    '2026'
   ].join(', '),
   openGraph: {
     title: 'Ferien Planung - Dein Urlaubsplaner',

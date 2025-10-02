@@ -147,7 +147,7 @@ export const mecklenburgVorpommern: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: false,
@@ -156,7 +156,7 @@ export const mecklenburgVorpommern: StateInfo = {
         description: `${holiday.name} ist in Mecklenburg-Vorpommern ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["MV"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["MV"] || []).map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: true,
@@ -166,7 +166,7 @@ export const mecklenburgVorpommern: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["MV"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["MV"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien an der Ostsee - Maritimes Wintervergnügen",

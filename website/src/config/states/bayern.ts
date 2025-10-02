@@ -173,7 +173,7 @@ export const bayern: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: false,
@@ -183,7 +183,7 @@ export const bayern: StateInfo = {
         description: `${holiday.name} ist in Bayern ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["BY"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["BY"] || []).map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: true,
@@ -194,7 +194,7 @@ export const bayern: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["BY"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["BY"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien in Bayern - perfekt für Skiurlaub und winterliche Aktivitäten",

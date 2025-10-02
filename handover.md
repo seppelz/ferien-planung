@@ -1,5 +1,57 @@
 # Project Handover
 
+## Project Structure
+
+The `ferien-planung` repository contains **TWO separate applications** in one monorepo:
+
+```
+C:\Work\ferien-planung\
+│
+├── website/                    → Next.js Website (SEO Landing Page)
+│   ├── src/app/page.tsx       → Main landing page (visible on Vercel root)
+│   ├── src/app/states/        → State-specific SEO pages (e.g., /states/berlin)
+│   ├── src/app/app/           → Redirect to React planner
+│   ├── src/components/        → Website components (Navigation, Footer, etc.)
+│   └── package.json           → Separate dependencies for Next.js
+│
+├── src/                       → React Calendar App (PWA)
+│   ├── App.tsx                → Calendar application (basename="/app")
+│   ├── pages/                 → App pages (HomePage, StatePage, etc.)
+│   └── components/            → Calendar components
+│
+├── vercel.json                → Vercel config pointing to website folder
+└── package.json               → React app dependencies
+```
+
+### How Vercel Deploys This
+
+Vercel configuration (`vercel.json`):
+```json
+{
+  "buildCommand": "cd website && npm install --force && npm run build",
+  "outputDirectory": "website/out"
+}
+```
+
+**Deployment Routes:**
+- `/` → Next.js landing page from `website/` folder
+- `/states/berlin`, `/states/bayern`, etc. → Next.js state pages (SEO optimized)
+- `/app` → React calendar application (the actual vacation planner tool)
+
+### Why Two Applications?
+
+**Website (`/website/`)** - Next.js for SEO:
+- Server-side rendering
+- SEO-optimized landing pages
+- State-specific pages with rich metadata
+- Blog-style content
+
+**App (`/src/`)** - React PWA for functionality:
+- Interactive calendar
+- Offline capability
+- Fast client-side interactions
+- Vacation planning tools
+
 ## Recent Progress
 
 1. Implemented PWA support with:

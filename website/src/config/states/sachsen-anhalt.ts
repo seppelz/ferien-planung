@@ -155,7 +155,7 @@ export const sachsenAnhalt: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: false,
@@ -165,7 +165,7 @@ export const sachsenAnhalt: StateInfo = {
         description: `${holiday.name} ist in Sachsen-Anhalt ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["ST"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["ST"] || []).map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: true,
@@ -176,7 +176,7 @@ export const sachsenAnhalt: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["ST"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["ST"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien zwischen Kultur und Natur - Vielfältiges Vergnügen",

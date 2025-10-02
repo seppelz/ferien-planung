@@ -57,7 +57,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = ({
 
           {/* Year display */}
           <div className={styles.yearDisplay}>
-            <span className={styles.year}>2025</span>
+            <span className={styles.year}>2026</span>
           </div>
 
           {/* Person 2 controls */}

@@ -155,7 +155,7 @@ export const thueringen: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: false,
@@ -165,7 +165,7 @@ export const thueringen: StateInfo = {
         description: `${holiday.name} ist in Thüringen ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["TH"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["TH"] || []).map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: true,
@@ -176,7 +176,7 @@ export const thueringen: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["TH"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["TH"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien zwischen Kultur und Natur - Vielfältiges Vergnügen",

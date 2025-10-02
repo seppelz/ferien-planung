@@ -61,7 +61,7 @@ const generateStructuredData = (stateInfo: StateInfo): Record<string, unknown> =
     ],
     event: [
       ...stateInfo.holidays
-        .filter(holiday => holiday.start?.startsWith('2025'))
+        .filter(holiday => holiday.start?.startsWith('2026'))
         .map(holiday => ({
           '@type': 'Event',
           name: holiday.name,
@@ -81,8 +81,8 @@ const generateStructuredData = (stateInfo: StateInfo): Record<string, unknown> =
     ],
     mainEntity: {
       '@type': 'WebPage',
-      name: `Feiertage und Schulferien ${stateInfo.name} 2025`,
-      description: `Alle Feiertage und Schulferien für ${stateInfo.name} im Jahr 2025. Optimale Urlaubsplanung mit Brückentagen.`,
+      name: `Feiertage und Schulferien ${stateInfo.name} 2026`,
+      description: `Alle Feiertage und Schulferien für ${stateInfo.name} im Jahr 2026. Optimale Urlaubsplanung mit Brückentagen.`,
       breadcrumb: {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -120,8 +120,8 @@ export async function generateMetadata(
   const publicHolidaysCount = stateInfo.holidays.filter(h => h.type === 'public').length;
   const schoolHolidaysCount = stateInfo.schoolHolidays?.length || 0;
 
-  const metaTitle = `${stateInfo.name} - Ferien und Feiertage 2025 | Urlaubsplaner`;
-  const metaDescription = `Planen Sie Ihren Urlaub 2025 in ${stateInfo.name}. ${publicHolidaysCount} Feiertage, ${schoolHolidaysCount} Ferienzeiten und optimale Brückentage. ${stateInfo.keyFacts.population} Einwohner, ${stateInfo.keyFacts.area}.`;
+  const metaTitle = `${stateInfo.name} - Ferien und Feiertage 2026 | Urlaubsplaner`;
+  const metaDescription = `Planen Sie Ihren Urlaub 2026 in ${stateInfo.name}. ${publicHolidaysCount} Feiertage, ${schoolHolidaysCount} Ferienzeiten und optimale Brückentage. ${stateInfo.keyFacts.population} Einwohner, ${stateInfo.keyFacts.area}.`;
 
   return {
     metadataBase: new URL('https://ferien-planung.de'),
@@ -129,8 +129,8 @@ export async function generateMetadata(
     description: metaDescription,
     keywords: [
       stateInfo.name,
-      'Feiertage 2025',
-      'Schulferien 2025',
+      'Feiertage 2026',
+      'Schulferien 2026',
       'Brückentage',
       'Urlaub',
       'Urlaubsplanung',
@@ -150,7 +150,7 @@ export async function generateMetadata(
           url: `/images/states/${stateId}.jpg`,
           width: 1200,
           height: 630,
-          alt: `${stateInfo.name} - Urlaubsplanung 2025`,
+          alt: `${stateInfo.name} - Urlaubsplanung 2026`,
         },
       ],
     },
@@ -261,17 +261,17 @@ export default async function StatePage({
   const publicHolidays = (holidays as Holiday[]).filter(h => {
     if (h.type !== 'public') return false;
     if (h.isRegional) return false;
-    return h.start?.startsWith('2025');
+    return h.start?.startsWith('2026');
   });
 
   const regionalHolidays = (holidays as Holiday[]).filter(h => {
     if (h.type !== 'public') return false;
     if (!h.isRegional) return false;
-    return h.start?.startsWith('2025');
+    return h.start?.startsWith('2026');
   });
 
   const filteredSchoolHolidays = (schoolHolidays as Holiday[]).filter(h => {
-    return h.start?.startsWith('2025');
+    return h.start?.startsWith('2026');
   });
 
   const totalSchoolHolidayDays = filteredSchoolHolidays.reduce((total, holiday) => {
@@ -398,100 +398,128 @@ export default async function StatePage({
             <div className={styles.headerContent} style={{
               display: 'flex',
               flexDirection: 'column',
-              justifyContent: 'flex-start',
-              height: '380px',
+              justifyContent: 'center',
+              minHeight: '450px',
               position: 'relative',
-              zIndex: 1
+              zIndex: 1,
+              padding: '3rem 1rem'
             }}>
               <div className={styles.heroStats} style={{
                 display: 'flex',
                 flexWrap: 'nowrap',
                 justifyContent: 'center',
-                gap: '0.5rem',
-                margin: '0',
-                maxWidth: '100%',
-                padding: '0.75rem 0.5rem'
+                gap: '1rem',
+                margin: '0 auto 3rem',
+                maxWidth: '600px',
+                width: '100%'
               }}>
                 <div className={styles.statBadge} style={{
-                  background: 'var(--state-primary-alpha-10)',
+                  background: 'rgba(255, 255, 255, 0.2)',
                   color: 'var(--state-text-on-hero)',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  flex: '1 1 auto',
-                  minWidth: '80px',
-                  maxWidth: '110px',
-                  padding: '0.4rem'
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: '12px',
+                  flex: '1',
+                  padding: '1rem 0.75rem',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                 }}>
                   <span className={styles.statNumber} style={{
-                    fontSize: 'clamp(1.1rem, 3.5vw, 1.3rem)',
-                    lineHeight: '1.1'
+                    fontSize: 'clamp(2rem, 5vw, 3rem)',
+                    fontWeight: '700',
+                    lineHeight: '1',
+                    display: 'block',
+                    marginBottom: '0.5rem'
                   }}>{publicHolidays.length}</span>
                   <span className={styles.statLabel} style={{
-                    fontSize: 'clamp(0.7rem, 2vw, 0.8rem)',
-                    lineHeight: '1.1'
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                    lineHeight: '1',
+                    opacity: '0.95',
+                    fontWeight: '500',
+                    display: 'block'
                   }}>Feiertage</span>
                 </div>
                 <div className={styles.statBadge} style={{
-                  background: 'var(--state-primary-alpha-10)',
+                  background: 'rgba(255, 255, 255, 0.2)',
                   color: 'var(--state-text-on-hero)',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  flex: '1 1 auto',
-                  minWidth: '80px',
-                  maxWidth: '110px',
-                  padding: '0.4rem'
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: '12px',
+                  flex: '1',
+                  padding: '1rem 0.75rem',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                 }}>
                   <span className={styles.statNumber} style={{
-                    fontSize: 'clamp(1.1rem, 3.5vw, 1.3rem)',
-                    lineHeight: '1.1'
+                    fontSize: 'clamp(2rem, 5vw, 3rem)',
+                    fontWeight: '700',
+                    lineHeight: '1',
+                    display: 'block',
+                    marginBottom: '0.5rem'
                   }}>{regionalHolidays.length}</span>
                   <span className={styles.statLabel} style={{
-                    fontSize: 'clamp(0.7rem, 2vw, 0.8rem)',
-                    lineHeight: '1.1'
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                    lineHeight: '1',
+                    opacity: '0.95',
+                    fontWeight: '500',
+                    display: 'block'
                   }}>Regional</span>
                 </div>
                 <div className={styles.statBadge} style={{
-                  background: 'var(--state-primary-alpha-10)',
+                  background: 'rgba(255, 255, 255, 0.2)',
                   color: 'var(--state-text-on-hero)',
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  flex: '1 1 auto',
-                  minWidth: '80px',
-                  maxWidth: '110px',
-                  padding: '0.4rem'
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  borderRadius: '12px',
+                  flex: '1',
+                  padding: '1rem 0.75rem',
+                  textAlign: 'center',
+                  boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)'
                 }}>
                   <span className={styles.statNumber} style={{
-                    fontSize: 'clamp(1.1rem, 3.5vw, 1.3rem)',
-                    lineHeight: '1.1'
+                    fontSize: 'clamp(2rem, 5vw, 3rem)',
+                    fontWeight: '700',
+                    lineHeight: '1',
+                    display: 'block',
+                    marginBottom: '0.5rem'
                   }}>{totalSchoolHolidayDays}</span>
                   <span className={styles.statLabel} style={{
-                    fontSize: 'clamp(0.7rem, 2vw, 0.8rem)',
-                    lineHeight: '1.1'
+                    fontSize: 'clamp(0.75rem, 2vw, 0.875rem)',
+                    lineHeight: '1',
+                    opacity: '0.95',
+                    fontWeight: '500',
+                    display: 'block'
                   }}>Ferientage</span>
                 </div>
               </div>
-              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', minHeight: 0, marginTop: '0.75rem' }}>
+              <div style={{ textAlign: 'center', marginBottom: '2.5rem' }}>
                 <h1 className={styles.heroTitle} style={{ 
                   color: 'var(--state-text-on-hero)',
-                  textShadow: '0 2px 4px rgba(0, 0, 0, 0.15)',
-                  willChange: 'transform',
-                  transform: 'translateZ(0)',
-                  backfaceVisibility: 'hidden',
-                  fontSize: 'clamp(1.4rem, 3.5vw, 2.5rem)',
-                  lineHeight: '1.2',
+                  textShadow: '0 2px 8px rgba(0, 0, 0, 0.2)',
+                  fontSize: 'clamp(1.75rem, 5vw, 3rem)',
+                  fontWeight: '700',
+                  lineHeight: '1.1',
                   padding: '0 1rem',
-                  margin: '0.5rem 0'
+                  margin: '0 0 1.25rem 0',
+                  maxWidth: '900px',
+                  marginLeft: 'auto',
+                  marginRight: 'auto'
                 }}>
-                  Feiertage und Schulferien in {fullName} 2025
+                  Feiertage und Schulferien in {fullName} 2026
                 </h1>
                 <p className={styles.heroSubtitle} style={{ 
                   color: 'var(--state-text-on-hero)',
-                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
-                  fontSize: 'clamp(0.8rem, 2.5vw, 1.25rem)',
-                  lineHeight: '1.3',
-                  padding: '0 1rem',
-                  maxWidth: '800px',
-                  margin: '0 auto 0.5rem'
+                  textShadow: '0 1px 4px rgba(0, 0, 0, 0.15)',
+                  fontSize: 'clamp(1rem, 2.5vw, 1.25rem)',
+                  lineHeight: '1.5',
+                  padding: '0 1.5rem',
+                  maxWidth: '700px',
+                  margin: '0 auto',
+                  opacity: '0.95',
+                  fontWeight: '400'
                 }}>
                   Maximieren Sie Ihren Urlaub in {fullName} mit unserem intelligenten Urlaubsplaner.
                   Nutzen Sie {publicHolidays.length + regionalHolidays.length} Feiertage für optimale Brückentage.
@@ -500,33 +528,34 @@ export default async function StatePage({
               <div className={styles.heroActions} style={{
                 display: 'flex',
                 flexDirection: 'column',
-                gap: '0.5rem',
+                gap: '1rem',
                 justifyContent: 'center',
                 alignItems: 'center',
-                padding: '0.5rem 1rem 0.75rem',
                 width: '100%',
-                maxWidth: '100%'
+                maxWidth: '400px',
+                margin: '0 auto'
               }}>
                 <Link 
                   href="https://app.ferien-planung.de" 
                   className={styles.primaryButton}
                   style={{
-                    background: 'var(--state-primary-alpha-20)',
-                    color: 'var(--state-text-on-hero)',
-                    borderColor: 'var(--state-primary-alpha-10)',
-                    backdropFilter: 'blur(4px)',
-                    WebkitBackdropFilter: 'blur(4px)',
-                    '--hover-color': 'var(--state-hover-overlay)',
+                    background: 'rgba(255, 255, 255, 0.95)',
+                    color: 'var(--state-primary-color)',
+                    border: 'none',
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)',
+                    '--hover-color': 'rgba(255, 255, 255, 1)',
                     margin: '0',
                     width: '100%',
-                    maxWidth: '300px',
                     justifyContent: 'center',
-                    padding: '0.6rem 1.25rem',
-                    fontSize: '0.95rem'
+                    padding: '1rem 2rem',
+                    fontSize: '1.1rem',
+                    fontWeight: '600',
+                    borderRadius: '12px',
+                    transition: 'all 0.2s ease'
                   } as React.CSSProperties}
                 >
                   Urlaubsplaner starten
-                  <span className={styles.buttonIcon}>→</span>
+                  <span className={styles.buttonIcon} style={{ fontSize: '1.2rem', marginLeft: '0.5rem' }}>→</span>
                 </Link>
                 <ScrollButton className={styles.secondaryButton} />
               </div>

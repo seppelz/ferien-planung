@@ -102,7 +102,7 @@ export default function HolidayList({
               opacity: '0.95',
               textShadow: '0 1px 2px rgba(0,0,0,0.1)'
             }}>
-              {allPublicHolidays.length} Feiertage in 2025
+              {allPublicHolidays.length} Feiertage in 2026
             </p>
           </div>
         </div>
@@ -475,7 +475,7 @@ export default function HolidayList({
               opacity: '0.95',
               textShadow: '0 1px 2px rgba(0,0,0,0.1)'
             }}>
-              {totalSchoolHolidayDays} Ferientage in 2025
+              {totalSchoolHolidayDays} Ferientage in 2026
             </p>
           </div>
         </div>

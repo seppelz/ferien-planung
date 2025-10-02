@@ -178,7 +178,7 @@ const StatePage: React.FC = () => {
     if (h.type !== 'public') return false;
     if (!h.isRegional) return false;
     const holidayDate = h.date || h.start;
-    return holidayDate?.startsWith('2025');
+    return holidayDate?.startsWith('2026');
   }).map(holiday => ({
     ...holiday,
     details: getHolidayDetails(holiday.name) || holiday.details
@@ -186,7 +186,7 @@ const StatePage: React.FC = () => {
 
   const schoolHolidays = (stateInfo?.schoolHolidays || []) as StatePageHoliday[];
   const filteredSchoolHolidays = schoolHolidays.filter(h => {
-    return h.start && h.start.startsWith('2025');
+    return h.start && h.start.startsWith('2026');
   }).map(holiday => ({
     ...holiday,
     details: getHolidayDetails(holiday.name) || holiday.details

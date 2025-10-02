@@ -40,9 +40,9 @@ export const holidayService = {
     if (!stateCode) return [];
     
     try {
-      const holidays2025 = getHolidaysForYear(2025, stateCode).school;
+      const holidays2026 = getHolidaysForYear(2026, stateCode).school;
       
-      return holidays2025
+      return holidays2026
         .map(holiday => {
           const start = parseDateString(holiday.start);
           const end = holiday.end ? parseDateString(holiday.end) : start;
@@ -74,9 +74,9 @@ export const holidayService = {
     if (!stateCode) return [];
     
     try {
-      const holidays2025 = getHolidaysForYear(2025, stateCode).public;
+      const holidays2026 = getHolidaysForYear(2026, stateCode).public;
       
-      return holidays2025
+      return holidays2026
         .map(holiday => {
           const date = parseDateString(holiday.start);
           

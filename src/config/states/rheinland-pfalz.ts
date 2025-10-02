@@ -159,7 +159,7 @@ export const rheinlandPfalz: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: false,
@@ -168,7 +168,7 @@ export const rheinlandPfalz: StateInfo = {
         description: `${holiday.name} ist in Rheinland-Pfalz ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["RP"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["RP"] || []).map(holiday => ({
       ...holiday,
       type: "public" as const,
       isRegional: true,
@@ -178,7 +178,7 @@ export const rheinlandPfalz: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["RP"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["RP"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien im Weinland - Zwischen Geschichte und Genuss",

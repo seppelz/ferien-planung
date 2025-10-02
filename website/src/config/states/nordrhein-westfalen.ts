@@ -161,7 +161,7 @@ export const nordrheinWestfalen: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: false,
@@ -171,7 +171,7 @@ export const nordrheinWestfalen: StateInfo = {
         description: `${holiday.name} ist in Nordrhein-Westfalen ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["NW"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["NW"] || []).map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: true,
@@ -182,7 +182,7 @@ export const nordrheinWestfalen: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["NW"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["NW"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien zwischen Metropolen und Bergen - Vielfältiges Vergnügen",

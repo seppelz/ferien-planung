@@ -175,6 +175,7 @@ export const MainLayout: React.FC = () => {
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [selectedYear, setSelectedYear] = useState<number>(2026);
   const { persons, updatePerson } = usePersonContext();
   const { isFirstTimeUser, markTutorialAsSeen } = useFirstTimeUser();
   const theme = useTheme();
@@ -410,7 +411,7 @@ export const MainLayout: React.FC = () => {
                 setIsSelectingVacation(true);
                 // Focus January 1st after a short delay when clicking the button
                 setTimeout(() => {
-                  const jan1Button = calendarRef.current?.querySelector('[data-date="2025-01-01"]') as HTMLButtonElement;
+                  const jan1Button = calendarRef.current?.querySelector('[data-date="2026-01-01"]') as HTMLButtonElement;
                   if (jan1Button) {
                     jan1Button.focus();
                   }
@@ -795,6 +796,8 @@ export const MainLayout: React.FC = () => {
           onExport={() => setShowExportModal(true)}
           person2State={persons.person2?.selectedState || null}
           onPerson2StateChange={(state) => state && updatePerson(2, { selectedState: state })}
+          selectedYear={selectedYear}
+          onYearChange={setSelectedYear}
         />
 
         {/* Main Content - Added pt-16 (64px) to account for navbar height */}

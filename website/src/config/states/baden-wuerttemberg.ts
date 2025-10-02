@@ -152,7 +152,7 @@ export const badenWuerttemberg: StateInfo = {
     ]
   },
   holidays: [
-    ...holidays.publicHolidays["2025"]["ALL"].map(holiday => ({
+    ...holidays.publicHolidays["2026"]["ALL"].map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: false,
@@ -162,7 +162,7 @@ export const badenWuerttemberg: StateInfo = {
         description: `${holiday.name} ist in Baden-Württemberg ein gesetzlicher Feiertag.`
       }
     })),
-    ...(holidays.publicHolidays["2025"]["BW"] || []).map(holiday => ({
+    ...(holidays.publicHolidays["2026"]["BW"] || []).map(holiday => ({
       name: holiday.name,
       type: "public" as const,
       isRegional: true,
@@ -173,7 +173,7 @@ export const badenWuerttemberg: StateInfo = {
       }
     }))
   ],
-  schoolHolidays: holidays.schoolHolidays["2025"]["BW"].map(holiday => {
+  schoolHolidays: holidays.schoolHolidays["2026"]["BW"].map(holiday => {
     const familyActivities: Record<string, { description: string, activities: string[] }> = {
       "Winterferien": {
         description: "Winterferien in Baden-Württemberg - Wintersport und Naturerlebnisse",
