@@ -32,6 +32,19 @@ export interface MultiDayHoliday extends BaseHoliday {
 
 export type Holiday = SingleDayHoliday | MultiDayHoliday;
 
+export interface BridgeDay extends SingleDayHoliday {
+  type: 'bridge';
+  start: string;
+  end: string;
+  days: number;
+  holidays: Holiday[];
+  efficiency: number;
+  requiredVacationDays: number;
+  totalDaysOff: number;
+  periodStart: string;
+  periodEnd: string;
+}
+
 // Raw data interfaces (for API/storage)
 export interface RawHolidayDate {
   date: string;

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { Holiday, BridgeDay } from '../types/holiday';
 import { GermanState } from '../types/GermanState';
-import { bridgeDayService } from '../services/bridgeDayService';
+import { calculateBridgeDays } from '../services/bridgeDayService';
 import { holidayService } from '../services/holidayService';
 import { isSameDay } from 'date-fns';
 
@@ -54,14 +54,14 @@ export function useBridgeDays(state: GermanState | null) {
         const allHolidays: Holiday[] = [...publicHolidays];
         schoolHolidays.forEach(holiday => {
           const exists = allHolidays.some(h => 
-            isSameDay(new Date(h.date), new Date(holiday.date)) && 
+            h.date && holiday.date && isSameDay(new Date(h.date), new Date(holiday.date)) && 
             h.name === holiday.name
           );
           if (!exists) allHolidays.push(holiday);
         });
 
         // Calculate bridge days from public holidays only
-        const calculatedBridgeDays = bridgeDayService.calculateBridgeDays(publicHolidays, memoizedState);
+        const calculatedBridgeDays = calculateBridgeDays(publicHolidays, memoizedState);
 
         // Update cache
         bridgeDayCache[memoizedState] = {
