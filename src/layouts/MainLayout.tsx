@@ -298,7 +298,7 @@ export const MainLayout: React.FC = () => {
     return allDays.reduce((count, d) => {
       if (isWeekend(d)) return count;
       const isPublicHoliday = holidays.some(h => 
-        h.type === 'public' && isSameDay(new Date(h.date), d)
+        h.type === 'public' && h.date && isSameDay(new Date(h.date), d)
       );
       return isPublicHoliday ? count : count + 1;
     }, 0);
@@ -313,7 +313,7 @@ export const MainLayout: React.FC = () => {
     let lastFreeDay = date;
 
     while (isWeekend(currentDay) || holidays.some(h => 
-      h.type === 'public' && isSameDay(new Date(h.date), currentDay)
+      h.type === 'public' && h.date && isSameDay(new Date(h.date), currentDay)
     )) {
       lastFreeDay = currentDay;
       currentDay = direction === 'forward' ? addDays(currentDay, 1) : subDays(currentDay, 1);
@@ -356,7 +356,7 @@ export const MainLayout: React.FC = () => {
       // Required days are workdays that aren't public holidays
       const requiredDays = days.filter(d => 
         !isWeekend(d) && !holidays.some(h => 
-          h.type === 'public' && isSameDay(new Date(h.date), d)
+          h.type === 'public' && h.date && isSameDay(new Date(h.date), d)
         )
       ).length;
       
