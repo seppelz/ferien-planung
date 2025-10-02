@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install && npm run build && cd website && npm install --force && npm run build && cd .. && node scripts/copy-app-build.js",
+  "buildCommand": "cd website && npm install --force && npm run build",
   "outputDirectory": "website/out",
   "rewrites": []
 } 
