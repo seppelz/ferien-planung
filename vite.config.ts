@@ -46,6 +46,11 @@ export default defineConfig({
   },
   test: {
     environment: 'node',
-    include: ['src/utils/dateUtils.test.ts', 'src/services/bridgeDayService.test.ts', 'src/utils/stateQuery.test.ts'],
+    include: [
+      'src/utils/dateUtils.test.ts',
+      'src/services/bridgeDayService.test.ts',
+      'src/services/planShareService.test.ts',
+      'src/utils/stateQuery.test.ts',
+    ],
   },
 })

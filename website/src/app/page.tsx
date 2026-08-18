@@ -30,29 +30,7 @@ const FAQ_DATA = [
   },
 ];
 
-const TESTIMONIALS_DATA = [
-  {
-    name: 'Sarah M.',
-    role: 'Projektmanagerin',
-    text: 'Dank der Zwei-Personen Planung können mein Partner und ich unseren Urlaub perfekt aufeinander abstimmen.',
-    rating: 5
-  },
-  {
-    name: 'Michael K.',
-    role: 'Lehrer',
-    text: 'Die Berücksichtigung der Schulferien ist super praktisch. So kann ich meinen Urlaub optimal mit dem Schuljahr koordinieren.',
-    rating: 5
-  },
-  {
-    name: 'Lisa B.',
-    role: 'Teamleiterin',
-    text: 'Die Effizienzberechnung hat mir geholfen, aus meinen 30 Urlaubstagen das Maximum herauszuholen.',
-    rating: 5
-  }
-];
-
-// Add JSON-LD structured data
-const structuredData = {
+const webApplicationSchema = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
   name: 'Holiday Planner',
@@ -72,15 +50,34 @@ const structuredData = {
     'Bundesland-spezifische Feiertage',
     'Schulferien-Integration',
     'ICS-Kalender-Export',
-    'Kostenlose Nutzung'
+    'Kostenlose Nutzung',
   ],
-  review: {
-    '@type': 'AggregateRating',
-    ratingValue: '5',
-    ratingCount: '3',
-    bestRating: '5',
-    worstRating: '1'
-  }
+};
+
+const faqPageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ_DATA.map((item) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: {
+      '@type': 'Answer',
+      text: item.answer,
+    },
+  })),
+};
+
+const landingBreadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Start',
+      item: 'https://ferien-planung.de/',
+    },
+  ],
 };
 
 export const metadata: Metadata = {
@@ -135,17 +132,22 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  verification: {
-    google: 'your-google-verification-code',
-  },
   other: {
-    'application/ld+json': JSON.stringify(structuredData),
-  }
-}
+    'application/ld+json': JSON.stringify(webApplicationSchema),
+  },
+};
 
 export default function LandingPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(landingBreadcrumbSchema) }}
+      />
       <Navigation />
       <main className={styles.landingPage}>
         {/* Hero Section */}
@@ -351,31 +353,6 @@ export default function LandingPage() {
                 <div key={index} className={styles.faqItem}>
                   <h3>{item.question}</h3>
                   <p>{item.answer}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section className={`${styles.section} ${styles.testimonials}`}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Das sagen unsere Nutzer</h2>
-            <div className={styles.testimonialsGrid}>
-              {TESTIMONIALS_DATA.map((testimonial, index) => (
-                <div key={index} className={styles.testimonialCard}>
-                  <div className={styles.testimonialContent}>
-                    <p>{testimonial.text}</p>
-                    <div className={styles.testimonialRating}>
-                      {'★'.repeat(testimonial.rating)}
-                    </div>
-                  </div>
-                  <div className={styles.testimonialAuthor}>
-                    <p>
-                      {testimonial.name}
-                      <span className={styles.testimonialRole}>{testimonial.role}</span>
-                    </p>
-                  </div>
                 </div>
               ))}
             </div>

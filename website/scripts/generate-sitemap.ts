@@ -17,6 +17,11 @@ async function generateSitemap() {
       path: `/states/${stateId}/`,
       priority: '0.8',
       changefreq: 'weekly'
+    })),
+    ...stateIds.map(stateId => ({
+      path: `/states/${stateId}/brueckentage-2026/`,
+      priority: '0.85',
+      changefreq: 'weekly'
     }))
   ];
 

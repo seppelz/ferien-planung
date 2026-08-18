@@ -2,6 +2,25 @@
 
 German holiday planner: marketing site in `website/` (Next.js, port 3000) and the interactive planner SPA in `src/` (Vite, port 5173, base path `/app/`).
 
+## Product roadmap (SEO & planner)
+
+Work in this order; **2027 rollover only after steps 1–9**:
+
+| Step | Scope | Status |
+|------|--------|--------|
+| 1 | Verify server-side Brückentag math (`website/src/utils/bridgeDays.ts` vs planner); programmatic `/states/[state]/brueckentage-2026/` pages | In progress |
+| 2 | `FAQPage` + `BreadcrumbList` JSON-LD; visible breadcrumbs on state/subpages | In progress |
+| 3 | Remove unverified `AggregateRating` and testimonials (Search Console connected separately) | Done |
+| 4 | Keep SEO on `/`; enrich `/app/` static shell (`index.html` noscript + meta) without competing with home | Done |
+| 5 | Keep `website/scripts/generate-sitemap.ts` in sync when adding URLs (sitemap already submitted in GSC) | Ongoing |
+| 6 | **Plan kopieren** — shareable URL via `?plan=` base64 payload (`src/services/planShareService.ts`) | Done |
+| 7 | First-run checklist after Bundesland pick (scroll to top-3, export hint) | Done |
+| 8 | **Nächster Brückentag** — date-aware banner/widget (not past dates) on state pages + planner | Done |
+| 9 | Export UX — ICS prominence, Google Calendar link, HR/PDF via existing export modal | Done |
+| 10 | **2027** — set `NEXT_PLAN_YEAR`, duplicate `brueckentage-2027` routes, holiday data, redirects | After 1–9 |
+
+Bridge math verification runs in website build: `website/scripts/verify-bridge-math.ts`.
+
 ## Cursor Cloud specific instructions
 
 - Planner URL is only `/app/` (locally `http://localhost:5173/app/`, production `https://ferien-planung.de/app/`). Deep links use `?state=berlin` or `?state=BE`.

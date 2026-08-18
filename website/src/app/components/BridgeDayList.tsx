@@ -40,8 +40,12 @@ export default function BridgeDayList({
       </ol>
       {stateSlug && (
         <p className={styles.footerLink}>
+          <Link href={`/states/${stateSlug}/brueckentage-${PLAN_YEAR}/`} className={shared.linkAccent}>
+            Alle Brückentage {PLAN_YEAR} in {stateName}
+          </Link>
+          {' · '}
           <Link href={plannerUrl(stateSlug)} className={shared.linkAccent}>
-            Diese Brückentage in {stateName} {PLAN_YEAR} jetzt einplanen
+            Im Ferienplaner einplanen
           </Link>
         </p>
       )}

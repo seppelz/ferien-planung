@@ -5193,3 +5193,18 @@
   color: var(--state-primary-color, #2b6cb0);
   text-decoration: none;
 }
+
+.bridgeSubpageLink {
+  text-align: center;
+  margin: 0.5rem 0 1.5rem;
+}
+
+.bridgeSubpageLink a {
+  color: var(--state-primary-color, #0369a1);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.bridgeSubpageLink a:hover {
+  text-decoration: underline;
+}

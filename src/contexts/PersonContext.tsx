@@ -5,7 +5,14 @@ import { VacationPlan } from '../types/vacationPlan';
 import { usePersonStorage } from '../hooks/usePersonStorage';
 import { useNotification } from './NotificationContext';
 import { calculateVacationEfficiency } from '../utils/vacationEfficiency';
+import { ONBOARDING_KEYS } from '../constants/onboardingKeys';
 import { parseStateQuery } from '../utils/stateQuery';
+import {
+  decodePlanFromParam,
+  PLAN_SHARE_QUERY_KEY,
+  SharedPlanPayload,
+} from '../services/planShareService';
+import { toDate } from '../utils/dateUtils';
 
 interface PersonContextType {
   persons: PersonInfo;
@@ -38,6 +45,50 @@ const DEFAULT_PERSON_INFO: PersonInfo = {
   person2: null
 };
 
+function plansFromSharedRanges(
+  ranges: [string, string][],
+  personId: 1 | 2,
+  state: GermanState
+): VacationPlan[] {
+  const plans: VacationPlan[] = [];
+  ranges.forEach(([startIso, endIso], index) => {
+    const start = toDate(startIso);
+    const end = toDate(endIso);
+    if (!start || !end) return;
+    plans.push({
+      id: `shared-${personId}-${index}-${startIso}`,
+      personId,
+      isVisible: true,
+      state,
+      start,
+      end,
+      efficiency: { requiredDays: 0, gainedDays: 0, score: 0 },
+    });
+  });
+  return plans;
+}
+
+function applySharedPlan(base: PersonInfo, shared: SharedPlanPayload): PersonInfo {
+  const person1Plans = plansFromSharedRanges(shared.p1, 1, shared.s);
+  const next: PersonInfo = {
+    person1: {
+      ...base.person1,
+      selectedState: shared.s,
+      availableVacationDays: shared.vd,
+      vacationPlans: person1Plans,
+    },
+    person2: shared.p2
+      ? {
+          id: 2,
+          selectedState: shared.p2.s,
+          availableVacationDays: shared.p2.vd,
+          vacationPlans: plansFromSharedRanges(shared.p2.plans, 2, shared.p2.s),
+        }
+      : base.person2,
+  };
+  return next;
+}
+
 export const PersonProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { savePersons, loadPersons, clearPersons: clearStorage } = usePersonStorage();
   const { showNotification } = useNotification();
@@ -52,21 +103,23 @@ export const PersonProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         setIsLoading(true);
         const savedPersons = await loadPersons();
         const stateFromUrl = parseStateQuery(window.location.search);
-        if (savedPersons) {
-          setPersons(
-            stateFromUrl
-              ? {
-                  ...savedPersons,
-                  person1: { ...savedPersons.person1, selectedState: stateFromUrl }
-                }
-              : savedPersons
-          );
+        const params = new URLSearchParams(window.location.search);
+        const sharedPlanEncoded = params.get(PLAN_SHARE_QUERY_KEY);
+        const sharedPlan = sharedPlanEncoded ? decodePlanFromParam(sharedPlanEncoded) : null;
+
+        let nextPersons = savedPersons ?? DEFAULT_PERSON_INFO;
+
+        if (sharedPlan) {
+          nextPersons = applySharedPlan(nextPersons, sharedPlan);
+          localStorage.setItem(ONBOARDING_KEYS.statePicked, 'true');
         } else if (stateFromUrl) {
-          setPersons({
-            ...DEFAULT_PERSON_INFO,
-            person1: { ...DEFAULT_PERSON_INFO.person1, selectedState: stateFromUrl }
-          });
+          nextPersons = {
+            ...nextPersons,
+            person1: { ...nextPersons.person1, selectedState: stateFromUrl },
+          };
         }
+
+        setPersons(nextPersons);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to load data'));
         showNotification('Fehler beim Laden der Daten', 'error');

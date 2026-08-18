@@ -40,13 +40,6 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
     "applicationSubCategory": "Vacation Planning",
     "browserRequirements": "Requires JavaScript. Requires HTML5.",
     "softwareVersion": "1.0",
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "5",
-      "ratingCount": "1",
-      "bestRating": "5",
-      "worstRating": "1"
-    },
     "creator": {
       "@type": "Organization",
       "name": "Holiday Planner",

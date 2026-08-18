@@ -26,8 +26,10 @@ import type { Holiday } from '@/types/holiday';
 import type { StateInfo } from '@/types/StateInfo';
 import styles from '@/app/styles/StatePage.module.css';
 import { PLAN_YEAR, plannerUrl } from '@/constants/planYear';
-import { bridgeLabelByHolidayDate, getTopBridgeOpportunities, schoolHolidayDays } from '@/utils/bridgeDays';
+import { bridgeLabelByHolidayDate, getNextBridgeOpportunity, getTopBridgeOpportunities, schoolHolidayDays } from '@/utils/bridgeDays';
+import Breadcrumbs from '@/app/components/Breadcrumbs';
 import BridgeDayList from '@/app/components/BridgeDayList';
+import NextBridgeBanner from '@/app/components/NextBridgeBanner';
 
 type Props = {
   params: {
@@ -279,6 +281,7 @@ export default async function StatePage({
 
   const totalSchoolHolidayDays = schoolHolidayDays(filteredSchoolHolidays);
   const bridgeOpportunities = getTopBridgeOpportunities([...publicHolidays, ...regionalHolidays], 3);
+  const nextBridge = getNextBridgeOpportunity([...publicHolidays, ...regionalHolidays]);
   const holidayBridgeLabels = bridgeLabelByHolidayDate([...publicHolidays, ...regionalHolidays]);
 
   return (
@@ -295,6 +298,16 @@ export default async function StatePage({
         tertiaryColor={colorScheme.accent.main}
       />
       <Navigation />
+      <Breadcrumbs
+        items={[
+          { label: 'Start', href: '/' },
+          { label: 'Bundesländer', href: '/states/' },
+          { label: fullName },
+        ]}
+      />
+      {nextBridge && (
+        <NextBridgeBanner stateName={fullName} stateSlug={stateId} opportunity={nextBridge} />
+      )}
       <div className={styles.stickyPlannerBar}>
         <Link href={plannerUrl(stateId)}>
           Urlaub in {fullName} {PLAN_YEAR} planen
@@ -574,6 +587,11 @@ export default async function StatePage({
             stateSlug={stateId}
             opportunities={bridgeOpportunities}
           />
+          <p className={styles.bridgeSubpageLink}>
+            <Link href={`/states/${stateId}/brueckentage-${PLAN_YEAR}/`}>
+              Alle Brückentage {PLAN_YEAR} in {fullName} ansehen
+            </Link>
+          </p>
           <HolidayList
             publicHolidays={publicHolidays}
             regionalHolidays={regionalHolidays}

@@ -21,6 +21,15 @@ import { useTheme } from '../hooks/useTheme';
 import { AppNavbar } from '../components/Navigation/AppNavbar';
 import { FirstRunStatePicker } from '../components/FirstRunStatePicker';
 import { PlanVacationHint } from '../components/PlanVacationHint';
+import { SharePlanButton } from '../components/SharePlanButton';
+import {
+  dismissOnboardingChecklist,
+  isOnboardingChecklistVisible,
+  OnboardingChecklist,
+} from '../components/OnboardingChecklist';
+import { NextBridgeWidget } from '../components/NextBridgeWidget';
+import { buildGoogleCalendarUrl } from '../utils/calendarLinks';
+import { toDate } from '../utils/dateUtils';
 import { PLAN_YEAR } from '../constants/planYear';
 import { ONBOARDING_KEYS } from '../constants/onboardingKeys';
 import { parseStateQuery } from '../utils/stateQuery';
@@ -186,6 +195,7 @@ export const MainLayout: React.FC = () => {
   const [showExportModal, setShowExportModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
   const [showStatePicker, setShowStatePicker] = useState(false);
+  const [showOnboardingChecklist, setShowOnboardingChecklist] = useState(false);
   const { persons, updatePerson, isLoading } = usePersonContext();
   const { markTutorialAsSeen } = useFirstTimeUser();
   const { showHint: showPlanVacationHint, dismissHint: dismissPlanVacationHint } = usePlanVacationHint(
@@ -578,6 +588,30 @@ export const MainLayout: React.FC = () => {
           <DesktopEfficiencyScore efficiency={efficiency} personId={personId} />
         </div>
 
+        {personId === 1 && showOnboardingChecklist && (
+          <OnboardingChecklist
+            hasVacationPlan={(person?.vacationPlans?.length || 0) > 0}
+            onScrollToRecommendations={() => {
+              vacationListRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }}
+            onDismiss={() => {
+              dismissOnboardingChecklist();
+              setShowOnboardingChecklist(false);
+            }}
+          />
+        )}
+
+        {personId === 1 && (
+          <NextBridgeWidget
+            bridgeDays={bridgeDays || []}
+            onAddBridge={(bridge) => {
+              const start = toDate(bridge.periodStart);
+              const end = toDate(bridge.periodEnd);
+              if (start && end) handleVacationAdd(start, end);
+            }}
+          />
+        )}
+
         {/* Vacation Days Input */}
         <div className={`${theme.card.base} p-4 flex items-center justify-between`}>
           <div className="flex items-center gap-2">
@@ -615,16 +649,38 @@ export const MainLayout: React.FC = () => {
         </div>
 
         {(person?.vacationPlans?.length || 0) > 0 && (
-          <button
-            type="button"
-            onClick={() => {
-              const icsData = generateICSData(persons);
-              downloadFile(icsData, `urlaubsplan-${PLAN_YEAR}.ics`, 'text/calendar');
-            }}
-            className={`w-full ${theme.button.base} border border-gray-200 bg-white text-gray-800 hover:bg-gray-50`}
-          >
-            Als Kalender (.ics) exportieren
-          </button>
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={() => {
+                const icsData = generateICSData(persons);
+                downloadFile(icsData, `urlaubsplan-${PLAN_YEAR}.ics`, 'text/calendar');
+              }}
+              className={`w-full ${theme.button.base} border border-gray-200 bg-white text-gray-800 hover:bg-gray-50`}
+            >
+              Als Kalender (.ics) exportieren
+            </button>
+            {personId === 1 && person && (
+              <>
+                <SharePlanButton />
+                {person.vacationPlans[0] && (
+                  <a
+                    href={buildGoogleCalendarUrl(
+                      'Urlaub',
+                      person.vacationPlans[0].start,
+                      person.vacationPlans[0].end,
+                      'Geplant mit ferien-planung.de'
+                    )}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-center text-sm font-medium text-gray-800 hover:bg-gray-50"
+                  >
+                    In Google Kalender öffnen
+                  </a>
+                )}
+              </>
+            )}
+          </div>
         )}
 
         {/* Vacation List with Recommendations */}
@@ -750,6 +806,12 @@ export const MainLayout: React.FC = () => {
       setShowStatePicker(true);
     }
   }, [isLoading]);
+
+  useEffect(() => {
+    if (!isLoading && !showStatePicker && isOnboardingChecklistVisible()) {
+      setShowOnboardingChecklist(true);
+    }
+  }, [isLoading, showStatePicker]);
 
   const handleTutorialClose = () => {
     setShowTutorial(false);

@@ -111,6 +111,28 @@ export function getTopBridgeOpportunities(
   return getBridgeOpportunities(holidays, year).slice(0, limit);
 }
 
+/** Bridge opportunities whose vacation day is on or after referenceDate (local calendar day). */
+export function getUpcomingBridgeOpportunities(
+  holidays: Holiday[],
+  referenceDate: Date = new Date(),
+  year: number = PLAN_YEAR
+): BridgeOpportunity[] {
+  const refIso = toIso(referenceDate);
+  return getBridgeOpportunities(holidays, year)
+    .filter((opportunity) => opportunity.vacationDate >= refIso)
+    .sort((a, b) => a.vacationDate.localeCompare(b.vacationDate));
+}
+
+/** The chronologically next bridge opportunity from today onward. */
+export function getNextBridgeOpportunity(
+  holidays: Holiday[],
+  referenceDate: Date = new Date(),
+  year: number = PLAN_YEAR
+): BridgeOpportunity | null {
+  const upcoming = getUpcomingBridgeOpportunities(holidays, referenceDate, year);
+  return upcoming[0] ?? null;
+}
+
 export function bridgeLabelByHolidayDate(
   holidays: Holiday[],
   year: number = PLAN_YEAR

@@ -1,0 +1,42 @@
+.banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 1rem auto 0;
+  padding: 1.25rem 1.5rem;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #ecfdf5, #f0f9ff);
+  border: 1px solid #bae6fd;
+  box-shadow: 0 2px 12px rgba(3, 105, 161, 0.08);
+}
+
+.content {
+  flex: 1;
+  min-width: 220px;
+}
+
+.eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #0369a1;
+}
+
+.title {
+  margin: 0 0 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.detail {
+  margin: 0 0 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: #334155;
+}
