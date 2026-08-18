@@ -115,8 +115,10 @@ const generateHolidayData = (holidays1: Holiday[], holidays2: Holiday[]) => {
   // Add person 1 holidays
   lines.push('\nPerson 1:');
   holidays1.forEach(holiday => {
+    const holidayDate = holiday.date ? new Date(holiday.date) : null;
+    if (!holidayDate) return;
     lines.push(
-      `${formatHolidayDate(new Date(holiday.date))} - ${holiday.name}`,
+      `${formatHolidayDate(holidayDate)} - ${holiday.name}`,
       `Typ: ${holiday.type}`,
       holiday.state ? `Bundesland: ${stateNames[holiday.state]}` : '',
       ''
@@ -127,8 +129,10 @@ const generateHolidayData = (holidays1: Holiday[], holidays2: Holiday[]) => {
   if (holidays2 && holidays2.length > 0) {
     lines.push('\nPerson 2:');
     holidays2.forEach(holiday => {
+      const holidayDate = holiday.date ? new Date(holiday.date) : null;
+      if (!holidayDate) return;
       lines.push(
-        `${formatHolidayDate(new Date(holiday.date))} - ${holiday.name}`,
+        `${formatHolidayDate(holidayDate)} - ${holiday.name}`,
         `Typ: ${holiday.type}`,
         holiday.state ? `Bundesland: ${stateNames[holiday.state]}` : '',
         ''
@@ -616,7 +620,7 @@ export const MainLayout: React.FC = () => {
             }}
             personId={personId}
             availableVacationDays={person?.availableVacationDays || 30}
-            onAddVacation={handleVacationAdd}
+            onAddVacation={(vacation) => handleVacationAdd(vacation.start, vacation.end)}
             state={person?.selectedState || GermanState.BE}
           />
         </div>

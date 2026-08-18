@@ -5,8 +5,6 @@ import { MobileContainer } from './Mobile/Container/MobileContainer';
 import { Holiday, BridgeDay } from '../types/holiday';
 import { GermanState } from '../types/GermanState';
 import { VacationPlan } from '../types/vacationPlan';
-import { InstallPrompt } from './Mobile/PWA/InstallPrompt';
-import { UpdateNotification } from './Mobile/PWA/UpdateNotification';
 
 interface AppWrapperProps {
   children: React.ReactNode;
@@ -57,8 +55,6 @@ export const AppWrapper: React.FC<AppWrapperProps> = ({
           </div>
         </div>
       )}
-      <InstallPrompt />
-      <UpdateNotification />
     </>
   );
 }; 

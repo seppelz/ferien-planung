@@ -1,35 +1,6 @@
 import { Holiday, BridgeDay } from '@/types';
-import { addDays, differenceInDays, isWeekend } from 'date-fns';
+import { addDays, isWeekend } from 'date-fns';
 import { getHolidayDate, isSameDayAs, toDate, toDateString } from '@/utils/dateUtils';
-
-type CombinationPattern = {
-  pattern: string;
-  weight: number;
-  description: string;
-}
-
-const COMBINATION_PATTERNS: CombinationPattern[] = [
-  {
-    pattern: 'HOLIDAY_BRIDGE_WEEKEND',
-    weight: 3.0,
-    description: 'Brückentag verbindet Feiertag mit Wochenende'
-  },
-  {
-    pattern: 'HOLIDAY_BRIDGE_HOLIDAY',
-    weight: 4.0,
-    description: 'Brückentag zwischen zwei Feiertagen'
-  },
-  {
-    pattern: 'WEEKEND_BRIDGE_HOLIDAY',
-    weight: 3.0,
-    description: 'Brückentag verbindet Wochenende mit Feiertag'
-  },
-  {
-    pattern: 'HOLIDAY_BRIDGE_NORMAL',
-    weight: 2.0,
-    description: 'Einzelner Brückentag nach Feiertag'
-  }
-];
 
 // Helper to find a holiday on a specific date
 const findHolidayOnDate = (dateStr: string, holidays: Holiday[]): Holiday | undefined => {
@@ -50,8 +21,9 @@ const findConnectedFreeDays = (
     holidays: [] as Holiday[]
   };
 
-  let currentDate = toDate(dateStr);
-  if (!currentDate) return result;
+  const parsedStart = toDate(dateStr);
+  if (!parsedStart) return result;
+  let currentDate: Date = parsedStart;
 
   let keepGoing = true;
   let daysChecked = 0;
@@ -112,7 +84,8 @@ export function calculateBridgeDays(holidays: Holiday[], state?: string): Bridge
       if (!bridgeDate) return;
 
       // Skip if it's a weekend or another holiday
-      if (isWeekend(toDate(bridgeDate)!) || findHolidayOnDate(bridgeDate, publicHolidays)) continue;
+      const bridgeDateObj = toDate(bridgeDate);
+      if (!bridgeDateObj || isWeekend(bridgeDateObj) || findHolidayOnDate(bridgeDate, publicHolidays)) return;
 
       // Find connected free days
       const before = findConnectedFreeDays(bridgeDate, 'backward', publicHolidays);

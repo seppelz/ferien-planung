@@ -27,7 +27,7 @@ export const MobileBottomStats: React.FC<MobileBottomStatsProps> = ({
     const vacationDays = allDays.filter(date => {
       if (isWeekend(date)) return false;
       const isHoliday = holidays.some(h => 
-        h.type === 'public' && isSameDay(new Date(h.date), date)
+        h.type === 'public' && h.date && isSameDay(new Date(h.date), date)
       );
       return !isHoliday;
     }).length;
@@ -36,7 +36,7 @@ export const MobileBottomStats: React.FC<MobileBottomStatsProps> = ({
     const additionalFreeDays = allDays.filter(date => {
       if (isWeekend(date)) return true;
       return holidays.some(h => 
-        h.type === 'public' && isSameDay(new Date(h.date), date)
+        h.type === 'public' && h.date && isSameDay(new Date(h.date), date)
       );
     }).length;
 

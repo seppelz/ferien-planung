@@ -131,7 +131,7 @@ export const MobileContainer: React.FC<MobileContainerProps> = ({
       // Required days are workdays that aren't public holidays
       const requiredDays = days.filter(d => 
         !isWeekend(d) && !holidays.some(h => 
-          h.type === 'public' && isSameDay(new Date(h.date), d)
+          h.type === 'public' && h.date && isSameDay(new Date(h.date), d)
         )
       ).length;
       

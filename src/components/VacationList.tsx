@@ -22,9 +22,15 @@ interface VacationRecommendation {
 interface VacationListProps {
   vacations: VacationPlan[];
   holidays: Holiday[];
-  onAddVacation?: (vacation: Omit<VacationPlan, 'id' | 'personId' | 'isVisible'>) => void;
+  onAddVacation?: (vacation: Omit<VacationPlan, 'id' | 'personId' | 'isVisible'> | { start: Date; end: Date }) => void;
   onRemoveVacation?: (vacation: VacationPlan) => void;
   state: GermanState;
+  otherPersonVacations?: VacationPlan[];
+  bridgeDays?: BridgeDay[];
+  onToggleVisibility?: (id: string) => void;
+  onRemove?: (id: string) => void;
+  personId?: 1 | 2;
+  availableVacationDays?: number;
 }
 
 const formatDateRange = (start: Date, end: Date): string => {
@@ -57,6 +63,7 @@ export const VacationList: React.FC<VacationListProps> = ({
   holidays,
   onAddVacation,
   onRemoveVacation,
+  onRemove,
   state
 }) => {
   const theme = useTheme();
@@ -75,7 +82,7 @@ export const VacationList: React.FC<VacationListProps> = ({
         gainedDays: rec.totalDaysOff,
         score: rec.efficiency,
         bridgeDayBenefit: rec.bridgeDays.length > 0 ? {
-          dates: rec.bridgeDays.map(bd => toDate(bd.date)).filter((d): d is Date => d !== undefined),
+          dates: rec.bridgeDays.map(bd => toDate(bd.date)).filter((d): d is Date => d !== null),
           description: 'Brückentag'
         } : undefined
       }
@@ -111,9 +118,12 @@ export const VacationList: React.FC<VacationListProps> = ({
               {(vacation.efficiency?.score ?? 0) > 1 && ` • ${Math.round((vacation.efficiency?.score ?? 0) * 100)}% Effizienz`}
             </div>
           </div>
-          {onRemoveVacation && (
+          {(onRemoveVacation || onRemove) && (
             <button
-              onClick={() => onRemoveVacation(vacation)}
+              onClick={() => {
+                onRemoveVacation?.(vacation);
+                onRemove?.(vacation.id);
+              }}
               className={`${theme.button.base} text-red-600 hover:text-red-700 ml-2`}
               aria-label="Urlaub entfernen"
             >

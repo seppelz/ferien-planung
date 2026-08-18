@@ -95,8 +95,12 @@ export const Calendar: React.FC<CalendarProps> = (props) => {
     onVacationSelectComplete: props.onVacationSelectComplete,
     onShowRecommendations: props.onShowRecommendations,
     recommendedDates: {
-      person1: props.holidays.map(h => ({ date: h.date, reason: h.name })),
-      person2: props.secondStateHolidays.map(h => ({ date: h.date, reason: h.name }))
+      person1: props.holidays
+        .map(h => ({ date: h.date ? new Date(h.date) : undefined, reason: h.name }))
+        .filter((item): item is { date: Date; reason: string } => item.date instanceof Date && !isNaN(item.date.getTime())),
+      person2: props.secondStateHolidays
+        .map(h => ({ date: h.date ? new Date(h.date) : undefined, reason: h.name }))
+        .filter((item): item is { date: Date; reason: string } => item.date instanceof Date && !isNaN(item.date.getTime()))
     }
   };
 

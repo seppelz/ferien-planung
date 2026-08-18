@@ -4,7 +4,7 @@ import { de } from 'date-fns/locale';
 import { BaseCalendarProps, useCalendar } from '../../Shared/Calendar/BaseCalendar';
 import { useTheme } from '../../../hooks/useTheme';
 import { Holiday, BridgeDay } from '../../../types/holiday';
-import { parseDateString } from '../../../utils/dateUtils';
+import { parseDateString, holidayOccursOn, toDate } from '../../../utils/dateUtils';
 
 interface HolidayType {
   type: Holiday["type"] | "bridge" | null;
@@ -399,8 +399,8 @@ export const DesktopCalendar: React.FC<ExtendedBaseCalendarProps> = (props) => {
     };
 
     // Check bridge days for both states
-    const firstStateBridgeDay = bridgeDays.find(bd => isSameDay(bd.date, date));
-    const secondStateBridgeDay = secondStateBridgeDays.find(bd => isSameDay(bd.date, date));
+    const firstStateBridgeDay = bridgeDays.find(bd => toDate(bd.date) && isSameDay(toDate(bd.date) as Date, date));
+    const secondStateBridgeDay = secondStateBridgeDays.find(bd => toDate(bd.date) && isSameDay(toDate(bd.date) as Date, date));
 
     if (firstStateBridgeDay) {
       result.firstState = { type: 'bridge', holiday: null };
@@ -410,19 +410,9 @@ export const DesktopCalendar: React.FC<ExtendedBaseCalendarProps> = (props) => {
     }
 
     // Check holidays for both states
-    const firstStateHoliday = holidays.find(h => {
-      if (h.endDate) {
-        return isWithinInterval(date, { start: h.date, end: h.endDate });
-      }
-      return isSameDay(h.date, date);
-    });
+    const firstStateHoliday = holidays.find(h => holidayOccursOn(h, date));
 
-    const secondStateHoliday = secondStateHolidays.find(h => {
-      if (h.endDate) {
-        return isWithinInterval(date, { start: h.date, end: h.endDate });
-      }
-      return isSameDay(h.date, date);
-    });
+    const secondStateHoliday = secondStateHolidays.find(h => holidayOccursOn(h, date));
 
     if (firstStateHoliday && !result.firstState.type) {
       result.firstState = { type: firstStateHoliday.type, holiday: firstStateHoliday };

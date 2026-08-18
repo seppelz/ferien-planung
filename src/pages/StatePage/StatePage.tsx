@@ -6,13 +6,9 @@ import { Helmet } from 'react-helmet-async';
 import { FaSun, FaLeaf, FaSnowflake, FaUmbrella, FaCalendarAlt, FaGraduationCap, FaArrowRight } from 'react-icons/fa';
 import { FaMonument, FaMountain, FaCity, FaLandmark, FaTree, FaWater, FaLocationDot, FaPersonHiking, FaBuilding, FaUsers, FaRulerCombined, FaIndustry, FaEuroSign, FaBriefcase, FaWallet, FaCrown, FaChurch, FaMusic, FaGift, FaUtensils, FaWineGlass, FaMask, FaMasksTheater, FaMugHot } from 'react-icons/fa6';
 import styles from './StatePage.module.css';
-import { StatePageHoliday, StateInfo, HolidayDetails } from './types';
+import { StatePageHoliday, HolidayDetails } from './types';
+import { StateInfo } from '../../config/types/StateInfo';
 import { parseDateString } from '../../utils/dateUtils';
-
-declare module '*.module.css' {
-  const classes: { [key: string]: string };
-  export default classes;
-}
 
 const calculateDuration = (start: string, end: string): number => {
   const startDate = new Date(start);
@@ -130,76 +126,12 @@ const getRegionalIcon = (iconName: string, className = 'regionalIcon') => {
 const StatePage: React.FC = () => {
   const { stateId } = useParams<{ stateId: string }>();
   const [selectedHoliday, setSelectedHoliday] = useState<StatePageHoliday | null>(null);
-  
-  if (!stateId) {
-    return (
-      <div className={styles.errorPage}>
-        <h1>Bundesland nicht gefunden</h1>
-        <p>Das gesuchte Bundesland konnte leider nicht gefunden werden.</p>
-        <Link to="/" className={styles.primaryButton}>Zur Startseite</Link>
-      </div>
-    );
-  }
-
-  const stateInfo = getStateInfo(stateId);
-  const stateColors = GERMAN_STATES.find(s => s.slug === stateId)?.colors || ['#4299e1', '#2b6cb0'];
   const sectionsRef = useRef<HTMLElement[]>([]);
-
-  if (!stateInfo) {
-    return (
-      <div className={styles.errorPage}>
-        <h1>Bundesland nicht gefunden</h1>
-        <p>Das gesuchte Bundesland konnte leider nicht gefunden werden.</p>
-        <Link to="/" className={styles.primaryButton}>Zur Startseite</Link>
-      </div>
-    );
-  }
-
-  const getHolidayDetails = (holidayName: string) => {
-    const stateObject = stateData[stateId];
-    if (stateObject && 'stateSpecificHolidayDetails' in stateObject) {
-      return (stateObject as any).stateSpecificHolidayDetails[holidayName];
-    }
-    return null;
-  };
-
-  const allHolidays = stateInfo?.holidays || [] as StatePageHoliday[];
-  const publicHolidays = allHolidays.filter(h => {
-    if (h.type !== 'public') return false;
-    if (h.isRegional) return false;
-    const holidayDate = h.date || h.start;
-    return holidayDate?.startsWith('2025');
-  }).map(holiday => ({
-    ...holiday,
-    details: getHolidayDetails(holiday.name) || holiday.details
-  }));
-
-  const regionalHolidays = allHolidays.filter(h => {
-    if (h.type !== 'public') return false;
-    if (!h.isRegional) return false;
-    const holidayDate = h.date || h.start;
-    return holidayDate?.startsWith('2026');
-  }).map(holiday => ({
-    ...holiday,
-    details: getHolidayDetails(holiday.name) || holiday.details
-  }));
-
-  const schoolHolidays = (stateInfo?.schoolHolidays || []) as StatePageHoliday[];
-  const filteredSchoolHolidays = schoolHolidays.filter(h => {
-    return h.start && h.start.startsWith('2026');
-  }).map(holiday => ({
-    ...holiday,
-    details: getHolidayDetails(holiday.name) || holiday.details
-  }));
-
-  const totalSchoolHolidayDays = filteredSchoolHolidays.reduce((total, holiday) => {
-    if (holiday.start && holiday.end) {
-      return total + calculateDuration(holiday.start, holiday.end);
-    }
-    return total;
-  }, 0);
+  const stateInfo = stateId ? getStateInfo(stateId) : undefined;
+  const stateColors = GERMAN_STATES.find(s => s.slug === stateId)?.colors || ['#4299e1', '#2b6cb0'];
 
   useEffect(() => {
+    if (!stateId || !stateInfo) return;
     if (stateColors) {
       const isWhiteColor = (color: string) => {
         return color.toLowerCase() === '#ffffff' || color.toLowerCase() === '#fff';
@@ -233,7 +165,8 @@ const StatePage: React.FC = () => {
       }
     );
 
-    sectionsRef.current.forEach((section) => {
+    const observed = [...sectionsRef.current];
+    observed.forEach((section) => {
       if (section) observer.observe(section);
     });
 
@@ -254,7 +187,7 @@ const StatePage: React.FC = () => {
     document.addEventListener('mousemove', handleMouseMove);
 
     return () => {
-      sectionsRef.current.forEach((section) => {
+      observed.forEach((section) => {
         if (section) observer.unobserve(section);
       });
       document.removeEventListener('mousemove', handleMouseMove);
@@ -263,7 +196,77 @@ const StatePage: React.FC = () => {
       document.documentElement.style.setProperty('--header-text-color', 'white');
       document.documentElement.style.setProperty('--primary-button-color', '#4299e1');
     };
-  }, [stateId, stateColors]);
+  }, [stateId, stateInfo, stateColors]);
+
+  if (!stateId || !stateInfo) {
+    return (
+      <div className={styles.errorPage}>
+        <h1>Bundesland nicht gefunden</h1>
+        <p>Das gesuchte Bundesland konnte leider nicht gefunden werden.</p>
+        <Link to="/" className={styles.primaryButton}>Zur Startseite</Link>
+      </div>
+    );
+  }
+
+  const getHolidayDetails = (holidayName: string) => {
+    const stateObject = stateData[stateId];
+    if (stateObject && 'stateSpecificHolidayDetails' in stateObject) {
+      return (stateObject as any).stateSpecificHolidayDetails[holidayName];
+    }
+    return null;
+  };
+
+  const allHolidays: StatePageHoliday[] = (stateInfo.publicHolidays?.[2026] || []).map((h) => ({
+    name: h.name,
+    date: h.date,
+    start: h.start ?? h.date,
+    end: h.end ?? h.endDate,
+    type: h.type === 'school' ? 'school' : 'public',
+    isRegional: h.isRegional,
+    details: h.details as HolidayDetails | undefined,
+  }));
+  const publicHolidays = allHolidays.filter(h => {
+    if (h.type !== 'public') return false;
+    if (h.isRegional) return false;
+    const holidayDate = h.date || h.start;
+    return holidayDate?.startsWith('2025');
+  }).map(holiday => ({
+    ...holiday,
+    details: getHolidayDetails(holiday.name) || holiday.details
+  }));
+
+  const regionalHolidays = allHolidays.filter(h => {
+    if (h.type !== 'public') return false;
+    if (!h.isRegional) return false;
+    const holidayDate = h.date || h.start;
+    return holidayDate?.startsWith('2026');
+  }).map(holiday => ({
+    ...holiday,
+    details: getHolidayDetails(holiday.name) || holiday.details
+  }));
+
+  const schoolHolidays: StatePageHoliday[] = (stateInfo.schoolHolidays?.[2026] || []).map((h) => ({
+    name: h.name,
+    date: h.date,
+    start: h.start ?? h.date,
+    end: h.end ?? h.endDate,
+    type: 'school',
+    isRegional: h.isRegional,
+    details: h.details as HolidayDetails | undefined,
+  }));
+  const filteredSchoolHolidays = schoolHolidays.filter(h => {
+    return h.start && h.start.startsWith('2026');
+  }).map(holiday => ({
+    ...holiday,
+    details: getHolidayDetails(holiday.name) || holiday.details
+  }));
+
+  const totalSchoolHolidayDays = filteredSchoolHolidays.reduce((total, holiday) => {
+    if (holiday.start && holiday.end) {
+      return total + calculateDuration(holiday.start, holiday.end);
+    }
+    return total;
+  }, 0);
 
   const addToRefs = (el: HTMLElement | null) => {
     if (el && !sectionsRef.current.includes(el)) {
@@ -307,18 +310,18 @@ const StatePage: React.FC = () => {
         <div className={styles.microInfoItem}>
           <FaUsers className={styles.microInfoIcon} />
           <span className={styles.microInfoLabel}>Einwohner:</span>
-          <span className={styles.microInfoValue}>{keyFacts.population.toLocaleString()}</span>
+          <span className={styles.microInfoValue}>{keyFacts.population}</span>
         </div>
         <div className={styles.microInfoItem}>
           <FaRulerCombined className={styles.microInfoIcon} />
           <span className={styles.microInfoLabel}>Fläche:</span>
-          <span className={styles.microInfoValue}>{keyFacts.area.toLocaleString()} km²</span>
+          <span className={styles.microInfoValue}>{keyFacts.area}</span>
         </div>
-        {keyFacts.gdp && (
+        {'gdp' in keyFacts && keyFacts.gdp && (
           <div className={styles.microInfoItem}>
             <FaEuroSign className={styles.microInfoIcon} />
             <span className={styles.microInfoLabel}>BIP p.K.:</span>
-            <span className={styles.microInfoValue}>{keyFacts.gdp.toLocaleString()} €</span>
+            <span className={styles.microInfoValue}>{String(keyFacts.gdp)}</span>
           </div>
         )}
       </>
@@ -562,7 +565,11 @@ const StatePage: React.FC = () => {
             </div>
             <div className={styles.holidayList}>
               {filteredSchoolHolidays
-                .sort((a, b) => new Date(a.start).getTime() - new Date(b.start).getTime())
+                .sort((a, b) => {
+                  const aStart = a.start ? new Date(a.start).getTime() : 0;
+                  const bStart = b.start ? new Date(b.start).getTime() : 0;
+                  return aStart - bStart;
+                })
                 .map((holiday, index) => {
                   const cleanName = holiday.name.split(" ")[0]
                     .charAt(0).toUpperCase() + holiday.name.split(" ")[0].slice(1).toLowerCase();
@@ -574,14 +581,14 @@ const StatePage: React.FC = () => {
                         onClick={() => toggleHolidayDetails(holiday)}
                       >
                         <div className={styles.holidayDate}>
-                          {formatDate(holiday.start)}
+                          {holiday.start ? formatDate(holiday.start) : ''}
                           <span className={styles.dateSeparator}>-</span>
-                          {formatDate(holiday.end)}
+                          {holiday.end ? formatDate(holiday.end) : ''}
                         </div>
                         <div className={styles.holidayName}>
                           {cleanName}
                           <span className={styles.duration}>
-                            ({calculateDuration(holiday.start, holiday.end)} Tage)
+                            ({holiday.start && holiday.end ? calculateDuration(holiday.start, holiday.end) : 0} Tage)
                           </span>
                         </div>
                         {holiday.details && (

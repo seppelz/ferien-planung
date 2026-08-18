@@ -7,6 +7,7 @@ import { Holiday, BridgeDay } from '../../../types/holiday';
 import { useSpring, animated } from '@react-spring/web';
 import { useDrag } from '@use-gesture/react';
 import { VacationPlan } from '../../../types/vacationPlan';
+import { holidayOccursOn, toDate } from '../../../utils/dateUtils';
 
 interface MobileCalendarProps extends Omit<BaseCalendarProps, 'getDateVacationInfo'> {
   personId: 1 | 2;
@@ -102,18 +103,16 @@ export const MobileCalendar: React.FC<MobileCalendarProps> = (props) => {
     }
 
     // Then check for bridge days
-    const isBridgeDay = props.bridgeDays?.some(bd => isSameDay(bd.date, date));
+    const isBridgeDay = props.bridgeDays?.some(bd => {
+      const bridgeDate = toDate(bd.date);
+      return bridgeDate ? isSameDay(bridgeDate, date) : false;
+    });
     if (isBridgeDay) {
       return { type: 'bridge', holiday: null };
     }
 
     // Then check for holidays
-    const holiday = props.holidays?.find(h => {
-      if (h.endDate) {
-        return isWithinInterval(date, { start: h.date, end: h.endDate });
-      }
-      return isSameDay(h.date, date);
-    });
+    const holiday = props.holidays?.find(h => holidayOccursOn(h, date));
 
     return holiday ? { type: holiday.type, holiday } : { type: null, holiday: null };
   }, [isDateInVacation, props.bridgeDays, props.holidays]);
@@ -183,7 +182,7 @@ export const MobileCalendar: React.FC<MobileCalendarProps> = (props) => {
       return `${baseClasses} ${holidayColors[props.personId === 1 ? 'person1' : 'person2'].bridge} text-white ${cursorClasses}`;
     }
 
-    if (type === 'regional' || type === 'school') {
+    if (type === 'school') {
       return `${baseClasses} ${holidayColors[props.personId === 1 ? 'person1' : 'person2'].school} text-white ${cursorClasses}`;
     }
 
@@ -247,7 +246,10 @@ export const MobileCalendar: React.FC<MobileCalendarProps> = (props) => {
 
   // Memoize expensive date operations
   const getBridgeDayInfo = (date: Date) => {
-    const bridgeDay = props.bridgeDays?.find(bd => isSameDay(bd.date, date));
+    const bridgeDay = props.bridgeDays?.find(bd => {
+      const bridgeDate = toDate(bd.date);
+      return bridgeDate ? isSameDay(bridgeDate, date) : false;
+    });
     return bridgeDay;
   };
 

@@ -53,10 +53,11 @@ export const holidayService = {
           }
           
           const holidayObj: MultiDayHoliday = {
-            ...holiday,
-            name: capitalizeHolidayName(holiday.name), // Capitalize the holiday name
-            date: start,
-            endDate: end,
+            name: capitalizeHolidayName(holiday.name),
+            start: holiday.start,
+            end: holiday.end || holiday.start,
+            date: holiday.start,
+            endDate: holiday.end || holiday.start,
             type: 'school',
             state: stateCode
           };
@@ -86,10 +87,11 @@ export const holidayService = {
           }
           
           const holidayObj: SingleDayHoliday = {
-            ...holiday,
-            date,
+            name: holiday.name,
+            date: holiday.start,
             type: 'public',
-            state: stateCode
+            state: stateCode,
+            nationwide: holiday.type === 'public'
           };
           
           return holidayObj;

@@ -23,7 +23,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = ({
   showPerson2,
   onShowTutorial,
   onExport,
-  person2State,
+  person2State = null,
   onPerson2StateChange,
   selectedYear = 2026,
   onYearChange

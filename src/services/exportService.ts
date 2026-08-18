@@ -70,7 +70,7 @@ export class ExportService {
       days.forEach(date => {
         if (isWeekend(date)) {
           weekendDays++;
-        } else if (holidays.some(h => h.type === 'public' && isSameDay(new Date(h.date), date))) {
+        } else if (holidays.some(h => h.type === 'public' && h.date && isSameDay(new Date(h.date), date))) {
           holidayDays++;
         } else {
           workDays++;

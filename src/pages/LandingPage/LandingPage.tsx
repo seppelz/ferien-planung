@@ -92,29 +92,6 @@ const HOW_IT_WORKS_STEPS = [
   },
 ];
 
-const PWA_FEATURES = [
-  {
-    icon: '🔌',
-    title: 'Offline verfügbar',
-    description: 'Nutze die App auch ohne Internetverbindung. Alle Funktionen bleiben erhalten.',
-  },
-  {
-    icon: '📱',
-    title: 'App Installation',
-    description: 'Installiere die App direkt auf deinem Smartphone oder Desktop für schnellen Zugriff.',
-  },
-  {
-    icon: '🚀',
-    title: 'Schnellzugriff',
-    description: 'Greife blitzschnell auf deine Urlaubsplanung zu - direkt vom Homescreen.',
-  },
-  {
-    icon: '🔄',
-    title: 'Automatische Updates',
-    description: 'Bleibe immer auf dem neuesten Stand mit automatischen App-Updates.',
-  },
-];
-
 // Common components
 interface CTAButtonProps {
   children: React.ReactNode;
@@ -134,6 +111,19 @@ const CTAButton: React.FC<CTAButtonProps> = ({ children }) => {
 };
 
 // Memoized components
+interface FeatureCardProps {
+  icon: string;
+  title: string;
+  description: string;
+}
+
+interface BenefitCardProps {
+  icon: string;
+  title: string;
+  value: string;
+  description: string;
+}
+
 const FeatureCard = memo<FeatureCardProps>(({ icon, title, description }) => (
   <div className={styles.featureCard} role="article">
     <div className={styles.featureIcon} aria-hidden="true">{icon}</div>
@@ -399,50 +389,6 @@ const HowItWorksSection = () => {
   );
 };
 
-const PWASection = () => {
-  return (
-    <section className={styles.pwa}>
-      <div className={styles.sectionContent}>
-        <h2>Immer & Überall verfügbar</h2>
-        <div className={styles.pwaContent}>
-          <div className={styles.pwaFeatures}>
-            {PWA_FEATURES.map((feature, index) => (
-              <div key={index} className={styles.pwaFeatureCard}>
-                <div className={styles.pwaFeatureIcon}>{feature.icon}</div>
-                <h3>{feature.title}</h3>
-                <p>{feature.description}</p>
-              </div>
-            ))}
-          </div>
-          
-          <div className={styles.pwaDemo}>
-            <div className={styles.deviceFrame}>
-              <div className={styles.deviceScreen}>
-                <div className={styles.installPrompt}>
-                  <div className={styles.appIcon}>🏖️</div>
-                  <div className={styles.installText}>
-                    <h4>Holiday Planner</h4>
-                    <p>Zum Homescreen hinzufügen</p>
-                  </div>
-                  <button className={styles.installButton}>Installieren</button>
-                </div>
-              </div>
-            </div>
-            <div className={styles.pwaInstructions}>
-              <h3>Installation leicht gemacht</h3>
-              <ol className={styles.installSteps}>
-                <li>Öffne die App im Browser</li>
-                <li>Tippe auf "Zum Homescreen hinzufügen"</li>
-                <li>Fertig! Die App ist jetzt installiert</li>
-              </ol>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-};
-
 // Add FAQ section data
 const FAQ_DATA = [
   {
@@ -560,7 +506,6 @@ export const LandingPage: React.FC = () => {
         <TestimonialsSection />
         <HowItWorksSection />
         <FAQSection />
-        <PWASection />
       </main>
       <footer className={styles.footer}>
         <p>© {new Date().getFullYear()} Holiday Planner. Alle Rechte vorbehalten.</p>

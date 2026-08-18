@@ -72,29 +72,6 @@ const HOW_IT_WORKS_STEPS = [
   },
 ];
 
-const PWA_FEATURES = [
-  {
-    icon: '🔌',
-    title: 'Offline verfügbar',
-    description: 'Nutze die App auch ohne Internetverbindung. Alle Funktionen bleiben erhalten.',
-  },
-  {
-    icon: '📱',
-    title: 'App Installation',
-    description: 'Installiere die App direkt auf deinem Smartphone oder Desktop für schnellen Zugriff.',
-  },
-  {
-    icon: '🚀',
-    title: 'Schnellzugriff',
-    description: 'Greife blitzschnell auf deine Urlaubsplanung zu - direkt vom Homescreen.',
-  },
-  {
-    icon: '🔄',
-    title: 'Automatische Updates',
-    description: 'Bleibe immer auf dem neuesten Stand mit automatischen App-Updates.',
-  },
-];
-
 const FAQ_DATA = [
   {
     question: 'Was sind Brückentage?',
@@ -518,38 +495,6 @@ export default function LandingPage() {
                   )}
                 </div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* PWA Section */}
-        <section className={`${styles.section} ${styles.pwa}`}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Immer & Überall verfügbar</h2>
-            <div className={styles.pwaContent}>
-              <div className={styles.pwaFeatures}>
-                {PWA_FEATURES.map((feature, index) => (
-                  <div key={index} className={styles.pwaFeatureCard}>
-                    <div className={styles.pwaFeatureIcon}>{feature.icon}</div>
-                    <h3>{feature.title}</h3>
-                    <p>{feature.description}</p>
-                  </div>
-                ))}
-              </div>
-              <div className={styles.pwaDemo}>
-                <div className={styles.deviceFrame}>
-                  <div className={styles.deviceScreen}>
-                    <div className={styles.installPrompt}>
-                      <div className={styles.appIcon}>🏖️</div>
-                      <div className={styles.installText}>
-                        <h4>Holiday Planner</h4>
-                        <p>Zum Homescreen hinzufügen</p>
-                      </div>
-                      <button className={styles.installButton}>Installieren</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

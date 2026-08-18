@@ -71,9 +71,8 @@ export function useHolidays() {
 
         // Remove duplicates based on date and name
         const uniqueHolidays = allHolidays.reduce((acc: Holiday[], holiday) => {
-          const exists = acc.some(h => 
-            h.date.getTime() === holiday.date.getTime() && 
-            h.name === holiday.name
+          const exists = acc.some(h =>
+            h.date === holiday.date && h.name === holiday.name
           );
           if (!exists) acc.push(holiday);
           return acc;
