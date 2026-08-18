@@ -241,27 +241,27 @@ export default function LandingPage() {
                   <div className={styles.dayLabel}>So</div>
                 </div>
                 <div className={styles.daysRow}>
-                  <div className={styles.day}>29</div>
-                  <div className={styles.day}>30</div>
-                  <div className={styles.day}>1</div>
-                  <div className={`${styles.day} ${styles.bridgeDay}`}>2</div>
-                  <div className={`${styles.day} ${styles.holiday}`}>3</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>4</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>5</div>
+                  <div className={styles.day}>11</div>
+                  <div className={styles.day}>12</div>
+                  <div className={styles.day}>13</div>
+                  <div className={`${styles.day} ${styles.holiday}`}>14</div>
+                  <div className={`${styles.day} ${styles.bridgeDay}`}>15</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>16</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>17</div>
                 </div>
                 <div className={styles.daysRow}>
-                  <div className={styles.day}>6</div>
-                  <div className={styles.day}>7</div>
-                  <div className={styles.day}>8</div>
-                  <div className={styles.day}>9</div>
-                  <div className={styles.day}>10</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>11</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>12</div>
+                  <div className={styles.day}>18</div>
+                  <div className={styles.day}>19</div>
+                  <div className={styles.day}>20</div>
+                  <div className={styles.day}>21</div>
+                  <div className={styles.day}>22</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>23</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>24</div>
                 </div>
                 <div className={styles.legend}>
                   <div className={styles.legendItem}>
                     <span className={styles.legendDot} style={{ background: '#2D7D9A' }}></span>
-                    <span>Tag der Deutschen Einheit</span>
+                    <span>Christi Himmelfahrt (14. Mai 2026)</span>
                   </div>
                   <div className={styles.legendItem}>
                     <span className={styles.legendDot} style={{ background: '#FFB347' }}></span>

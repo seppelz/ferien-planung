@@ -1,6 +1,5 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
-import Image from 'next/image';
 import { getAllStates, getStateInfo } from '@/config';
 import Navigation from '@/components/Navigation/Navigation';
 import Footer from '@/components/Footer/Footer';
@@ -47,14 +46,14 @@ export default function StatesPage() {
               className={styles.stateCard}
             >
               <div className={styles.stateSymbols}>
-                <Image
+                <img
                   src={`/images/states/${state.id}/flag.svg`}
                   alt={`Flagge von ${state.fullName}`}
                   width={60}
                   height={36}
                   className={styles.stateFlag}
                 />
-                <Image
+                <img
                   src={`/images/states/${state.id}/coat.svg`}
                   alt={`Wappen von ${state.fullName}`}
                   width={32}
