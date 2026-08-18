@@ -7,68 +7,109 @@
     scroll-behavior: smooth;
   }
 
+  body {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
   :focus-visible {
-    outline: 2px solid var(--theme-primary);
+    outline: 2px solid var(--brand-primary);
     outline-offset: 2px;
   }
 }
 
-/* Global variables */
+/* Unified brand & layout tokens (marketing site + state pages) */
 :root {
-  /* Dynamic State Colors - Injected from stateColorSchemes.ts */
-  --state-primary-main: var(--state-color-primary-main, #0077b6);
-  --state-primary-light: var(--state-color-primary-light, #0090d9);
-  --state-primary-dark: var(--state-color-primary-dark, #005d91);
-  
-  --state-secondary-main: var(--state-color-secondary-main, #f5f5f5);
-  --state-secondary-light: var(--state-color-secondary-light, #ffffff);
-  --state-secondary-dark: var(--state-color-secondary-dark, #e0e0e0);
-  
-  --state-accent-main: var(--state-color-accent-main, #004b93);
-  --state-accent-light: var(--state-color-accent-light, #0066cc);
-  --state-accent-dark: var(--state-color-accent-dark, #003366);
+  --brand-primary: #0077b6;
+  --brand-primary-light: #0090d9;
+  --brand-primary-dark: #005d91;
+  --brand-secondary: #20b2aa;
+  --brand-accent: #023e8a;
+  --brand-bridge: #d4922a;
 
-  /* Background Colors */
-  --bg-default: var(--state-color-bg-default, #ffffff);
-  --bg-paper: var(--state-color-bg-paper, #f8f9fa);
-  --bg-subtle: var(--state-color-bg-subtle, #f0f2f5);
+  --landing-primary: var(--brand-primary);
+  --landing-secondary: var(--brand-secondary);
+  --theme-primary: var(--brand-accent);
+  --theme-secondary: var(--brand-primary);
+  --theme-accent: var(--brand-secondary);
+  --primary: var(--brand-primary);
+  --primary-color: var(--brand-primary);
+  --primary-dark: var(--brand-primary-dark);
+  --ocean-blue: var(--brand-primary);
+  --turquoise: var(--brand-secondary);
+  --deep-ocean: var(--brand-accent);
+  --light-turquoise: #5ec4bc;
 
-  /* Text Colors */
-  --text-primary: var(--state-color-text-primary, #1a1a1a);
-  --text-secondary: var(--state-color-text-secondary, #4a4a4a);
-  --text-light: var(--state-color-text-light, #ffffff);
-  --text-dark: var(--state-color-text-dark, #000000);
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f1f5f9;
+  --bg-accent: #eef6fb;
+  --bg-paper: #f8f9fa;
+  --bg-subtle: #f0f2f5;
+  --bg-default: #ffffff;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f8fafc;
 
-  /* Gradient Classes */
-  --gradient-primary: var(--state-gradient-primary, linear-gradient(135deg, var(--state-primary-main), var(--state-primary-light)));
-  --gradient-secondary: var(--state-gradient-secondary, linear-gradient(135deg, var(--state-secondary-main), var(--state-secondary-light)));
-  --gradient-accent: var(--state-gradient-accent, linear-gradient(135deg, var(--state-accent-main), var(--state-accent-light)));
+  --text-primary: #1a202c;
+  --text-secondary: #4a5568;
+  --text-tertiary: #718096;
+  --text-muted: #718096;
+  --text-light: #ffffff;
+  --text-on-brand: #ffffff;
 
-  /* Button Colors */
-  --button-primary-bg: var(--state-color-button-primary-bg, var(--state-primary-main));
-  --button-primary-hover: var(--state-color-button-primary-hover, var(--state-primary-dark));
-  --button-primary-text: var(--state-color-button-primary-text, var(--text-light));
+  --border: #e2e8f0;
+  --border-light: #e2e8f0;
+  --border-medium: #cbd5e1;
 
-  --button-secondary-bg: var(--state-color-button-secondary-bg, var(--state-secondary-main));
-  --button-secondary-hover: var(--state-color-button-secondary-hover, var(--state-secondary-dark));
-  --button-secondary-text: var(--state-color-button-secondary-text, var(--text-dark));
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.05);
+  --shadow-md: 0 4px 14px rgba(0, 119, 182, 0.08);
+  --shadow-lg: 0 12px 28px rgba(0, 119, 182, 0.12);
+  --shadow-hover: 0 16px 32px rgba(0, 119, 182, 0.14);
 
-  --button-accent-bg: var(--state-color-button-accent-bg, var(--state-accent-main));
-  --button-accent-hover: var(--state-color-button-accent-hover, var(--state-accent-dark));
-  --button-accent-text: var(--state-color-button-accent-text, var(--text-light));
+  --gradient-brand: linear-gradient(135deg, var(--brand-primary) 0%, var(--brand-secondary) 100%);
+  --gradient-hero: linear-gradient(
+    135deg,
+    var(--brand-accent) 0%,
+    var(--brand-primary) 42%,
+    var(--brand-primary-light) 100%
+  );
+  --gradient-subtle: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
 
-  /* Border Colors */
-  --border-light: var(--state-color-border-light, #e0e0e0);
-  --border-medium: var(--state-color-border-medium, #bdbdbd);
-  --border-dark: var(--state-color-border-dark, #757575);
+  --card-radius: 1rem;
+  --card-radius-lg: 1.25rem;
+  --card-border: 1px solid color-mix(in srgb, var(--brand-primary) 10%, white);
 
-  /* Shadows */
-  --shadow-small: var(--state-shadow-small, 0 2px 4px rgba(0, 0, 0, 0.1));
-  --shadow-medium: var(--state-shadow-medium, 0 4px 6px rgba(0, 0, 0, 0.1));
-  --shadow-large: var(--state-shadow-large, 0 8px 16px rgba(0, 0, 0, 0.1));
-
-  /* Transitions */
   --transition-fast: 150ms ease;
   --transition-normal: 250ms ease;
   --transition-slow: 350ms ease;
+
+  /* State page dynamic fallbacks */
+  --state-primary-main: var(--brand-primary);
+  --state-primary-light: var(--brand-primary-light);
+  --state-primary-dark: var(--brand-primary-dark);
+  --state-secondary-main: #f5f5f5;
+  --state-accent-main: var(--brand-accent);
+  --state-color-primary-main: var(--brand-primary);
+  --state-color-primary-light: var(--brand-primary-light);
+  --state-color-primary-dark: var(--brand-primary-dark);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--brand-primary) 35%, white);
+  border-radius: 4px;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--brand-primary) 25%, transparent);
+  color: inherit;
 }

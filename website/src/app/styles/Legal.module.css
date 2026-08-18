@@ -1,5 +1,5 @@
 .legalPage {
-  padding: 2rem 1rem;
+  padding: 6rem 1rem 3rem;
   max-width: 1200px;
   margin: 0 auto;
   color: var(--text-primary);
@@ -46,13 +46,13 @@
 }
 
 .container a {
-  color: var(--primary-color);
+  color: var(--brand-primary);
   text-decoration: none;
-  transition: color 0.2s ease;
+  transition: color var(--transition-fast);
 }
 
 .container a:hover {
-  color: var(--primary-dark);
+  color: var(--brand-primary-dark);
   text-decoration: underline;
 }
 

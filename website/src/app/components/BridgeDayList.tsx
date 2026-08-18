@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { PLAN_YEAR, plannerUrl } from '@/constants/planYear';
 import type { BridgeOpportunity } from '@/utils/bridgeDays';
+import shared from '@/app/styles/shared.module.css';
+import styles from './BridgeDayList.module.css';
 
 interface BridgeDayListProps {
   stateName: string;
@@ -18,47 +20,27 @@ export default function BridgeDayList({
   if (opportunities.length === 0) return null;
 
   return (
-    <section
-      aria-labelledby="bridge-days-heading"
-      style={{
-        margin: '0 0 2rem',
-        padding: '1.5rem',
-        background: '#ffffff',
-        borderRadius: '1rem',
-        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.06)',
-      }}
-    >
-      <h2 id="bridge-days-heading" style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>
+    <section className={`${shared.card} ${styles.section}`} aria-labelledby="bridge-days-heading">
+      <h2 id="bridge-days-heading" className={styles.heading}>
         {heading || `Beste Brückentage ${PLAN_YEAR} in ${stateName}`}
       </h2>
-      <p style={{ color: '#4a5568', marginBottom: '1rem' }}>
+      <p className={styles.intro}>
         Mit einem Urlaubstag mehrere freie Tage gewinnen – berechnet aus den gesetzlichen Feiertagen {PLAN_YEAR}.
       </p>
-      <ol style={{ listStyle: 'none', padding: 0, margin: 0, display: 'grid', gap: '0.75rem' }}>
+      <ol className={styles.list}>
         {opportunities.map((opportunity) => (
-          <li
-            key={`${opportunity.vacationDate}-${opportunity.holidayDate}`}
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              gap: '1rem',
-              flexWrap: 'wrap',
-              padding: '0.85rem 1rem',
-              background: '#f7fafc',
-              borderRadius: '0.75rem',
-            }}
-          >
+          <li key={`${opportunity.vacationDate}-${opportunity.holidayDate}`} className={styles.item}>
             <div>
-              <strong>{opportunity.holidayName}</strong>
-              <div style={{ color: '#4a5568', fontSize: '0.95rem' }}>{opportunity.displayRange}</div>
+              <strong className={styles.holidayName}>{opportunity.holidayName}</strong>
+              <div className={styles.dateRange}>{opportunity.displayRange}</div>
             </div>
-            <div style={{ fontWeight: 700, color: '#276749' }}>{opportunity.efficiencyLabel}</div>
+            <div className={shared.efficiencyBadge}>{opportunity.efficiencyLabel}</div>
           </li>
         ))}
       </ol>
       {stateSlug && (
-        <p style={{ marginTop: '1rem' }}>
-          <Link href={plannerUrl(stateSlug)} style={{ color: '#2b6cb0', fontWeight: 600 }}>
+        <p className={styles.footerLink}>
+          <Link href={plannerUrl(stateSlug)} className={shared.linkAccent}>
             Diese Brückentage in {stateName} {PLAN_YEAR} jetzt einplanen
           </Link>
         </p>

@@ -7,6 +7,7 @@ import { PLAN_YEAR, plannerUrl } from '@/constants/planYear'
 import { getTopBridgeOpportunities } from '@/utils/bridgeDays'
 import { berlin } from '@/config/states/berlin'
 import BridgeDayList from '@/app/components/BridgeDayList'
+import { LANDING_BRIDGE_HIGHLIGHTS } from '@/data/landingBridgeHighlights'
 
 // Constants from old landing page
 const FEATURES = [
@@ -260,15 +261,15 @@ export default function LandingPage() {
                 </div>
                 <div className={styles.legend}>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendDot} style={{ background: '#2D7D9A' }}></span>
+                    <span className={`${styles.legendDot} ${styles.legendDotHoliday}`} />
                     <span>Christi Himmelfahrt (14. Mai 2026)</span>
                   </div>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendDot} style={{ background: '#FFB347' }}></span>
+                    <span className={`${styles.legendDot} ${styles.legendDotBridge}`} />
                     <span>Brückentag</span>
                   </div>
                   <div className={styles.legendItem}>
-                    <span className={styles.legendDot} style={{ background: 'rgba(45, 125, 154, 0.05)' }}></span>
+                    <span className={`${styles.legendDot} ${styles.legendDotWeekend}`} />
                     <span>Wochenende</span>
                   </div>
                 </div>
@@ -277,7 +278,7 @@ export default function LandingPage() {
           </div>
         </section>
 
-        <section className={`${styles.section} ${styles.bridgeDays2026}`}>
+        <section className={`${styles.section} ${styles.bridgeDays2026}`} id="brueckentage">
           <div className={styles.sectionContent}>
             <BridgeDayList
               stateName="Berlin"
@@ -285,12 +286,7 @@ export default function LandingPage() {
               opportunities={getTopBridgeOpportunities(berlin.holidays, 3)}
               heading={`Nächste starke Brückentage Berlin ${PLAN_YEAR}`}
             />
-          </div>
-        </section>
 
-        {/* Bridge Days 2026 Section */}
-        <section className={`${styles.section} ${styles.bridgeDays2026}`}>
-          <div className={styles.sectionContent}>
             <h2 className={styles.sectionTitle}>Brückentage 2026: So verlängern Sie Ihren Urlaub</h2>
             
             <div className={styles.introText}>
@@ -302,135 +298,22 @@ export default function LandingPage() {
             </div>
 
             <div className={styles.bridgeDaysList}>
-              <article className={styles.bridgeDayCard}>
-                <h3>🎆 Neujahr (1. Januar 2026 – Donnerstag)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Freitag, den 2. Januar frei
+              {LANDING_BRIDGE_HIGHLIGHTS.map((highlight) => (
+                <article key={highlight.title} className={styles.bridgeDayCard}>
+                  <h3>{highlight.emoji} {highlight.title}</h3>
+                  <div className={styles.bridgeDayContent}>
+                    <div className={styles.recommendation}>
+                      <strong>Empfehlung:</strong> {highlight.recommendation}
+                    </div>
+                    <div className={styles.benefit}>
+                      <span className={styles.days}>1 Urlaubstag</span>
+                      <span>=</span>
+                      <span className={styles.freeDays}>4 Tage frei</span>
+                    </div>
+                    <p className={styles.explanation}>{highlight.explanation}</p>
                   </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Donnerstag bis Sonntag am Stück freihaben. Perfekter Start ins neue Jahr!
-                  </p>
-                </div>
-              </article>
-
-              <article className={styles.bridgeDayCard}>
-                <h3>👑 Heilige Drei Könige (6. Januar 2026 – Dienstag)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Montag, den 5. Januar frei
-                  </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Gilt für Baden-Württemberg, Bayern und Sachsen-Anhalt. Verlängertes Wochenende zu Jahresbeginn.
-                  </p>
-                </div>
-              </article>
-
-              <article className={styles.bridgeDayCard}>
-                <h3>🐣 Ostern (3.-6. April 2026)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Donnerstag, den 2. April frei
-                  </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Von Karfreitag (3. April) bis Ostermontag (6. April) ist bereits frei. 
-                    Mit einem zusätzlichen Urlaubstag am Donnerstag davor genießen Sie vier Tage am Stück.
-                  </p>
-                </div>
-              </article>
-
-              <article className={styles.bridgeDayCard}>
-                <h3>🌹 Tag der Arbeit (1. Mai 2026 – Freitag)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Donnerstag, den 30. April frei
-                  </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Der 1. Mai fällt auf einen Freitag – ideal für ein verlängertes Wochenende. 
-                    Mit einem Brückentag am Donnerstag haben Sie vier Tage frei.
-                  </p>
-                </div>
-              </article>
-
-              <article className={styles.bridgeDayCard}>
-                <h3>☁️ Christi Himmelfahrt (14. Mai 2026 – Donnerstag)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Freitag, den 15. Mai frei
-                  </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Einer der beliebtesten Brückentage! Mit nur einem Urlaubstag ein langes Wochenende sichern.
-                  </p>
-                </div>
-              </article>
-
-              <article className={styles.bridgeDayCard}>
-                <h3>🕊️ Pfingstmontag (25. Mai 2026 – Montag)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Freitag, den 22. Mai frei
-                  </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Pfingsten bietet bereits ein verlängertes Wochenende. Optimieren Sie es mit einem Brückentag.
-                  </p>
-                </div>
-              </article>
-
-              <article className={styles.bridgeDayCard}>
-                <h3>✝️ Fronleichnam (4. Juni 2026 – Donnerstag)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Freitag, den 5. Juni frei
-                  </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Gilt für Baden-Württemberg, Bayern, Hessen, NRW, Rheinland-Pfalz und Saarland.
-                  </p>
-                </div>
-              </article>
-
-              <article className={styles.bridgeDayCard}>
-                <h3>🎄 Weihnachten (25. Dezember 2026 – Freitag)</h3>
-                <div className={styles.bridgeDayContent}>
-                  <div className={styles.recommendation}>
-                    <strong>Empfehlung:</strong> Nehmen Sie Donnerstag, den 24. Dezember frei
-                  </div>
-                  <div className={styles.benefit}>
-                    <span className={styles.days}>1 Urlaubstag</span> = 
-                    <span className={styles.freeDays}>4 Tage frei</span>
-                  </div>
-                  <p className={styles.explanation}>
-                    Heiligabend bis Sonntag frei – der perfekte Start in die Feiertage.
-                  </p>
-                </div>
-              </article>
+                </article>
+              ))}
             </div>
 
             <div className={styles.seoText}>
@@ -457,7 +340,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section className={`${styles.section} ${styles.features}`}>
+        <section id="features" className={`${styles.section} ${styles.features}`}>
           <div className={styles.sectionContent}>
             <h2 className={styles.sectionTitle}>Unsere Features</h2>
             <div className={styles.featureGrid}>
