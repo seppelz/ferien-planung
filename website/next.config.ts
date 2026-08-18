@@ -34,6 +34,22 @@ const nextConfig: NextConfig = {
   },
   basePath: '',
   assetPrefix: '',
+  async rewrites() {
+    // Local dev only: proxy /app to the Vite planner (production serves website/out/app).
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: '/app',
+          destination: 'http://localhost:5173/app/',
+        },
+        {
+          source: '/app/:path*',
+          destination: 'http://localhost:5173/app/:path*',
+        },
+      ];
+    }
+    return [];
+  },
 };
 
 export default nextConfig;
