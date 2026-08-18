@@ -20,8 +20,11 @@ import { useFirstTimeUser } from '../hooks/useFirstTimeUser';
 import { useTheme } from '../hooks/useTheme';
 import { AppNavbar } from '../components/Navigation/AppNavbar';
 import { FirstRunStatePicker } from '../components/FirstRunStatePicker';
+import { PlanVacationHint } from '../components/PlanVacationHint';
 import { PLAN_YEAR } from '../constants/planYear';
+import { ONBOARDING_KEYS } from '../constants/onboardingKeys';
 import { parseStateQuery } from '../utils/stateQuery';
+import { usePlanVacationHint } from '../hooks/usePlanVacationHint';
 
 // Helper function to download files
 const downloadFile = (content: string, filename: string, type: string) => {
@@ -185,6 +188,9 @@ export const MainLayout: React.FC = () => {
   const [showStatePicker, setShowStatePicker] = useState(false);
   const { persons, updatePerson, isLoading } = usePersonContext();
   const { markTutorialAsSeen } = useFirstTimeUser();
+  const { showHint: showPlanVacationHint, dismissHint: dismissPlanVacationHint } = usePlanVacationHint(
+    !isLoading && !showStatePicker
+  );
   const theme = useTheme();
   
   // Add refs for focusing elements
@@ -439,6 +445,7 @@ export const MainLayout: React.FC = () => {
   };
 
   const handleStartVacationSelection = (personId: 1 | 2) => {
+    dismissPlanVacationHint();
     if (personId === 2 && !showSecondPerson) {
       setShowSecondPerson(true);
       // If person2 doesn't exist yet, initialize it
@@ -536,6 +543,7 @@ export const MainLayout: React.FC = () => {
     }, 0) || 0;
 
     const handleVacationAdd = (start: Date, end: Date) => {
+      dismissPlanVacationHint();
       const person = personId === 2 ? persons.person2 : persons.person1;
       if (!person) return;
 
@@ -586,19 +594,25 @@ export const MainLayout: React.FC = () => {
         </div>
 
         {/* Add Vacation Button */}
-        <button
-          onClick={() => handleStartVacationSelection(personId)}
-          className={`w-full flex items-center justify-center gap-2 ${theme.button.base} ${
-            personId === 1 
-              ? 'bg-emerald-500 hover:bg-emerald-600 text-white' 
-              : 'bg-cyan-500 hover:bg-cyan-600 text-white'
-          }`}
-        >
-          <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-          </svg>
-          <span>Urlaub planen</span>
-        </button>
+        <div className="relative">
+          <PlanVacationHint
+            show={showPlanVacationHint && personId === 1}
+            onDismiss={dismissPlanVacationHint}
+          />
+          <button
+            onClick={() => handleStartVacationSelection(personId)}
+            className={`w-full flex items-center justify-center gap-2 ${theme.button.base} ${
+              personId === 1
+                ? 'bg-emerald-500 hover:bg-emerald-600 text-white ring-2 ring-offset-2 ring-emerald-300'
+                : 'bg-cyan-500 hover:bg-cyan-600 text-white'
+            } ${showPlanVacationHint && personId === 1 ? 'animate-pulse' : ''}`}
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Urlaub planen</span>
+          </button>
+        </div>
 
         {(person?.vacationPlans?.length || 0) > 0 && (
           <button
@@ -645,6 +659,7 @@ export const MainLayout: React.FC = () => {
   };
 
   const handleAddVacation = useCallback((start: Date, end: Date) => {
+    dismissPlanVacationHint();
     const person = selectedPersonId === 2 ? persons.person2 : persons.person1;
     if (!person) return;
 
@@ -669,7 +684,7 @@ export const MainLayout: React.FC = () => {
     updatePerson(selectedPersonId || 1, {
       vacationPlans: [...(person.vacationPlans || []), newVacation]
     });
-  }, [selectedPersonId, persons, holidayData, calculateVacationEfficiency, updatePerson]);
+  }, [selectedPersonId, persons, holidayData, calculateVacationEfficiency, updatePerson, dismissPlanVacationHint]);
 
   const handleExport = async (type: 'ics' | 'hr' | 'celebration') => {
     switch (type) {
@@ -728,10 +743,10 @@ export const MainLayout: React.FC = () => {
     if (isLoading) return;
     const fromUrl = parseStateQuery(window.location.search);
     if (fromUrl) {
-      localStorage.setItem('holiday-planner-state-picked', 'true');
+      localStorage.setItem(ONBOARDING_KEYS.statePicked, 'true');
       return;
     }
-    if (!localStorage.getItem('holiday-planner-state-picked')) {
+    if (!localStorage.getItem(ONBOARDING_KEYS.statePicked)) {
       setShowStatePicker(true);
     }
   }, [isLoading]);
@@ -756,7 +771,17 @@ export const MainLayout: React.FC = () => {
   };
 
   return (
-    <AppWrapper
+    <>
+      <FirstRunStatePicker
+        isOpen={showStatePicker}
+        onSelect={(state) => {
+          handleStateSelect(state);
+          localStorage.setItem(ONBOARDING_KEYS.statePicked, 'true');
+          setShowStatePicker(false);
+          markTutorialAsSeen();
+        }}
+      />
+      <AppWrapper
       mobileProps={persons.person1?.selectedState ? {
         personId: selectedPersonId || 1,
         selectedState: persons.person1.selectedState,
@@ -790,7 +815,9 @@ export const MainLayout: React.FC = () => {
         onAvailableDaysChange: (days: number) => {
           updatePerson(selectedPersonId || 1, { availableVacationDays: days });
         },
-        otherPersonVacations: selectedPersonId === 2 ? persons.person1?.vacationPlans || [] : persons.person2?.vacationPlans || []
+        otherPersonVacations: selectedPersonId === 2 ? persons.person1?.vacationPlans || [] : persons.person2?.vacationPlans || [],
+        showPlanVacationHint,
+        onDismissPlanVacationHint: dismissPlanVacationHint,
       } : undefined}
     >
       <div className="h-screen bg-gray-50 flex flex-col">
@@ -806,15 +833,6 @@ export const MainLayout: React.FC = () => {
           hasTwoPersons={!!persons.person2?.vacationPlans}
         />
 
-        <FirstRunStatePicker
-          isOpen={showStatePicker}
-          onSelect={(state) => {
-            handleStateSelect(state);
-            localStorage.setItem('holiday-planner-state-picked', 'true');
-            setShowStatePicker(false);
-            markTutorialAsSeen();
-          }}
-        />
         <TutorialModal
           isOpen={showTutorial}
           onClose={handleTutorialClose}
@@ -872,5 +890,6 @@ export const MainLayout: React.FC = () => {
         </main>
       </div>
     </AppWrapper>
+    </>
   );
 }; 

@@ -18,6 +18,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { TutorialModal } from '../Tutorial/TutorialModal';
 import { ExportService } from '../../../services/exportService';
 import { eachDayOfInterval, isWeekend, isSameDay } from 'date-fns';
+import { PlanVacationHint } from '../../PlanVacationHint';
 import { useFirstTimeUser } from '../../../hooks/useFirstTimeUser';
 
 type ViewType = 'holidays' | 'school' | 'bridge' | 'planning' | 'calendar';
@@ -35,6 +36,8 @@ interface MobileContainerProps {
   availableVacationDays: number;
   onAvailableDaysChange: (days: number) => void;
   otherPersonVacations: VacationPlan[];
+  showPlanVacationHint?: boolean;
+  onDismissPlanVacationHint?: () => void;
   isLoading?: boolean;
   error?: Error | null;
 }
@@ -95,7 +98,9 @@ export const MobileContainer: React.FC<MobileContainerProps> = ({
   onAvailableDaysChange,
   otherPersonVacations,
   isLoading = false,
-  error = null
+  error = null,
+  showPlanVacationHint = false,
+  onDismissPlanVacationHint,
 }) => {
   const [activeView, setActiveView] = useState<ViewType>('calendar');
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -177,6 +182,7 @@ export const MobileContainer: React.FC<MobileContainerProps> = ({
 
   // Enhanced vacation handlers with announcements
   const handleAddVacation = (start: Date, end: Date) => {
+    onDismissPlanVacationHint?.();
     onAddVacation(start, end);
     setStatusMessage('Urlaub erfolgreich hinzugefügt');
   };
@@ -364,6 +370,15 @@ export const MobileContainer: React.FC<MobileContainerProps> = ({
       holidays={holidays}
     >
       <AnimatePresence mode="wait">
+        {showPlanVacationHint && (
+          <div className="px-3 pt-2">
+            <PlanVacationHint
+              show
+              onDismiss={() => onDismissPlanVacationHint?.()}
+              variant="mobile"
+            />
+          </div>
+        )}
         {renderCurrentView()}
       </AnimatePresence>
       <TutorialModal

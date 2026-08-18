@@ -21,6 +21,8 @@ interface AppWrapperProps {
     availableVacationDays: number;
     onAvailableDaysChange: (days: number) => void;
     otherPersonVacations: VacationPlan[];
+    showPlanVacationHint?: boolean;
+    onDismissPlanVacationHint?: () => void;
   };
 }
 
@@ -47,6 +49,8 @@ export const AppWrapper: React.FC<AppWrapperProps> = ({
           availableVacationDays={mobileProps.availableVacationDays}
           onAvailableDaysChange={mobileProps.onAvailableDaysChange}
           otherPersonVacations={mobileProps.otherPersonVacations}
+          showPlanVacationHint={mobileProps.showPlanVacationHint}
+          onDismissPlanVacationHint={mobileProps.onDismissPlanVacationHint}
         />
       ) : (
         <div className={`min-h-screen bg-gradient-to-br from-beach-sand/40 to-beach-ocean/5 ${theme.effects.transitions.slow}`}>

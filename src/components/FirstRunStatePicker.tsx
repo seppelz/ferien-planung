@@ -22,7 +22,8 @@ export const FirstRunStatePicker: React.FC<FirstRunStatePickerProps> = ({ isOpen
       <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
         <h2 className="text-xl font-semibold text-gray-900">Bundesland für {PLAN_YEAR} wählen</h2>
         <p className="mt-2 text-sm text-gray-600">
-          Danach siehst du die drei stärksten Brückentage und kannst sie mit einem Klick in den Plan übernehmen.
+          Wähle dein Bundesland – danach siehst du die besten Brückentage. Klicke auf{' '}
+          <strong>Urlaub planen</strong>, um eigene Zeiträume im Kalender zu markieren.
         </p>
         <div className="mt-4 max-h-72 space-y-1 overflow-y-auto">
           {STATES.map((state) => (
