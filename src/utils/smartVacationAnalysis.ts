@@ -1,26 +1,24 @@
 import { Holiday, BridgeDay } from '../types/holiday';
 import { addDays, isWeekend, differenceInDays } from 'date-fns';
-import { parseDateString, formatDateString, areSameDays } from './dateUtils';
+import { GermanState } from '../types/GermanState';
+import { parseDateString, formatDateString, areSameDays, holidayStartTime } from './dateUtils';
 
-interface VacationRecommendation {
+export interface VacationRecommendation {
   start: string;
   end: string;
+  startDate: Date;
+  endDate: Date;
   requiredDays: number;
   totalDaysOff: number;
+  gainedDays: number;
   efficiency: number;
   holidays: Holiday[];
   bridgeDays: BridgeDay[];
+  vacationDays: Date[];
+  displayRange: string;
+  efficiencyDisplay: string;
 }
 
-// Helper to find a holiday on a specific date
-const findHolidayOnDate = (dateStr: string, holidays: Holiday[]): Holiday | undefined => {
-  return holidays.find(h => {
-    if (h.type === 'bridge') return false;
-    return h.type === 'public' && (h.date === dateStr || h.start === dateStr);
-  });
-};
-
-// Helper to check if a date is a holiday
 const isHolidayOnDate = (dateStr: string, holidays: Holiday[]): boolean => {
   return holidays.some(h => {
     if (h.type === 'bridge') return false;
@@ -28,7 +26,6 @@ const isHolidayOnDate = (dateStr: string, holidays: Holiday[]): boolean => {
   });
 };
 
-// Helper to calculate workdays between two dates
 const calculateWorkdays = (startDate: Date, endDate: Date, holidays: Holiday[]): number => {
   let workdays = 0;
   let currentDate = startDate;
@@ -44,7 +41,6 @@ const calculateWorkdays = (startDate: Date, endDate: Date, holidays: Holiday[]):
   return workdays;
 };
 
-// Helper to analyze a potential bridge day opportunity
 const analyzeBridgeDayOpportunity = (
   startDate: Date,
   endDate: Date,
@@ -64,35 +60,43 @@ const analyzeBridgeDayOpportunity = (
   });
 
   const relevantBridgeDays = holidays.filter((h): h is BridgeDay => {
-    if (h.type !== 'bridge') return false;
+    if (h.type !== 'bridge' || !h.date) return false;
     const bridgeDate = parseDateString(h.date);
     return bridgeDate >= startDate && bridgeDate <= endDate;
   });
 
+  const efficiency = requiredDays > 0 ? totalDaysOff / requiredDays : 0;
+  const displayRange = `${formatDateString(startDate)} – ${formatDateString(endDate)}`;
+  const efficiencyDisplay = `${requiredDays} Urlaubstage • ${totalDaysOff} Tage frei • ${Math.round(efficiency * 100)}%`;
+
   return {
     start: startStr,
     end: endStr,
+    startDate,
+    endDate,
     requiredDays,
     totalDaysOff,
-    efficiency: totalDaysOff / requiredDays,
+    gainedDays: totalDaysOff,
+    efficiency,
     holidays: relevantHolidays,
-    bridgeDays: relevantBridgeDays
+    bridgeDays: relevantBridgeDays,
+    vacationDays: [startDate, endDate],
+    displayRange,
+    efficiencyDisplay,
   };
 };
 
-// Main function to analyze vacation opportunities
-export const analyzeVacationOpportunities = (holidays: Holiday[]): VacationRecommendation[] => {
+export const analyzeVacationOpportunities = (
+  holidays: Holiday[],
+  _state?: GermanState
+): VacationRecommendation[] => {
+  void _state;
   const recommendations: VacationRecommendation[] = [];
 
-  // Group holidays by proximity
   const holidayGroups: Holiday[][] = [];
   const sortedHolidays = holidays
     .filter(h => h.type === 'public')
-    .sort((a, b) => {
-      const dateA = parseDateString(a.date || a.start || '');
-      const dateB = parseDateString(b.date || b.start || '');
-      return dateA.getTime() - dateB.getTime();
-    });
+    .sort((a, b) => holidayStartTime(a) - holidayStartTime(b));
 
   let currentGroup: Holiday[] = [];
   for (let i = 0; i < sortedHolidays.length; i++) {
@@ -125,7 +129,6 @@ export const analyzeVacationOpportunities = (holidays: Holiday[]): VacationRecom
     holidayGroups.push(currentGroup);
   }
 
-  // Analyze each group for vacation opportunities
   for (const group of holidayGroups) {
     const firstHoliday = group[0];
     const lastHoliday = group[group.length - 1];
@@ -140,7 +143,6 @@ export const analyzeVacationOpportunities = (holidays: Holiday[]): VacationRecom
     const windowStart = addDays(firstDate, -5);
     const windowEnd = addDays(lastDate, 5);
 
-    // Try different combinations of start and end dates
     for (let start = windowStart; start <= firstDate; start = addDays(start, 1)) {
       for (let end = lastDate; end <= windowEnd; end = addDays(end, 1)) {
         const rec = analyzeBridgeDayOpportunity(start, end, holidays);
@@ -151,7 +153,6 @@ export const analyzeVacationOpportunities = (holidays: Holiday[]): VacationRecom
     }
   }
 
-  // Sort by efficiency and remove duplicates
   return recommendations
     .sort((a, b) => b.efficiency - a.efficiency)
     .filter((rec, index, self) =>

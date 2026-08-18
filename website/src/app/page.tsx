@@ -3,6 +3,10 @@ import Link from 'next/link'
 import styles from './styles/LandingPage.module.css'
 import Navigation from '@/components/Navigation/Navigation'
 import Footer from '@/components/Footer/Footer'
+import { PLAN_YEAR, plannerUrl } from '@/constants/planYear'
+import { getTopBridgeOpportunities } from '@/utils/bridgeDays'
+import { berlin } from '@/config/states/berlin'
+import BridgeDayList from '@/app/components/BridgeDayList'
 
 // Constants from old landing page
 const FEATURES = [
@@ -22,9 +26,9 @@ const FEATURES = [
     description: 'Alle Feiertage für jedes Bundesland, inklusive Schulferien als zusätzliche Information.',
   },
   {
-    icon: '⌨️',
-    title: 'Schnelle Bedienung',
-    description: 'Effiziente Tastatursteuerung für schnelle und komfortable Urlaubsplanung.',
+    icon: '📤',
+    title: 'Kalender-Export',
+    description: 'Exportiere deinen Plan als ICS-Datei und übernimm ihn in Outlook, Google Kalender oder Apple Kalender.',
   },
 ];
 
@@ -69,29 +73,6 @@ const HOW_IT_WORKS_STEPS = [
     icon: '✨',
     title: 'Urlaub optimieren',
     description: 'Wähle die Brückentage aus und optimiere deinen Jahresurlaub mit wenigen Klicks.',
-  },
-];
-
-const PWA_FEATURES = [
-  {
-    icon: '🔌',
-    title: 'Offline verfügbar',
-    description: 'Nutze die App auch ohne Internetverbindung. Alle Funktionen bleiben erhalten.',
-  },
-  {
-    icon: '📱',
-    title: 'App Installation',
-    description: 'Installiere die App direkt auf deinem Smartphone oder Desktop für schnellen Zugriff.',
-  },
-  {
-    icon: '🚀',
-    title: 'Schnellzugriff',
-    description: 'Greife blitzschnell auf deine Urlaubsplanung zu - direkt vom Homescreen.',
-  },
-  {
-    icon: '🔄',
-    title: 'Automatische Updates',
-    description: 'Bleibe immer auf dem neuesten Stand mit automatischen App-Updates.',
   },
 ];
 
@@ -155,7 +136,7 @@ const structuredData = {
     'Zwei-Personen Planung',
     'Bundesland-spezifische Feiertage',
     'Schulferien-Integration',
-    'Offline-Verfügbarkeit',
+    'ICS-Kalender-Export',
     'Kostenlose Nutzung'
   ],
   review: {
@@ -241,8 +222,8 @@ export default function LandingPage() {
                 Maximiere deinen Urlaub 2026 mit unserem intelligenten Ferienplaner! 
                 Brückentage 2026 clever planen und mit wenigen Urlaubstagen viele freie Tage gewinnen.
               </p>
-              <Link href="/app" className={styles.ctaButton}>
-                Jetzt Urlaub 2026 Planen
+              <Link href={plannerUrl()} className={styles.ctaButton}>
+                Jetzt Urlaub {PLAN_YEAR} Planen
               </Link>
             </div>
             <div className={styles.heroIllustration}>
@@ -260,27 +241,27 @@ export default function LandingPage() {
                   <div className={styles.dayLabel}>So</div>
                 </div>
                 <div className={styles.daysRow}>
-                  <div className={styles.day}>29</div>
-                  <div className={styles.day}>30</div>
-                  <div className={styles.day}>1</div>
-                  <div className={`${styles.day} ${styles.bridgeDay}`}>2</div>
-                  <div className={`${styles.day} ${styles.holiday}`}>3</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>4</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>5</div>
+                  <div className={styles.day}>11</div>
+                  <div className={styles.day}>12</div>
+                  <div className={styles.day}>13</div>
+                  <div className={`${styles.day} ${styles.holiday}`}>14</div>
+                  <div className={`${styles.day} ${styles.bridgeDay}`}>15</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>16</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>17</div>
                 </div>
                 <div className={styles.daysRow}>
-                  <div className={styles.day}>6</div>
-                  <div className={styles.day}>7</div>
-                  <div className={styles.day}>8</div>
-                  <div className={styles.day}>9</div>
-                  <div className={styles.day}>10</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>11</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>12</div>
+                  <div className={styles.day}>18</div>
+                  <div className={styles.day}>19</div>
+                  <div className={styles.day}>20</div>
+                  <div className={styles.day}>21</div>
+                  <div className={styles.day}>22</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>23</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>24</div>
                 </div>
                 <div className={styles.legend}>
                   <div className={styles.legendItem}>
                     <span className={styles.legendDot} style={{ background: '#2D7D9A' }}></span>
-                    <span>Tag der Deutschen Einheit</span>
+                    <span>Christi Himmelfahrt (14. Mai 2026)</span>
                   </div>
                   <div className={styles.legendItem}>
                     <span className={styles.legendDot} style={{ background: '#FFB347' }}></span>
@@ -293,6 +274,17 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className={`${styles.section} ${styles.bridgeDays2026}`}>
+          <div className={styles.sectionContent}>
+            <BridgeDayList
+              stateName="Berlin"
+              stateSlug="berlin"
+              opportunities={getTopBridgeOpportunities(berlin.holidays, 3)}
+              heading={`Nächste starke Brückentage Berlin ${PLAN_YEAR}`}
+            />
           </div>
         </section>
 
@@ -457,8 +449,8 @@ export default function LandingPage() {
             <div className={styles.ctaBox}>
               <h3>Jetzt Ihren Urlaub 2026 optimal planen</h3>
               <p>Nutzen Sie unseren kostenlosen Ferienplaner, um die besten Brückentage 2026 für Ihr Bundesland zu finden.</p>
-              <Link href="/app" className={styles.ctaButton}>
-                Zum Ferienplaner 2026
+              <Link href={plannerUrl()} className={styles.ctaButton}>
+                Zum Ferienplaner {PLAN_YEAR}
               </Link>
             </div>
           </div>
@@ -518,38 +510,6 @@ export default function LandingPage() {
                   )}
                 </div>
               ))}
-            </div>
-          </div>
-        </section>
-
-        {/* PWA Section */}
-        <section className={`${styles.section} ${styles.pwa}`}>
-          <div className={styles.sectionContent}>
-            <h2 className={styles.sectionTitle}>Immer & Überall verfügbar</h2>
-            <div className={styles.pwaContent}>
-              <div className={styles.pwaFeatures}>
-                {PWA_FEATURES.map((feature, index) => (
-                  <div key={index} className={styles.pwaFeatureCard}>
-                    <div className={styles.pwaFeatureIcon}>{feature.icon}</div>
-                    <h3>{feature.title}</h3>
-                    <p>{feature.description}</p>
-                  </div>
-                ))}
-              </div>
-              <div className={styles.pwaDemo}>
-                <div className={styles.deviceFrame}>
-                  <div className={styles.deviceScreen}>
-                    <div className={styles.installPrompt}>
-                      <div className={styles.appIcon}>🏖️</div>
-                      <div className={styles.installText}>
-                        <h4>Holiday Planner</h4>
-                        <p>Zum Homescreen hinzufügen</p>
-                      </div>
-                      <button className={styles.installButton}>Installieren</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </section>

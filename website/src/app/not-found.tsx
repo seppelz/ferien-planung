@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import styles from './not-found.module.css'
 import Navigation from '@/components/Navigation/Navigation'
+import { plannerUrl } from '@/constants/planYear'
 
 export const dynamic = 'force-static'
 
@@ -16,7 +17,7 @@ export default function NotFound() {
             <Link href="/" className={styles.button}>
               Zur Startseite
             </Link>
-            <Link href="https://app.ferien-planung.de" className={styles.button}>
+            <Link href={plannerUrl()} className={styles.button}>
               Zum Urlaubsplaner
             </Link>
           </div>

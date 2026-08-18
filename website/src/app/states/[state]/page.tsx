@@ -25,6 +25,9 @@ import { getStateEnum, getStateInfo, getStateIds } from '@/utils/stateUtils';
 import type { Holiday } from '@/types/holiday';
 import type { StateInfo } from '@/types/StateInfo';
 import styles from '@/app/styles/StatePage.module.css';
+import { PLAN_YEAR, plannerUrl } from '@/constants/planYear';
+import { bridgeLabelByHolidayDate, getTopBridgeOpportunities, schoolHolidayDays } from '@/utils/bridgeDays';
+import BridgeDayList from '@/app/components/BridgeDayList';
 
 type Props = {
   params: {
@@ -61,7 +64,7 @@ const generateStructuredData = (stateInfo: StateInfo): Record<string, unknown> =
     ],
     event: [
       ...stateInfo.holidays
-        .filter(holiday => holiday.start?.startsWith('2026'))
+        .filter(holiday => holiday.start?.startsWith(String(PLAN_YEAR)))
         .map(holiday => ({
           '@type': 'Event',
           name: holiday.name,
@@ -81,8 +84,8 @@ const generateStructuredData = (stateInfo: StateInfo): Record<string, unknown> =
     ],
     mainEntity: {
       '@type': 'WebPage',
-      name: `Feiertage und Schulferien ${stateInfo.name} 2026`,
-      description: `Alle Feiertage und Schulferien für ${stateInfo.name} im Jahr 2026. Optimale Urlaubsplanung mit Brückentagen.`,
+      name: `Feiertage und Schulferien ${stateInfo.name} ${PLAN_YEAR}`,
+      description: `Alle Feiertage und Schulferien für ${stateInfo.name} im Jahr ${PLAN_YEAR}. Optimale Urlaubsplanung mit Brückentagen.`,
       breadcrumb: {
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -120,8 +123,8 @@ export async function generateMetadata(
   const publicHolidaysCount = stateInfo.holidays.filter(h => h.type === 'public').length;
   const schoolHolidaysCount = stateInfo.schoolHolidays?.length || 0;
 
-  const metaTitle = `${stateInfo.name} - Ferien und Feiertage 2026 | Urlaubsplaner`;
-  const metaDescription = `Planen Sie Ihren Urlaub 2026 in ${stateInfo.name}. ${publicHolidaysCount} Feiertage, ${schoolHolidaysCount} Ferienzeiten und optimale Brückentage. ${stateInfo.keyFacts.population} Einwohner, ${stateInfo.keyFacts.area}.`;
+  const metaTitle = `${stateInfo.name} - Ferien und Feiertage ${PLAN_YEAR} | Urlaubsplaner`;
+  const metaDescription = `Planen Sie Ihren Urlaub ${PLAN_YEAR} in ${stateInfo.name}. ${publicHolidaysCount} Feiertage, ${schoolHolidaysCount} Ferienzeiten und optimale Brückentage. ${stateInfo.keyFacts.population} Einwohner, ${stateInfo.keyFacts.area}.`;
 
   return {
     metadataBase: new URL('https://ferien-planung.de'),
@@ -129,8 +132,8 @@ export async function generateMetadata(
     description: metaDescription,
     keywords: [
       stateInfo.name,
-      'Feiertage 2026',
-      'Schulferien 2026',
+      `Feiertage ${PLAN_YEAR}`,
+      `Schulferien ${PLAN_YEAR}`,
       'Brückentage',
       'Urlaub',
       'Urlaubsplanung',
@@ -150,7 +153,7 @@ export async function generateMetadata(
           url: `/images/states/${stateId}.jpg`,
           width: 1200,
           height: 630,
-          alt: `${stateInfo.name} - Urlaubsplanung 2026`,
+          alt: `${stateInfo.name} - Urlaubsplanung ${PLAN_YEAR}`,
         },
       ],
     },
@@ -261,28 +264,22 @@ export default async function StatePage({
   const publicHolidays = (holidays as Holiday[]).filter(h => {
     if (h.type !== 'public') return false;
     if (h.isRegional) return false;
-    return h.start?.startsWith('2026');
+    return h.start?.startsWith(String(PLAN_YEAR));
   });
 
   const regionalHolidays = (holidays as Holiday[]).filter(h => {
     if (h.type !== 'public') return false;
     if (!h.isRegional) return false;
-    return h.start?.startsWith('2026');
+    return h.start?.startsWith(String(PLAN_YEAR));
   });
 
   const filteredSchoolHolidays = (schoolHolidays as Holiday[]).filter(h => {
-    return h.start?.startsWith('2026');
+    return h.start?.startsWith(String(PLAN_YEAR));
   });
 
-  const totalSchoolHolidayDays = filteredSchoolHolidays.reduce((total, holiday) => {
-    if (holiday.start && holiday.end) {
-      const startDate = new Date(holiday.start);
-      const endDate = new Date(holiday.end);
-      const diffTime = Math.abs(endDate.getTime() - startDate.getTime());
-      return total + Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
-    }
-    return total;
-  }, 0);
+  const totalSchoolHolidayDays = schoolHolidayDays(filteredSchoolHolidays);
+  const bridgeOpportunities = getTopBridgeOpportunities([...publicHolidays, ...regionalHolidays], 3);
+  const holidayBridgeLabels = bridgeLabelByHolidayDate([...publicHolidays, ...regionalHolidays]);
 
   return (
     <>
@@ -298,6 +295,11 @@ export default async function StatePage({
         tertiaryColor={colorScheme.accent.main}
       />
       <Navigation />
+      <div className={styles.stickyPlannerBar}>
+        <Link href={plannerUrl(stateId)}>
+          Urlaub in {fullName} {PLAN_YEAR} planen
+        </Link>
+      </div>
       <main className={styles.statePage} style={colorStyles}>
         <header className={styles.stateHeader}>
           <div className={styles.animatedBackground}>
@@ -536,7 +538,7 @@ export default async function StatePage({
                 margin: '0 auto'
               }}>
                 <Link 
-                  href="https://app.ferien-planung.de" 
+                  href={plannerUrl(stateId)} 
                   className={styles.primaryButton}
                   style={{
                     background: 'rgba(255, 255, 255, 0.95)',
@@ -567,6 +569,11 @@ export default async function StatePage({
           marginTop: '1rem',
           background: 'var(--state-background-subtle)'
         }}>
+          <BridgeDayList
+            stateName={fullName}
+            stateSlug={stateId}
+            opportunities={bridgeOpportunities}
+          />
           <HolidayList
             publicHolidays={publicHolidays}
             regionalHolidays={regionalHolidays}
@@ -574,6 +581,7 @@ export default async function StatePage({
             totalSchoolHolidayDays={totalSchoolHolidayDays}
             primaryColor="var(--state-primary-color)"
             secondaryColor="var(--state-secondary-color)"
+            bridgeLabels={holidayBridgeLabels}
           />
 
           <div className={styles.plannerPromo} style={{
@@ -684,7 +692,7 @@ export default async function StatePage({
                   Finden Sie die optimalen Brückentage und verlängern Sie Ihren Urlaub effizient.
                 </p>
                 <Link 
-                  href="https://app.ferien-planung.de" 
+                  href={plannerUrl(stateId)} 
                   className={styles.promoCTA}
                   style={{
                     display: 'inline-flex',
@@ -950,7 +958,7 @@ export default async function StatePage({
             <p className={styles.ctaDescription} style={{ color: 'var(--state-text-on-primary-muted)' }}>
               Optimiere deinen Urlaub mit unseren intelligenten Brückentage-Empfehlungen.
             </p>
-            <Link href="/planner" className={styles.ctaButton} style={{
+            <Link href={plannerUrl(stateId)} className={styles.ctaButton} style={{
               background: 'white',
               color: 'var(--state-primary-color)'
             }}>

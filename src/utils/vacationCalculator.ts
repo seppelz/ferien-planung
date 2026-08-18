@@ -28,7 +28,7 @@ export function calculateVacationDays(
       }
 
       const isPublicHoliday = holidays.some(h => 
-        h.type === 'public' && isSameDay(new Date(h.date), date)
+        h.type === 'public' && h.date && isSameDay(new Date(h.date), date)
       );
 
       if (isPublicHoliday) {

@@ -100,13 +100,6 @@ export const MetaTags: React.FC<MetaTagsProps> = ({
       <meta name="robots" content="index, follow" />
       <meta name="googlebot" content="index, follow" />
       <meta name="format-detection" content="telephone=no" />
-      <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-
-      {/* PWA Tags */}
-      <link rel="manifest" href="/holiday/manifest.json" />
-      <link rel="apple-touch-icon" href="/holiday/icons/icon-192x192.png" />
-      <link rel="icon" type="image/png" sizes="32x32" href="/holiday/icons/favicon-32x32.png" />
-      <link rel="icon" type="image/png" sizes="16x16" href="/holiday/icons/favicon-16x16.png" />
 
       {/* Structured Data */}
       <script type="application/ld+json">

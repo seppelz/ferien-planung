@@ -5,6 +5,7 @@ import { de } from 'date-fns/locale';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
 import { GermanState, stateNames } from '../types/GermanState';
+import { PLAN_YEAR } from '../constants/planYear';
 
 interface ICSEvent {
   start: Date;
@@ -70,7 +71,7 @@ export class ExportService {
       days.forEach(date => {
         if (isWeekend(date)) {
           weekendDays++;
-        } else if (holidays.some(h => h.type === 'public' && isSameDay(new Date(h.date), date))) {
+        } else if (holidays.some(h => h.type === 'public' && h.date && isSameDay(new Date(h.date), date))) {
           holidayDays++;
         } else {
           workDays++;
@@ -178,7 +179,7 @@ export class ExportService {
 
     // Header with title
     pdf.setFontSize(24);
-    pdf.text('Urlaubsplanung 2025', 105, 20, { align: 'center' });
+    pdf.text(`Urlaubsplanung ${PLAN_YEAR}`, 105, 20, { align: 'center' });
 
     let currentY = 30;
 

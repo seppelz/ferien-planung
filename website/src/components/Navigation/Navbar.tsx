@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
+import { plannerUrl } from '@/constants/planYear';
 
 interface State {
   id: string;
@@ -81,7 +82,7 @@ export const Navbar: React.FC = () => {
             )}
           </div>
 
-          <Link href="/planner" className={styles.navLink}>
+          <Link href={plannerUrl()} className={styles.navLink}>
             Zum Planer
           </Link>
         </div>

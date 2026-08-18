@@ -5173,3 +5173,23 @@
     border-top: 1px solid var(--state-border-light);
   }
 }
+
+.stickyPlannerBar {
+  position: sticky;
+  top: 72px;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  padding: 0.65rem 1rem;
+  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(8px);
+}
+
+.stickyPlannerBar a {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 700;
+  color: var(--state-primary-color, #2b6cb0);
+  text-decoration: none;
+}

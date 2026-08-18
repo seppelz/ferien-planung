@@ -1,9 +1,10 @@
 import React from 'react';
 import { format, isWeekend, isSameDay, isWithinInterval } from 'date-fns';
 import { de } from 'date-fns/locale';
-import { Holiday, MultiDayHoliday } from '../../types/holiday';
-import { VacationPlan } from '../../types/holiday';
+import { Holiday } from '../../types/holiday';
+import { VacationPlan } from '../../types/vacationPlan';
 import { useTheme } from '../../hooks/useTheme';
+import { holidayOccursOn, toDate } from '../../utils/dateUtils';
 
 interface MonthCalendarProps {
   month: Date;
@@ -48,24 +49,15 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
   };
 
   const isInSchoolHolidays = (date: Date, holidayList: Holiday[]) => {
-    return holidayList.some(holiday => {
-      if (holiday.type === 'school') {
-        const schoolHoliday = holiday as MultiDayHoliday;
-        return isWithinInterval(date, { 
-          start: schoolHoliday.date, 
-          end: schoolHoliday.endDate 
-        });
-      }
-      return false;
-    });
+    return holidayList.some(holiday => holiday.type === 'school' && holidayOccursOn(holiday, date));
   };
 
   const getDayClasses = (date: Date) => {
     const baseClasses = `w-6 h-6 flex items-center justify-center text-xs select-none ${theme.calendar.day.base}`;
     const classes = [baseClasses];
     const isWeekendDay = isWeekend(date);
-    const isFirstStateHoliday = holidays.find(h => isSameDay(date, h.date));
-    const isSecondStateHoliday = secondStateHolidays.find(h => isSameDay(date, h.date));
+    const isFirstStateHoliday = holidays.find(h => holidayOccursOn(h, date));
+    const isSecondStateHoliday = secondStateHolidays.find(h => holidayOccursOn(h, date));
     const isFirstStateBridgeDay = bridgeDays.some(d => isSameDay(date, d));
     const isSecondStateBridgeDay = secondStateBridgeDays.some(d => isSameDay(date, d));
     const isFirstStateSchoolHoliday = isInSchoolHolidays(date, holidays);
@@ -119,8 +111,8 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
     const info: { title: string; details: string[] } = { title: '', details: [] };
     
     // Check holidays
-    const firstStateHoliday = holidays.find(h => isSameDay(new Date(h.date), date));
-    const secondStateHoliday = secondStateHolidays.find(h => isSameDay(new Date(h.date), date));
+    const firstStateHoliday = holidays.find(h => holidayOccursOn(h, date));
+    const secondStateHoliday = secondStateHolidays.find(h => holidayOccursOn(h, date));
     
     if (firstStateHoliday) {
       info.details.push(firstStateHoliday.name);
@@ -160,7 +152,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
   return (
     <div className={`${theme.calendar.container} overflow-hidden select-none`}>
       <h3 className={`text-xs font-medium ${theme.text.body} py-1 text-center border-b ${theme.effects.glass.light}`}>
-        {format(month, 'MMMM', { locale: de })} {month.getMonth() === 0 && '2025'}
+        {format(month, 'MMMM', { locale: de })} {month.getMonth() === 0 && month.getFullYear()}
       </h3>
       <div className="p-1">
         <div className="grid grid-cols-7 gap-px">

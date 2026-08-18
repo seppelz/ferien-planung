@@ -1,6 +1,6 @@
 import { GermanState } from './GermanState';
 
-export type HolidayType = 'public' | 'school' | 'vacation';
+export type HolidayType = 'public' | 'school' | 'vacation' | 'bridge';
 
 export interface HolidayDetails {
   description?: string;
@@ -10,30 +10,29 @@ export interface HolidayDetails {
   familyActivities?: string[];
 }
 
-export interface BaseHoliday {
+export interface Holiday {
   name: string;
   type: HolidayType;
+  /** ISO date (YYYY-MM-DD) for single-day holidays */
+  date?: string;
+  /** ISO start date for multi-day holidays */
+  start?: string;
+  /** ISO end date for multi-day holidays */
+  end?: string;
+  /** Alias used by some UI components for the end of a range */
+  endDate?: string;
   details?: HolidayDetails;
   isRegional?: boolean;
   nationwide?: boolean;
   state?: GermanState;
 }
 
-export interface SingleDayHoliday extends BaseHoliday {
-  date: string;
-  endDate?: string;
-}
+export type SingleDayHoliday = Holiday & { date: string; type: 'public' | 'vacation' | 'bridge' };
+export type MultiDayHoliday = Holiday & { start: string; end: string; type: 'school' };
 
-export interface MultiDayHoliday extends BaseHoliday {
-  start: string;
-  end: string;
-  date?: string; // For compatibility with single day holiday interface
-}
-
-export type Holiday = SingleDayHoliday | MultiDayHoliday;
-
-export interface BridgeDay extends SingleDayHoliday {
+export interface BridgeDay extends Holiday {
   type: 'bridge';
+  date: string;
   start: string;
   end: string;
   days: number;
@@ -45,7 +44,6 @@ export interface BridgeDay extends SingleDayHoliday {
   periodEnd: string;
 }
 
-// Raw data interfaces (for API/storage)
 export interface RawHolidayDate {
   date: string;
   name: string;
@@ -58,14 +56,15 @@ export interface RawSchoolHoliday {
   start: string;
   end: string;
   name: string;
-  type: 'school';
+  type?: 'school';
   details?: HolidayDetails;
 }
 
 export interface RawPublicHoliday {
-  date: string;
+  date?: string;
+  start?: string;
   name: string;
-  type: 'public';
+  type?: 'public';
   details?: HolidayDetails;
   nationwide?: boolean;
   end?: string;
@@ -78,7 +77,8 @@ export interface HolidayData {
         name: string;
         start: string;
         end?: string;
-        type: 'public';
+        type?: 'public';
+        nationwide?: boolean;
       }>;
     };
   };
@@ -88,7 +88,7 @@ export interface HolidayData {
         name: string;
         start: string;
         end: string;
-        type: 'school';
+        type?: 'school';
         details?: HolidayDetails;
       }>;
     };
@@ -96,6 +96,14 @@ export interface HolidayData {
 }
 
 export interface SeasonalTradition {
-  season: string;
+  name?: string;
   description: string;
-} 
+  season: string;
+  dates?: {
+    start: string;
+    end: string;
+  };
+  locations?: string[];
+  activities?: string[];
+  culturalSignificance?: string;
+}

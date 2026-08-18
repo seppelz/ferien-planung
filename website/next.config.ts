@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,
-    domains: ['ferien-planung.de', 'app.ferien-planung.de'],
+    domains: ['ferien-planung.de'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/webp'],
@@ -14,10 +14,6 @@ const nextConfig: NextConfig = {
       {
         protocol: 'https',
         hostname: 'ferien-planung.de',
-      },
-      {
-        protocol: 'https',
-        hostname: 'app.ferien-planung.de',
       },
     ],
   },
@@ -38,6 +34,22 @@ const nextConfig: NextConfig = {
   },
   basePath: '',
   assetPrefix: '',
+  async rewrites() {
+    // Local dev only: proxy /app to the Vite planner (production serves website/out/app).
+    if (process.env.NODE_ENV === 'development') {
+      return [
+        {
+          source: '/app',
+          destination: 'http://localhost:5173/app/',
+        },
+        {
+          source: '/app/:path*',
+          destination: 'http://localhost:5173/app/:path*',
+        },
+      ];
+    }
+    return [];
+  },
 };
 
 export default nextConfig;

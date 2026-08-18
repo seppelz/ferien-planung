@@ -7,6 +7,10 @@ interface StateTheme {
 }
 
 export const stateThemes: Record<GermanState, StateTheme> = {
+  [GermanState.ALL]: {
+    gradient: 'from-slate-100 to-indigo-100',
+    accentColor: 'rgb(79, 70, 229)'
+  },
   [GermanState.BE]: {
     gradient: 'from-rose-100 to-indigo-100',
     pattern: 'M0 20L20 0L40 20L20 40zM-10 30L10 10L30 30L10 50z',

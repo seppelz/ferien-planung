@@ -2,7 +2,7 @@ import React from 'react';
 import { format, isWeekend, isSameDay, isWithinInterval, isBefore, startOfDay } from 'date-fns';
 import { de } from 'date-fns/locale';
 import { Holiday } from '../../types/holiday';
-import { parseDateString } from '../../utils/dateUtils';
+import { parseDateString, holidayOccursOn, toDate } from '../../utils/dateUtils';
 import { useTheme } from '../../hooks/useTheme';
 
 interface DateRange {
@@ -63,12 +63,7 @@ export const CalendarGrid: React.FC<CalendarGridProps> = ({
   };
 
   const getHolidayType = (date: Date, holidays: Holiday[], bridgeDays: Date[]) => {
-    const holiday = holidays.find(h => {
-      if (h.endDate) {
-        return isWithinInterval(date, { start: h.date, end: h.endDate });
-      }
-      return isSameDay(h.date, date);
-    });
+    const holiday = holidays.find(h => holidayOccursOn(h, date));
     
     const isBridgeDay = bridgeDays.some(d => isSameDay(d, date));
     

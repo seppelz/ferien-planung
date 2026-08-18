@@ -1,1 +1,0 @@
-if('serviceWorker' in navigator) navigator.serviceWorker.register('/holiday/dev-sw.js?dev-sw', { scope: '/holiday/', type: 'module' })

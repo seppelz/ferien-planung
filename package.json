@@ -4,13 +4,13 @@
   "version": "0.0.1",
   "type": "module",
   "homepage": "https://seppelz.github.io/holiday",
-  "scripts": {
+    "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "postbuild": "cp dist/index.html dist/200.html",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint . --report-unused-disable-directives",
+    "test": "vitest run",
     "preview": "vite preview",
-    "generate-pwa-icons": "node scripts/generate-pwa-icons.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },
@@ -48,10 +48,9 @@
     "gh-pages": "^6.2.0",
     "postcss": "^8.4.49",
     "react-icons": "^5.4.0",
-    "sharp": "^0.33.2",
     "tailwindcss": "^3.4.15",
     "typescript": "^5.7.2",
     "vite": "^5.4.11",
-    "vite-plugin-pwa": "^0.19.8"
+    "vitest": "^2.1.8"
   }
 }

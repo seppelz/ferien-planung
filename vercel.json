@@ -1,5 +1,13 @@
 {
-  "buildCommand": "cd website && npm install --force && npm run build",
+  "buildCommand": "npm install && npm run build && npm install --prefix website && npm run build --prefix website && node scripts/copy-app-build.js",
   "outputDirectory": "website/out",
-  "rewrites": []
-} 
+  "rewrites": [
+    { "source": "/app/:path*", "destination": "/app/index.html" }
+  ],
+  "redirects": [
+    { "source": "/planner", "destination": "/app/", "permanent": true },
+    { "source": "/planner/:path*", "destination": "/app/", "permanent": true },
+    { "source": "/app-redirect", "destination": "/app/", "permanent": true },
+    { "source": "/app-redirect/:path*", "destination": "/app/", "permanent": true }
+  ]
+}
