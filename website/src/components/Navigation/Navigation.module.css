@@ -114,8 +114,8 @@
 }
 
 .dropdownContent a:hover {
-  background-color: rgba(79, 70, 229, 0.1);
-  color: #4F46E5;
+  background-color: color-mix(in srgb, var(--brand-primary) 10%, white);
+  color: var(--brand-primary-dark);
 }
 
 .dropdownDivider {
@@ -142,36 +142,25 @@
   padding: 0.75rem 1.5rem;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 8px;
-  background: #4F46E5;
-  color: #FFFFFF;
+  border-radius: 0.75rem;
+  background: var(--brand-primary);
+  color: var(--text-on-brand);
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
   border: 2px solid transparent;
-  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 119, 182, 0.22);
 }
 
 .ctaButton:hover {
-  background: #4338CA;
+  background: var(--brand-primary-dark);
   transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
-}
-
-.ctaButton:focus {
-  outline: none;
-  border-color: #818CF8;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
-}
-
-.ctaButton:focus:not(:focus-visible) {
-  border-color: transparent;
-  box-shadow: none;
+  box-shadow: 0 6px 16px rgba(0, 119, 182, 0.28);
 }
 
 .ctaButton:focus-visible {
   outline: none;
-  border-color: #818CF8;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.3);
+  border-color: color-mix(in srgb, var(--brand-primary-light) 60%, white);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--brand-primary) 25%, transparent);
 }
 
 .ctaIcon {
@@ -219,15 +208,15 @@
 }
 
 .holidayLink {
-  color: #4F46E5;
+  color: var(--brand-primary);
   text-decoration: none;
   font-size: 0.875rem;
   padding: 0.5rem 1rem;
   border-radius: 0.375rem;
-  background-color: rgba(79, 70, 229, 0.1);
-  transition: background-color 0.2s;
+  background-color: color-mix(in srgb, var(--brand-primary) 10%, white);
+  transition: background-color var(--transition-fast);
 }
 
 .holidayLink:hover {
-  background-color: rgba(79, 70, 229, 0.2);
+  background-color: color-mix(in srgb, var(--brand-primary) 16%, white);
 } 
