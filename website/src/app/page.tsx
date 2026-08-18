@@ -3,6 +3,10 @@ import Link from 'next/link'
 import styles from './styles/LandingPage.module.css'
 import Navigation from '@/components/Navigation/Navigation'
 import Footer from '@/components/Footer/Footer'
+import { PLAN_YEAR, plannerUrl } from '@/constants/planYear'
+import { getTopBridgeOpportunities } from '@/utils/bridgeDays'
+import { berlin } from '@/config/states/berlin'
+import BridgeDayList from '@/app/components/BridgeDayList'
 
 // Constants from old landing page
 const FEATURES = [
@@ -22,9 +26,9 @@ const FEATURES = [
     description: 'Alle Feiertage für jedes Bundesland, inklusive Schulferien als zusätzliche Information.',
   },
   {
-    icon: '⌨️',
-    title: 'Schnelle Bedienung',
-    description: 'Effiziente Tastatursteuerung für schnelle und komfortable Urlaubsplanung.',
+    icon: '📤',
+    title: 'Kalender-Export',
+    description: 'Exportiere deinen Plan als ICS-Datei und übernimm ihn in Outlook, Google Kalender oder Apple Kalender.',
   },
 ];
 
@@ -132,7 +136,7 @@ const structuredData = {
     'Zwei-Personen Planung',
     'Bundesland-spezifische Feiertage',
     'Schulferien-Integration',
-    'Offline-Verfügbarkeit',
+    'ICS-Kalender-Export',
     'Kostenlose Nutzung'
   ],
   review: {
@@ -218,8 +222,8 @@ export default function LandingPage() {
                 Maximiere deinen Urlaub 2026 mit unserem intelligenten Ferienplaner! 
                 Brückentage 2026 clever planen und mit wenigen Urlaubstagen viele freie Tage gewinnen.
               </p>
-              <Link href="/app" className={styles.ctaButton}>
-                Jetzt Urlaub 2026 Planen
+              <Link href={plannerUrl()} className={styles.ctaButton}>
+                Jetzt Urlaub {PLAN_YEAR} Planen
               </Link>
             </div>
             <div className={styles.heroIllustration}>
@@ -270,6 +274,17 @@ export default function LandingPage() {
                 </div>
               </div>
             </div>
+          </div>
+        </section>
+
+        <section className={`${styles.section} ${styles.bridgeDays2026}`}>
+          <div className={styles.sectionContent}>
+            <BridgeDayList
+              stateName="Berlin"
+              stateSlug="berlin"
+              opportunities={getTopBridgeOpportunities(berlin.holidays, 3)}
+              heading={`Nächste starke Brückentage Berlin ${PLAN_YEAR}`}
+            />
           </div>
         </section>
 
@@ -434,8 +449,8 @@ export default function LandingPage() {
             <div className={styles.ctaBox}>
               <h3>Jetzt Ihren Urlaub 2026 optimal planen</h3>
               <p>Nutzen Sie unseren kostenlosen Ferienplaner, um die besten Brückentage 2026 für Ihr Bundesland zu finden.</p>
-              <Link href="/app" className={styles.ctaButton}>
-                Zum Ferienplaner 2026
+              <Link href={plannerUrl()} className={styles.ctaButton}>
+                Zum Ferienplaner {PLAN_YEAR}
               </Link>
             </div>
           </div>

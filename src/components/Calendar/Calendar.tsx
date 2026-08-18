@@ -7,6 +7,7 @@ import { GermanState } from '../../types/GermanState';
 import { Holiday, BridgeDay } from '../../types/holiday';
 import { VacationPlan } from '../../types/vacationPlan';
 import { differenceInDays, isWithinInterval, isSameDay } from 'date-fns';
+import { planYearStart } from '../../constants/planYear';
 
 interface CalendarProps {
   state: GermanState;
@@ -28,7 +29,7 @@ interface CalendarProps {
 }
 
 export const Calendar: React.FC<CalendarProps> = (props) => {
-  const [currentMonth] = useState(new Date(2025, 0));
+  const [currentMonth] = useState(planYearStart());
   const [selectedStartDate, setSelectedStartDate] = useState<Date | null>(null);
   const [selectedEndDate, setSelectedEndDate] = useState<Date | null>(null);
   const isMobile = useMediaQuery('(max-width: 768px)');

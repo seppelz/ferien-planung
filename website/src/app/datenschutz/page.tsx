@@ -75,7 +75,8 @@ export default function PrivacyPolicy() {
           <section>
             <h2>4. Lokale Datenspeicherung</h2>
             <p>
-              Die Ferien Planung speichert alle Ihre Urlaubsplanungsdaten ausschließlich lokal in Ihrem Browser. Es erfolgt keine 
+              Die Ferien Planung speichert alle Ihre Urlaubsplanungsdaten ausschließlich lokal in Ihrem Browser
+              (Urlaubsplaner unter <Link href="/app/">/app/</Link>). Es erfolgt keine
               Übertragung dieser Daten an unsere Server. Die Daten bleiben auf Ihrem Gerät und können jederzeit von Ihnen gelöscht werden.
             </p>
           </section>
@@ -108,7 +109,7 @@ export default function PrivacyPolicy() {
           </section>
 
           <div className={styles.lastUpdated}>
-            Stand: Januar 2025
+            Stand: Januar 2026
           </div>
         </div>
       </main>

@@ -1,7 +1,8 @@
-import { Holiday, SingleDayHoliday, MultiDayHoliday } from '../types/holiday';
+import { SingleDayHoliday, MultiDayHoliday } from '../types/holiday';
 import { GermanState } from '../types/GermanState';
 import { holidays } from '../data/holidays';
 import { parseDateString } from '../utils/dateUtils';
+import { PLAN_YEAR } from '../constants/planYear';
 
 const isValidDate = (date: any): date is Date => {
   return date instanceof Date && !isNaN(date.getTime());
@@ -40,9 +41,9 @@ export const holidayService = {
     if (!stateCode) return [];
     
     try {
-      const holidays2026 = getHolidaysForYear(2026, stateCode).school;
+      const yearHolidays = getHolidaysForYear(PLAN_YEAR, stateCode).school;
       
-      return holidays2026
+      return yearHolidays
         .map(holiday => {
           const start = parseDateString(holiday.start);
           const end = holiday.end ? parseDateString(holiday.end) : start;
@@ -75,9 +76,9 @@ export const holidayService = {
     if (!stateCode) return [];
     
     try {
-      const holidays2026 = getHolidaysForYear(2026, stateCode).public;
+      const yearHolidays = getHolidaysForYear(PLAN_YEAR, stateCode).public;
       
-      return holidays2026
+      return yearHolidays
         .map(holiday => {
           const date = parseDateString(holiday.start);
           

@@ -3,6 +3,7 @@ import { MobileCalendar } from '../Calendar/MobileCalendar';
 import { Holiday, BridgeDay } from '../../../types/holiday';
 import { VacationPlan } from '../../../types/vacationPlan';
 import { isWithinInterval, isSameDay, min, max, addDays, isBefore, differenceInDays } from 'date-fns';
+import { planYearStart } from '../../../constants/planYear';
 
 interface MobileCalendarViewProps {
   holidays: Holiday[];
@@ -25,7 +26,7 @@ export const MobileCalendarView: React.FC<MobileCalendarViewProps> = ({
   otherPersonVacations = [],
   initialDate = null
 }) => {
-  const [month, setMonth] = useState(() => initialDate || new Date(2025, 0, 1));
+  const [month, setMonth] = useState(() => initialDate || planYearStart());
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);

@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { getAllStates, getStateInfo } from '@/config'
+import { plannerUrl } from '@/constants/planYear'
 import styles from './Navigation.module.css'
 
 export default function Navigation() {
@@ -51,7 +52,7 @@ export default function Navigation() {
 
         <div className={styles.navActions}>
           <Link 
-            href="https://app.ferien-planung.de" 
+            href={plannerUrl()} 
             className={styles.ctaButton}
             aria-label="Urlaubsplaner öffnen - Planen Sie Ihren Urlaub mit unserer App"
             role="button"

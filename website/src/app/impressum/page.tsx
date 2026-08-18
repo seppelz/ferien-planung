@@ -107,8 +107,17 @@ export default function Imprint() {
             </p>
           </section>
 
+          <section>
+            <h2>Urlaubsplaner</h2>
+            <p>
+              Der interaktive Kalender liegt unter{' '}
+              <Link href="/app/">https://ferien-planung.de/app/</Link>.
+              Die Planung bleibt lokal in Ihrem Browser.
+            </p>
+          </section>
+
           <div className={styles.lastUpdated}>
-            Stand: Januar 2025
+            Stand: Januar 2026
           </div>
         </div>
       </main>

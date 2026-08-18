@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import styles from './Footer.module.css'
 import { GERMAN_STATES } from '@/config/states'
+import { plannerUrl } from '@/constants/planYear'
 
 export default function Footer() {
   // Split states into columns for better organization
@@ -21,7 +22,7 @@ export default function Footer() {
             <h4>Navigation</h4>
             <ul>
               <li><Link href="/">Startseite</Link></li>
-              <li><Link href="https://app.ferien-planung.de">Urlaubsplaner</Link></li>
+              <li><Link href={plannerUrl()}>Urlaubsplaner</Link></li>
               <li><Link href="/#features">Funktionen</Link></li>
             </ul>
           </div>

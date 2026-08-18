@@ -11,6 +11,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { Holiday } from '@/types/holiday';
 import styles from '@/app/styles/StatePage.module.css';
+import { PLAN_YEAR } from '@/constants/planYear';
 
 interface HolidayListProps {
   publicHolidays: Holiday[];
@@ -19,6 +20,7 @@ interface HolidayListProps {
   totalSchoolHolidayDays: number;
   primaryColor: string;
   secondaryColor: string;
+  bridgeLabels?: Record<string, string>;
 }
 
 const calculateDuration = (start: string, end: string): number => {
@@ -65,7 +67,8 @@ export default function HolidayList({
   schoolHolidays, 
   totalSchoolHolidayDays,
   primaryColor,
-  secondaryColor
+  secondaryColor,
+  bridgeLabels = {}
 }: HolidayListProps) {
   const [expandedHolidays, setExpandedHolidays] = useState<string[]>([]);
 
@@ -102,7 +105,7 @@ export default function HolidayList({
               opacity: '0.95',
               textShadow: '0 1px 2px rgba(0,0,0,0.1)'
             }}>
-              {allPublicHolidays.length} Feiertage in 2026
+              {allPublicHolidays.length} Feiertage in {PLAN_YEAR}
             </p>
           </div>
         </div>
@@ -139,6 +142,16 @@ export default function HolidayList({
                       gap: '0.5rem'
                     }}>
                       {holiday.name}
+                      {holiday.start && bridgeLabels[holiday.start.slice(0, 10)] && (
+                        <span style={{ 
+                          fontSize: '0.75rem',
+                          padding: '0.1rem 0.5rem',
+                          background: `${primaryColor}10`,
+                          color: '#276749',
+                          borderRadius: '4px',
+                          fontWeight: 600
+                        }}>{bridgeLabels[holiday.start.slice(0, 10)]}</span>
+                      )}
                       {holiday.isRegional && (
                         <span style={{ 
                           fontSize: '0.75rem',
@@ -311,6 +324,16 @@ export default function HolidayList({
                       gap: '0.5rem'
                     }}>
                       {holiday.name}
+                      {holiday.start && bridgeLabels[holiday.start.slice(0, 10)] && (
+                        <span style={{ 
+                          fontSize: '0.75rem',
+                          padding: '0.1rem 0.5rem',
+                          background: `${primaryColor}10`,
+                          color: '#276749',
+                          borderRadius: '4px',
+                          fontWeight: 600
+                        }}>{bridgeLabels[holiday.start.slice(0, 10)]}</span>
+                      )}
                       {holiday.isRegional && (
                         <span style={{ 
                           fontSize: '0.75rem',
@@ -475,7 +498,7 @@ export default function HolidayList({
               opacity: '0.95',
               textShadow: '0 1px 2px rgba(0,0,0,0.1)'
             }}>
-              {totalSchoolHolidayDays} Ferientage in 2026
+              {totalSchoolHolidayDays} Ferientage in {PLAN_YEAR}
             </p>
           </div>
         </div>

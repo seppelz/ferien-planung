@@ -152,7 +152,7 @@ export const MonthCalendar: React.FC<MonthCalendarProps> = ({
   return (
     <div className={`${theme.calendar.container} overflow-hidden select-none`}>
       <h3 className={`text-xs font-medium ${theme.text.body} py-1 text-center border-b ${theme.effects.glass.light}`}>
-        {format(month, 'MMMM', { locale: de })} {month.getMonth() === 0 && '2025'}
+        {format(month, 'MMMM', { locale: de })} {month.getMonth() === 0 && month.getFullYear()}
       </h3>
       <div className="p-1">
         <div className="grid grid-cols-7 gap-px">

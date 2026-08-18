@@ -1,6 +1,6 @@
-import React from 'react';
 import { StateSelect } from '../StateSelect';
 import { GermanState } from '../../types/GermanState';
+import { PLAN_YEAR } from '../../constants/planYear';
 import styles from './AppNavbar.module.css';
 
 interface AppNavbarProps {
@@ -12,8 +12,6 @@ interface AppNavbarProps {
   onExport: () => void;
   person2State?: GermanState | null;
   onPerson2StateChange?: (state: GermanState | null) => void;
-  selectedYear?: number;
-  onYearChange?: (year: number) => void;
 }
 
 export const AppNavbar: React.FC<AppNavbarProps> = ({
@@ -24,9 +22,7 @@ export const AppNavbar: React.FC<AppNavbarProps> = ({
   onShowTutorial,
   onExport,
   person2State = null,
-  onPerson2StateChange,
-  selectedYear = 2026,
-  onYearChange
+  onPerson2StateChange
 }) => {
   return (
     <nav className={styles.navbar}>
@@ -51,22 +47,8 @@ export const AppNavbar: React.FC<AppNavbarProps> = ({
             />
           </div>
 
-          {/* Year selector */}
-          <div className={styles.yearSelector}>
-            <button
-              onClick={() => onYearChange?.(2025)}
-              className={`${styles.yearButton} ${selectedYear === 2025 ? styles.active : ''}`}
-              aria-label="Jahr 2025 auswählen"
-            >
-              2025
-            </button>
-            <button
-              onClick={() => onYearChange?.(2026)}
-              className={`${styles.yearButton} ${selectedYear === 2026 ? styles.active : ''}`}
-              aria-label="Jahr 2026 auswählen"
-            >
-              2026
-            </button>
+          <div className={styles.yearSelector} aria-label={`Planungsjahr ${PLAN_YEAR}`}>
+            <span className={`${styles.yearButton} ${styles.active}`}>{PLAN_YEAR}</span>
           </div>
 
           {/* Person 2 controls */}

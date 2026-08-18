@@ -19,6 +19,9 @@ import { DesktopEfficiencyScore } from '../components/Desktop/DesktopEfficiencyS
 import { useFirstTimeUser } from '../hooks/useFirstTimeUser';
 import { useTheme } from '../hooks/useTheme';
 import { AppNavbar } from '../components/Navigation/AppNavbar';
+import { FirstRunStatePicker } from '../components/FirstRunStatePicker';
+import { PLAN_YEAR } from '../constants/planYear';
+import { parseStateQuery } from '../utils/stateQuery';
 
 // Helper function to download files
 const downloadFile = (content: string, filename: string, type: string) => {
@@ -107,7 +110,7 @@ const generateHRData = (persons: { person1: any; person2: any }) => {
 
 // Generate holiday data
 const generateHolidayData = (holidays1: Holiday[], holidays2: Holiday[]) => {
-  const lines = ['Feiertagsübersicht 2025\n'];
+  const lines = [`Feiertagsübersicht ${PLAN_YEAR}\n`];
 
   // Helper to format date for holidays
   const formatHolidayDate = (date: Date) => format(date, 'dd.MM.yyyy', { locale: de });
@@ -179,9 +182,9 @@ export const MainLayout: React.FC = () => {
   const [showKeyboardShortcuts, setShowKeyboardShortcuts] = useState(false);
   const [showExportModal, setShowExportModal] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
-  const [selectedYear, setSelectedYear] = useState<number>(2026);
-  const { persons, updatePerson } = usePersonContext();
-  const { isFirstTimeUser, markTutorialAsSeen } = useFirstTimeUser();
+  const [showStatePicker, setShowStatePicker] = useState(false);
+  const { persons, updatePerson, isLoading } = usePersonContext();
+  const { markTutorialAsSeen } = useFirstTimeUser();
   const theme = useTheme();
   
   // Add refs for focusing elements
@@ -225,7 +228,7 @@ export const MainLayout: React.FC = () => {
             setIsSelectingVacation(true);
             // Focus January 1st after a short delay
             setTimeout(() => {
-              const jan1Button = calendarRef.current?.querySelector('[data-date="2025-01-01"]') as HTMLButtonElement;
+              const jan1Button = calendarRef.current?.querySelector(`[data-date="${PLAN_YEAR}-01-01"]`) as HTMLButtonElement;
               if (jan1Button) {
                 jan1Button.focus();
               }
@@ -240,7 +243,7 @@ export const MainLayout: React.FC = () => {
             setIsSelectingVacation(true);
             // Focus January 1st after a short delay
             setTimeout(() => {
-              const jan1Button = calendarRef.current?.querySelector('[data-date="2025-01-01"]') as HTMLButtonElement;
+              const jan1Button = calendarRef.current?.querySelector(`[data-date="${PLAN_YEAR}-01-01"]`) as HTMLButtonElement;
               if (jan1Button) {
                 jan1Button.focus();
               }
@@ -415,7 +418,7 @@ export const MainLayout: React.FC = () => {
                 setIsSelectingVacation(true);
                 // Focus January 1st after a short delay when clicking the button
                 setTimeout(() => {
-                  const jan1Button = calendarRef.current?.querySelector('[data-date="2026-01-01"]') as HTMLButtonElement;
+                  const jan1Button = calendarRef.current?.querySelector(`[data-date="${PLAN_YEAR}-01-01"]`) as HTMLButtonElement;
                   if (jan1Button) {
                     jan1Button.focus();
                   }
@@ -597,6 +600,19 @@ export const MainLayout: React.FC = () => {
           <span>Urlaub planen</span>
         </button>
 
+        {(person?.vacationPlans?.length || 0) > 0 && (
+          <button
+            type="button"
+            onClick={() => {
+              const icsData = generateICSData(persons);
+              downloadFile(icsData, `urlaubsplan-${PLAN_YEAR}.ics`, 'text/calendar');
+            }}
+            className={`w-full ${theme.button.base} border border-gray-200 bg-white text-gray-800 hover:bg-gray-50`}
+          >
+            Als Kalender (.ics) exportieren
+          </button>
+        )}
+
         {/* Vacation List with Recommendations */}
         <div ref={vacationListRef} data-person={personId} className="focus-within:outline-none">
           <VacationList
@@ -707,12 +723,18 @@ export const MainLayout: React.FC = () => {
     setShowExportModal(false);
   };
 
-  // Show tutorial for first-time users
+  // First-run: pick a Bundesland unless a deep link already set one.
   useEffect(() => {
-    if (isFirstTimeUser) {
-      setShowTutorial(true);
+    if (isLoading) return;
+    const fromUrl = parseStateQuery(window.location.search);
+    if (fromUrl) {
+      localStorage.setItem('holiday-planner-state-picked', 'true');
+      return;
     }
-  }, [isFirstTimeUser]);
+    if (!localStorage.getItem('holiday-planner-state-picked')) {
+      setShowStatePicker(true);
+    }
+  }, [isLoading]);
 
   const handleTutorialClose = () => {
     setShowTutorial(false);
@@ -784,6 +806,15 @@ export const MainLayout: React.FC = () => {
           hasTwoPersons={!!persons.person2?.vacationPlans}
         />
 
+        <FirstRunStatePicker
+          isOpen={showStatePicker}
+          onSelect={(state) => {
+            handleStateSelect(state);
+            localStorage.setItem('holiday-planner-state-picked', 'true');
+            setShowStatePicker(false);
+            markTutorialAsSeen();
+          }}
+        />
         <TutorialModal
           isOpen={showTutorial}
           onClose={handleTutorialClose}
@@ -800,8 +831,6 @@ export const MainLayout: React.FC = () => {
           onExport={() => setShowExportModal(true)}
           person2State={persons.person2?.selectedState || null}
           onPerson2StateChange={(state) => state && updatePerson(2, { selectedState: state })}
-          selectedYear={selectedYear}
-          onYearChange={setSelectedYear}
         />
 
         {/* Main Content - Added pt-16 (64px) to account for navbar height */}
@@ -813,6 +842,20 @@ export const MainLayout: React.FC = () => {
 
           {/* Calendar */}
           <div ref={calendarRef} className="flex-1 overflow-auto">
+            {isSelectingVacation && (
+              <div className="mb-2 flex items-center justify-between rounded-lg bg-amber-50 px-3 py-2 text-sm text-amber-900">
+                <span>
+                  {selectedPersonId === 2 ? 'Person 2' : 'Person 1'}: Start- und Enddatum im Kalender wählen. Esc bricht ab.
+                </span>
+                <button
+                  type="button"
+                  onClick={handleVacationSelectComplete}
+                  className="rounded-full bg-white px-3 py-1 text-amber-900 shadow-sm hover:bg-amber-100"
+                >
+                  Abbrechen
+                </button>
+              </div>
+            )}
             <HomePage
               isSelectingVacation={isSelectingVacation}
               selectedPersonId={selectedPersonId}

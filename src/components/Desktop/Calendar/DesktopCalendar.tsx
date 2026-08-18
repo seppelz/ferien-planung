@@ -5,6 +5,7 @@ import { BaseCalendarProps, useCalendar } from '../../Shared/Calendar/BaseCalend
 import { useTheme } from '../../../hooks/useTheme';
 import { Holiday, BridgeDay } from '../../../types/holiday';
 import { parseDateString, holidayOccursOn, toDate } from '../../../utils/dateUtils';
+import { isPlanYear } from '../../../constants/planYear';
 
 interface HolidayType {
   type: Holiday["type"] | "bridge" | null;
@@ -370,8 +371,7 @@ export const DesktopCalendar: React.FC<ExtendedBaseCalendarProps> = (props) => {
   }, [props.endDate, props.isSelectingVacation]);
 
   const isDateDisabled = (date: Date) => {
-    // Only allow dates in 2025
-    if (date.getFullYear() !== 2025) return true;
+    if (!isPlanYear(date)) return true;
     
     return props.disabledDates?.some(range => 
       isWithinInterval(date, { start: range.start, end: range.end })

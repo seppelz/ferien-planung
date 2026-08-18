@@ -5,6 +5,7 @@ import { VacationPlan } from '../types/vacationPlan';
 import { usePersonStorage } from '../hooks/usePersonStorage';
 import { useNotification } from './NotificationContext';
 import { calculateVacationEfficiency } from '../utils/vacationEfficiency';
+import { parseStateQuery } from '../utils/stateQuery';
 
 interface PersonContextType {
   persons: PersonInfo;
@@ -50,8 +51,21 @@ export const PersonProvider: React.FC<{ children: React.ReactNode }> = ({ childr
       try {
         setIsLoading(true);
         const savedPersons = await loadPersons();
+        const stateFromUrl = parseStateQuery(window.location.search);
         if (savedPersons) {
-          setPersons(savedPersons);
+          setPersons(
+            stateFromUrl
+              ? {
+                  ...savedPersons,
+                  person1: { ...savedPersons.person1, selectedState: stateFromUrl }
+                }
+              : savedPersons
+          );
+        } else if (stateFromUrl) {
+          setPersons({
+            ...DEFAULT_PERSON_INFO,
+            person1: { ...DEFAULT_PERSON_INFO.person1, selectedState: stateFromUrl }
+          });
         }
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to load data'));
