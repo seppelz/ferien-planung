@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { CalendarRange } from 'lucide-react';
 import styles from './Navbar.module.css';
 import { plannerUrl } from '@/constants/planYear';
 
@@ -43,7 +44,8 @@ export const Navbar: React.FC = () => {
     <nav className={styles.navbar}>
       <div className={styles.navContent}>
         <Link href="/" className={styles.logo}>
-          🏖️ Holiday Planner
+          <CalendarRange size={22} strokeWidth={1.75} aria-hidden />
+          <span>Holiday Planner</span>
         </Link>
 
         <div className={styles.navLinks}>

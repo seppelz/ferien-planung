@@ -7,75 +7,9 @@ import { PLAN_YEAR, plannerUrl } from '@/constants/planYear'
 import { getTopBridgeOpportunities } from '@/utils/bridgeDays'
 import { berlin } from '@/config/states/berlin'
 import BridgeDayList from '@/app/components/BridgeDayList'
+import { LandingIcon } from '@/app/components/LandingIcon'
+import { LANDING_BENEFITS, LANDING_FEATURES, LANDING_STEPS } from '@/data/landingContent'
 import { LANDING_BRIDGE_HIGHLIGHTS } from '@/data/landingBridgeHighlights'
-
-// Constants from old landing page
-const FEATURES = [
-  {
-    icon: '🗓️',
-    title: 'Brückentage-Optimierung',
-    description: 'Intelligente Berechnung der effizientesten Urlaubstage mit Berücksichtigung von Feiertagen.',
-  },
-  {
-    icon: '👥',
-    title: 'Zwei-Personen Planung',
-    description: 'Plane deinen Urlaub gemeinsam mit Partner oder Familie, mit separater Verwaltung pro Person.',
-  },
-  {
-    icon: '🏛️',
-    title: 'Bundesland-spezifisch',
-    description: 'Alle Feiertage für jedes Bundesland, inklusive Schulferien als zusätzliche Information.',
-  },
-  {
-    icon: '📤',
-    title: 'Kalender-Export',
-    description: 'Exportiere deinen Plan als ICS-Datei und übernimm ihn in Outlook, Google Kalender oder Apple Kalender.',
-  },
-];
-
-const BENEFITS = [
-  {
-    icon: '📊',
-    title: 'Maximale Effizienz',
-    value: 'Bis zu 24 Tage',
-    description: 'Verlängere deinen Urlaub durch optimale Nutzung von Brückentagen und Feiertagen.',
-  },
-  {
-    icon: '🚀',
-    title: 'Schnelle Planung',
-    value: '< 5 Minuten',
-    description: 'Plane deinen gesamten Jahresurlaub in weniger als 5 Minuten.',
-  },
-  {
-    icon: '🎁',
-    title: 'Kostenlos',
-    value: '100% Gratis',
-    description: 'Alle Features kostenlos verfügbar, keine versteckten Kosten.',
-  },
-];
-
-const HOW_IT_WORKS_STEPS = [
-  {
-    icon: '🗺️',
-    title: 'Bundesland auswählen',
-    description: 'Wähle dein Bundesland aus, um alle relevanten Feiertage zu sehen.',
-  },
-  {
-    icon: '👥',
-    title: 'Optional: Zweite Person',
-    description: 'Plane gemeinsam mit Partner oder Familie durch Aktivierung der Zwei-Personen Ansicht.',
-  },
-  {
-    icon: '📅',
-    title: 'Brückentage anzeigen',
-    description: 'Lass dir die effizientesten Brückentage für dein Bundesland anzeigen.',
-  },
-  {
-    icon: '✨',
-    title: 'Urlaub optimieren',
-    description: 'Wähle die Brückentage aus und optimiere deinen Jahresurlaub mit wenigen Klicks.',
-  },
-];
 
 const FAQ_DATA = [
   {
@@ -223,7 +157,7 @@ export default function LandingPage() {
                 Maximiere deinen Urlaub 2026 mit unserem intelligenten Ferienplaner! 
                 Brückentage 2026 clever planen und mit wenigen Urlaubstagen viele freie Tage gewinnen.
               </p>
-              <Link href={plannerUrl()} className={styles.ctaButton}>
+              <Link href={plannerUrl()} className={`${styles.ctaButton} ${styles.ctaButtonHero}`}>
                 Jetzt Urlaub {PLAN_YEAR} Planen
               </Link>
             </div>
@@ -300,14 +234,19 @@ export default function LandingPage() {
             <div className={styles.bridgeDaysList}>
               {LANDING_BRIDGE_HIGHLIGHTS.map((highlight) => (
                 <article key={highlight.title} className={styles.bridgeDayCard}>
-                  <h3>{highlight.emoji} {highlight.title}</h3>
+                  <h3 className={styles.bridgeDayTitle}>
+                    <span className={styles.iconBadge} aria-hidden>
+                      <LandingIcon name={highlight.icon} size={20} />
+                    </span>
+                    <span>{highlight.title}</span>
+                  </h3>
                   <div className={styles.bridgeDayContent}>
                     <div className={styles.recommendation}>
                       <strong>Empfehlung:</strong> {highlight.recommendation}
                     </div>
                     <div className={styles.benefit}>
                       <span className={styles.days}>1 Urlaubstag</span>
-                      <span>=</span>
+                      <span className={styles.benefitEquals} aria-hidden>=</span>
                       <span className={styles.freeDays}>4 Tage frei</span>
                     </div>
                     <p className={styles.explanation}>{highlight.explanation}</p>
@@ -344,9 +283,11 @@ export default function LandingPage() {
           <div className={styles.sectionContent}>
             <h2 className={styles.sectionTitle}>Unsere Features</h2>
             <div className={styles.featureGrid}>
-              {FEATURES.map((feature, index) => (
-                <div key={index} className={styles.featureCard}>
-                  <div className={styles.featureIcon}>{feature.icon}</div>
+              {LANDING_FEATURES.map((feature) => (
+                <div key={feature.title} className={styles.featureCard}>
+                  <div className={styles.featureIcon} aria-hidden>
+                    <LandingIcon name={feature.icon} size={28} />
+                  </div>
                   <h3>{feature.title}</h3>
                   <p>{feature.description}</p>
                 </div>
@@ -360,9 +301,11 @@ export default function LandingPage() {
           <div className={styles.sectionContent}>
             <h2 className={styles.sectionTitle}>Deine Vorteile</h2>
             <div className={styles.benefitsGrid}>
-              {BENEFITS.map((benefit, index) => (
-                <div key={index} className={styles.benefitCard}>
-                  <div className={styles.benefitIcon}>{benefit.icon}</div>
+              {LANDING_BENEFITS.map((benefit) => (
+                <div key={benefit.title} className={styles.benefitCard}>
+                  <div className={styles.benefitIcon} aria-hidden>
+                    <LandingIcon name={benefit.icon} size={28} />
+                  </div>
                   <div className={styles.benefitValue}>{benefit.value}</div>
                   <p>{benefit.description}</p>
                 </div>
@@ -376,15 +319,17 @@ export default function LandingPage() {
           <div className={styles.sectionContent}>
             <h2 className={styles.sectionTitle}>So funktioniert&apos;s</h2>
             <div className={styles.stepsContainer}>
-              {HOW_IT_WORKS_STEPS.map((step, index) => (
-                <div key={index} className={styles.stepCard}>
+              {LANDING_STEPS.map((step, index) => (
+                <div key={step.title} className={styles.stepCard}>
                   <div className={styles.stepNumber}>{index + 1}</div>
-                  <div className={styles.stepIcon}>{step.icon}</div>
+                  <div className={styles.stepIcon} aria-hidden>
+                    <LandingIcon name={step.icon} size={26} />
+                  </div>
                   <div className={styles.stepContent}>
                     <h3>{step.title}</h3>
                     <p>{step.description}</p>
                   </div>
-                  {index < HOW_IT_WORKS_STEPS.length - 1 && (
+                  {index < LANDING_STEPS.length - 1 && (
                     <div className={styles.stepConnector}>
                       <svg viewBox="0 0 24 24" className={styles.connectorArrow}>
                         <path d="M5 12h14m-4 4l4-4-4-4" />

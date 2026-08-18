@@ -53,11 +53,11 @@
 }
 
 .factIcon {
-  font-size: 2.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 1rem;
-  animation: float 6s ease-in-out infinite;
   color: var(--state-primary-color);
-  display: inline-block;
 }
 
 .factBox h3 {

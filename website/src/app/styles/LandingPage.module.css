@@ -406,15 +406,21 @@
 }
 
 .featureIcon {
-  font-size: 2.5rem;
-  margin-bottom: 1.25rem;
-  display: inline-block;
-  transform-origin: center;
-  transition: transform var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 0.875rem;
+  background: color-mix(in srgb, var(--brand-primary) 10%, white);
+  color: var(--brand-primary);
+  transition: transform var(--transition-fast), background var(--transition-fast);
 }
 
 .featureCard:hover .featureIcon {
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1.05);
+  background: color-mix(in srgb, var(--brand-primary) 16%, white);
 }
 
 .featureCard h3 {
@@ -483,12 +489,16 @@
 }
 
 .benefitIcon {
-  font-size: 3rem;
-  margin-bottom: 1.5rem;
-  background: linear-gradient(135deg, var(--ocean-blue), var(--turquoise));
-  -webkit-background-clip: text;
-  display: inline-block;
-  transition: transform 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.25rem;
+  height: 3.25rem;
+  margin: 0 auto 1.25rem;
+  border-radius: 0.875rem;
+  background: color-mix(in srgb, var(--brand-primary) 10%, white);
+  color: var(--brand-primary);
+  transition: transform var(--transition-fast);
 }
 
 .benefitCard:hover .benefitIcon {
@@ -589,11 +599,15 @@
 }
 
 .stepIcon {
-  font-size: 2.5rem;
-  margin: 1rem 0;
-  background: linear-gradient(135deg, var(--ocean-blue), var(--turquoise));
-  -webkit-background-clip: text;
-  
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  margin: 1rem auto;
+  border-radius: 0.75rem;
+  background: color-mix(in srgb, var(--brand-primary) 10%, white);
+  color: var(--brand-primary);
 }
 
 .stepContent h3 {
@@ -1101,6 +1115,19 @@
   transform: translateY(0);
 }
 
+.ctaButtonHero {
+  background: #ffffff;
+  color: var(--brand-accent);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 8px 28px rgba(2, 62, 138, 0.35);
+}
+
+.ctaButtonHero:hover {
+  background: var(--bg-secondary);
+  color: var(--brand-primary-dark);
+  box-shadow: 0 10px 32px rgba(2, 62, 138, 0.4);
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
   .pwaContent,
@@ -1319,8 +1346,9 @@
 }
 
 .multiplier {
-  background: color-mix(in srgb, var(--brand-bridge) 90%, white);
-  color: var(--text-primary);
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  color: #9a3412;
+  border: 1px solid #fed7aa;
   padding: 0.5rem 1.25rem;
   border-radius: 999px;
   font-weight: 600;
@@ -1501,11 +1529,32 @@
   box-shadow: var(--shadow-lg);
 }
 
-.bridgeDayCard h3 {
+.bridgeDayCard h3,
+.bridgeDayTitle {
   font-size: 1.15rem;
   margin-bottom: 1rem;
   color: var(--brand-primary-dark);
   font-weight: 600;
+}
+
+.bridgeDayTitle {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  line-height: 1.4;
+}
+
+.iconBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.5rem;
+  background: color-mix(in srgb, var(--brand-primary) 10%, white);
+  color: var(--brand-primary);
+  margin-top: 0.1rem;
 }
 
 .bridgeDayContent {
@@ -1531,25 +1580,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1rem;
-  background: var(--gradient-brand);
-  border-radius: 0.5rem;
-  color: white;
-  font-size: 1.05rem;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-light);
+  border-radius: 0.625rem;
+  color: var(--text-primary);
+  font-size: 1rem;
   font-weight: 600;
 }
 
 .benefit .days {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+  color: #c2410c;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  border: 1px solid #fed7aa;
 }
 
 .benefit .freeDays {
-  background: rgba(255, 255, 255, 0.3);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #047857;
+  padding: 0.45rem 0.85rem;
+  border-radius: 0.5rem;
+  border: 1px solid #a7f3d0;
+}
+
+.benefitEquals {
+  color: var(--text-tertiary);
+  font-weight: 500;
 }
 
 .explanation {

@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react';
+import { Flower2, Leaf, Lightbulb, ScrollText, Snowflake, Sun } from 'lucide-react';
 import styles from './CulturalContext.module.css';
 
 interface Tradition {
@@ -43,7 +44,9 @@ export const CulturalContext: React.FC<CulturalContextProps> = ({
     <div className={styles.culturalContext}>
       <div className={styles.didYouKnow}>
         <div className={styles.factBox} ref={factBoxRef}>
-          <div className={styles.factIcon}>💡</div>
+          <div className={styles.factIcon} aria-hidden>
+            <Lightbulb size={28} strokeWidth={1.75} />
+          </div>
           <h3>Wussten Sie schon?</h3>
           <p>{uniqueHolidayInfo}</p>
         </div>
@@ -64,11 +67,11 @@ export const CulturalContext: React.FC<CulturalContextProps> = ({
               key={index} 
               className={`${styles.seasonCard} ${styles[tradition.season.toLowerCase()]}`}
             >
-              <div className={styles.seasonIcon}>
-                {tradition.season === 'Frühjahr' && '🌸'}
-                {tradition.season === 'Sommer' && '☀️'}
-                {tradition.season === 'Herbst' && '🍂'}
-                {tradition.season === 'Winter' && '❄️'}
+              <div className={styles.seasonIcon} aria-hidden>
+                {tradition.season === 'Frühjahr' && <Flower2 size={24} strokeWidth={1.75} />}
+                {tradition.season === 'Sommer' && <Sun size={24} strokeWidth={1.75} />}
+                {tradition.season === 'Herbst' && <Leaf size={24} strokeWidth={1.75} />}
+                {tradition.season === 'Winter' && <Snowflake size={24} strokeWidth={1.75} />}
               </div>
               <h4>{tradition.season}</h4>
               <p>{tradition.description}</p>
@@ -78,7 +81,9 @@ export const CulturalContext: React.FC<CulturalContextProps> = ({
       </div>
 
       <div className={styles.culturalNote}>
-        <div className={styles.noteIcon}>📜</div>
+        <div className={styles.noteIcon} aria-hidden>
+          <ScrollText size={28} strokeWidth={1.75} />
+        </div>
         <div className={styles.noteContent}>
           <h4>Kulturelle Bedeutung</h4>
           <p>
