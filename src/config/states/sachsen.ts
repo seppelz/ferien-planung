@@ -204,12 +204,14 @@ export const sachsen: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Sachsen verbindet barocke Festkultur mit erzgebirgischen Traditionen. Die Vielfalt der Regionen von Dresden über Leipzig bis zum Erzgebirge spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen Sachsens sind geprägt von barocker Kultur, Musikgeschichte und Bergbautradition. Klassische Musik, erzgebirgisches Brauchtum und lebendige Stadtkultur prägen das kulturelle Leben.",

@@ -198,12 +198,14 @@ export const hamburg: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Hamburg verbindet bei seinen Feiertagen hanseatische Tradition mit maritimem Flair und weltoffener Modernität.",
   traditionInfo: "Die Feiertage in Hamburg sind geprägt von der protestantischen Tradition und der engen Verbindung zum Hafen und zur Seefahrt.",

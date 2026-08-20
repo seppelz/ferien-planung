@@ -255,12 +255,14 @@ export const badenWuerttemberg: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Baden-Württemberg verbindet bei seinen Feiertagen alemannische und schwäbische Traditionen mit katholischem und evangelischem Brauchtum.",
   traditionInfo: "Die Feiertage in Baden-Württemberg sind geprägt von der reichen kulturellen Vielfalt des Landes, von der Fasnet bis zu den Weinfesten.",

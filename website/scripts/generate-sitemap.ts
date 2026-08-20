@@ -1,5 +1,6 @@
 import { writeFileSync } from 'fs';
 import { getStateIds } from '../src/utils/stateUtils';
+import { PLAN_YEAR } from '../src/constants/planYear';
 import path from 'path';
 
 async function generateSitemap() {
@@ -19,7 +20,7 @@ async function generateSitemap() {
       changefreq: 'weekly'
     })),
     ...stateIds.map(stateId => ({
-      path: `/states/${stateId}/brueckentage-2026/`,
+      path: `/states/${stateId}/brueckentage-${PLAN_YEAR}/`,
       priority: '0.85',
       changefreq: 'weekly'
     }))

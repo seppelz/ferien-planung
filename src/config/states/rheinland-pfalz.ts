@@ -204,12 +204,14 @@ export const rheinlandPfalz: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Rheinland-Pfalz verbindet Weinfestkultur mit römischer Geschichte. Die Vielfalt der Regionen von Rhein über Mosel bis zur Pfalz spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen von Rheinland-Pfalz sind geprägt von Weinbau, römischer Geschichte und rheinischer Lebensart. Weinfeste, römische Feiern und mittelalterliche Burgenfeste prägen das kulturelle Leben.",

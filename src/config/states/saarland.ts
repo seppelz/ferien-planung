@@ -210,12 +210,14 @@ export const saarland: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Das Saarland verbindet deutsch-französische Festkultur mit Industrietraditionen. Die Vielfalt der Regionen und die Nähe zu Frankreich spiegeln sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen des Saarlandes sind geprägt von deutsch-französischer Lebensart, Industriegeschichte und katholischen Bräuchen. Bergmannsfeste, französisch inspirierte Feiern und regionale Traditionen prägen das kulturelle Leben.",

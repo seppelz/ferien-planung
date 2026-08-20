@@ -82,19 +82,19 @@ const landingBreadcrumbSchema = {
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://ferien-planung.de'),
-  title: 'Brückentage 2026 & Ferienplaner 2026 | Urlaubsplanung optimal',
-  description: 'Brückentage 2026 optimal nutzen! Intelligenter Ferienplaner 2026 mit allen Feiertagen, Schulferien und Brückentag-Empfehlungen für Deutschland. Maximiere deinen Urlaub 2026 - Jetzt clever planen!',
+  title: `Brückentage ${PLAN_YEAR} & Ferienplaner ${PLAN_YEAR} | Urlaubsplanung optimal`,
+  description: `Brückentage ${PLAN_YEAR} optimal nutzen! Intelligenter Ferienplaner ${PLAN_YEAR} mit allen Feiertagen, Schulferien und Brückentag-Empfehlungen für Deutschland. Maximiere deinen Urlaub ${PLAN_YEAR} - Jetzt clever planen!`,
   keywords: [
-    'Brückentage 2026',
-    'Ferienplaner 2026',
-    'Urlaubsplaner 2026',
-    'Feiertage 2026 Deutschland',
-    'Brückentage 2026 Deutschland',
-    'Urlaubsplanung 2026',
-    'Schulferien 2026',
+    `Brückentage ${PLAN_YEAR}`,
+    `Ferienplaner ${PLAN_YEAR}`,
+    `Urlaubsplaner ${PLAN_YEAR}`,
+    `Feiertage ${PLAN_YEAR} Deutschland`,
+    `Brückentage ${PLAN_YEAR} Deutschland`,
+    `Urlaubsplanung ${PLAN_YEAR}`,
+    `Schulferien ${PLAN_YEAR}`,
     'Brückentage optimal nutzen',
-    'Feiertage Kalender 2026',
-    'Urlaubstage planen 2026'
+    `Feiertage Kalender ${PLAN_YEAR}`,
+    `Urlaubstage planen ${PLAN_YEAR}`
   ].join(', '),
   openGraph: {
     title: 'Ferien Planung - Dein Urlaubsplaner',
@@ -154,10 +154,10 @@ export default function LandingPage() {
         <section className={styles.hero}>
           <div className={styles.heroContent}>
             <div className={styles.heroText}>
-              <h1>Brückentage 2026 optimal nutzen – Ferienplaner 2026</h1>
+              <h1>Brückentage {PLAN_YEAR} optimal nutzen – Ferienplaner {PLAN_YEAR}</h1>
               <p>
-                Maximiere deinen Urlaub 2026 mit unserem intelligenten Ferienplaner! 
-                Brückentage 2026 clever planen und mit wenigen Urlaubstagen viele freie Tage gewinnen.
+                Maximiere deinen Urlaub {PLAN_YEAR} mit unserem intelligenten Ferienplaner!
+                Brückentage {PLAN_YEAR} clever planen und mit wenigen Urlaubstagen viele freie Tage gewinnen.
               </p>
               <Link href={plannerUrl()} className={`${styles.ctaButton} ${styles.ctaButtonHero}`}>
                 Jetzt Urlaub {PLAN_YEAR} Planen
@@ -178,27 +178,27 @@ export default function LandingPage() {
                   <div className={styles.dayLabel}>So</div>
                 </div>
                 <div className={styles.daysRow}>
+                  <div className={styles.day}>3</div>
+                  <div className={styles.day}>4</div>
+                  <div className={styles.day}>5</div>
+                  <div className={`${styles.day} ${styles.holiday}`}>6</div>
+                  <div className={`${styles.day} ${styles.bridgeDay}`}>7</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>8</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>9</div>
+                </div>
+                <div className={styles.daysRow}>
+                  <div className={styles.day}>10</div>
                   <div className={styles.day}>11</div>
                   <div className={styles.day}>12</div>
                   <div className={styles.day}>13</div>
-                  <div className={`${styles.day} ${styles.holiday}`}>14</div>
-                  <div className={`${styles.day} ${styles.bridgeDay}`}>15</div>
+                  <div className={styles.day}>14</div>
+                  <div className={`${styles.day} ${styles.weekend}`}>15</div>
                   <div className={`${styles.day} ${styles.weekend}`}>16</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>17</div>
-                </div>
-                <div className={styles.daysRow}>
-                  <div className={styles.day}>18</div>
-                  <div className={styles.day}>19</div>
-                  <div className={styles.day}>20</div>
-                  <div className={styles.day}>21</div>
-                  <div className={styles.day}>22</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>23</div>
-                  <div className={`${styles.day} ${styles.weekend}`}>24</div>
                 </div>
                 <div className={styles.legend}>
                   <div className={styles.legendItem}>
                     <span className={`${styles.legendDot} ${styles.legendDotHoliday}`} />
-                    <span>Christi Himmelfahrt (14. Mai 2026)</span>
+                    <span>Christi Himmelfahrt (6. Mai {PLAN_YEAR})</span>
                   </div>
                   <div className={styles.legendItem}>
                     <span className={`${styles.legendDot} ${styles.legendDotBridge}`} />
@@ -223,12 +223,12 @@ export default function LandingPage() {
               heading={`Nächste starke Brückentage Berlin ${PLAN_YEAR}`}
             />
 
-            <h2 className={styles.sectionTitle}>Brückentage 2026: So verlängern Sie Ihren Urlaub</h2>
+            <h2 className={styles.sectionTitle}>Brückentage {PLAN_YEAR}: So verlängern Sie Ihren Urlaub</h2>
             
             <div className={styles.introText}>
               <p>
-                Das Jahr 2026 bietet zahlreiche Möglichkeiten, mit wenigen Urlaubstagen viel Freizeit zu gewinnen. 
-                Viele gesetzliche Feiertage fallen günstig auf Wochentage. Mit unserem Ferienplaner 2026 
+                Das Jahr {PLAN_YEAR} bietet zahlreiche Möglichkeiten, mit wenigen Urlaubstagen viel Freizeit zu gewinnen.
+                Viele gesetzliche Feiertage fallen günstig auf Wochentage. Mit unserem Ferienplaner {PLAN_YEAR}
                 finden Sie die optimalen Brückentage für Ihr Bundesland.
               </p>
             </div>
@@ -258,21 +258,21 @@ export default function LandingPage() {
             </div>
 
             <div className={styles.seoText}>
-              <h3>Ferienplaner 2026: Alle Feiertage im Überblick</h3>
+              <h3>Ferienplaner {PLAN_YEAR}: Alle Feiertage im Überblick</h3>
               <p>
-                Unser Ferienplaner 2026 berücksichtigt alle gesetzlichen Feiertage in Deutschland und zeigt Ihnen 
-                automatisch die besten Brückentage für Ihr Bundesland. Mit der intelligenten Brückentag-Berechnung 
+                Unser Ferienplaner {PLAN_YEAR} berücksichtigt alle gesetzlichen Feiertage in Deutschland und zeigt Ihnen
+                automatisch die besten Brückentage für Ihr Bundesland. Mit der intelligenten Brückentag-Berechnung
                 können Sie Ihren Jahresurlaub optimal planen und mit wenigen Urlaubstagen maximale Freizeit gewinnen.
               </p>
               <p>
-                <strong>Wichtig:</strong> Nicht alle Feiertage gelten in allen Bundesländern. Unser Ferienplaner 
-                zeigt Ihnen nur die für Ihr Bundesland relevanten Feiertage und Brückentage 2026 an.
+                <strong>Wichtig:</strong> Nicht alle Feiertage gelten in allen Bundesländern. Unser Ferienplaner
+                zeigt Ihnen nur die für Ihr Bundesland relevanten Feiertage und Brückentage {PLAN_YEAR} an.
               </p>
             </div>
 
             <div className={styles.ctaBox}>
-              <h3>Jetzt Ihren Urlaub 2026 optimal planen</h3>
-              <p>Nutzen Sie unseren kostenlosen Ferienplaner, um die besten Brückentage 2026 für Ihr Bundesland zu finden.</p>
+              <h3>Jetzt Ihren Urlaub {PLAN_YEAR} optimal planen</h3>
+              <p>Nutzen Sie unseren kostenlosen Ferienplaner, um die besten Brückentage {PLAN_YEAR} für Ihr Bundesland zu finden.</p>
               <Link href={plannerUrl()} className={styles.ctaButton}>
                 Zum Ferienplaner {PLAN_YEAR}
               </Link>

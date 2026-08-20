@@ -523,7 +523,7 @@ export default async function StatePage({
                   marginLeft: 'auto',
                   marginRight: 'auto'
                 }}>
-                  Feiertage und Schulferien in {fullName} 2026
+                  Feiertage und Schulferien in {fullName} {PLAN_YEAR}
                 </h1>
                 <p className={styles.heroSubtitle} style={{ 
                   color: 'var(--state-text-on-hero)',

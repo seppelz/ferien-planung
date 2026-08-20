@@ -198,12 +198,14 @@ export const schleswigHolstein: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Schleswig-Holstein verbindet maritime Festkultur mit nordischen Traditionen. Die Vielfalt der Regionen von der Nordsee über die Ostsee bis zur Holsteinischen Schweiz spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen Schleswig-Holsteins sind geprägt von maritimer Geschichte, hanseatischem Erbe und nordischer Kultur. Hafenfeste, Segelsport und Küstenbrauchtum prägen das kulturelle Leben.",

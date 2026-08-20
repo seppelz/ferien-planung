@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 const STATES = ['BW', 'BY', 'BE', 'BB', 'HB', 'HH', 'HE', 'MV', 'NI', 'NW', 'RP', 'SL', 'SN', 'ST', 'SH', 'TH'] as const;
-const YEARS = [2024, 2025, 2026] as const;
+const YEARS = [2024, 2025, 2026, 2027] as const;
 
 interface ApiHoliday {
   start: string;

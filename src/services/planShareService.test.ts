@@ -15,8 +15,8 @@ describe('planShareService', () => {
             personId: 1,
             isVisible: true,
             state: GermanState.BE,
-            start: new Date(2026, 4, 15),
-            end: new Date(2026, 4, 18),
+            start: new Date(2027, 4, 7),
+            end: new Date(2027, 4, 10),
             efficiency: { requiredDays: 1, gainedDays: 4, score: 4 },
           },
         ],
@@ -26,6 +26,6 @@ describe('planShareService', () => {
 
     const decoded = decodePlanFromParam(encoded);
     expect(decoded?.s).toBe(GermanState.BE);
-    expect(decoded?.p1).toEqual([['2026-05-15', '2026-05-18']]);
+    expect(decoded?.p1).toEqual([['2027-05-07', '2027-05-10']]);
   });
 });

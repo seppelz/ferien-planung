@@ -8,6 +8,8 @@
     { "source": "/planner", "destination": "/app/", "permanent": true },
     { "source": "/planner/:path*", "destination": "/app/", "permanent": true },
     { "source": "/app-redirect", "destination": "/app/", "permanent": true },
-    { "source": "/app-redirect/:path*", "destination": "/app/", "permanent": true }
+    { "source": "/app-redirect/:path*", "destination": "/app/", "permanent": true },
+    { "source": "/states/:state/brueckentage-2026", "destination": "/states/:state/brueckentage-2027/", "permanent": true },
+    { "source": "/states/:state/brueckentage-2026/", "destination": "/states/:state/brueckentage-2027/", "permanent": true }
   ]
 }

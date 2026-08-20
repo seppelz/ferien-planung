@@ -198,12 +198,14 @@ export const sachsenAnhalt: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Sachsen-Anhalt verbindet mittelalterliche Festkultur mit Reformationsgeschichte. Die Vielfalt der Regionen von der Altmark über den Harz bis zur Saale-Unstrut spiegelt sich in den Feierlichkeiten wider.",
   traditionInfo: "Die Traditionen Sachsen-Anhalts sind geprägt von mittelalterlicher Geschichte, Reformationsgeschichte und regionaler Kultur. Historische Feste, Luthergedenken und lebendiges Brauchtum prägen das kulturelle Leben.",

@@ -247,12 +247,14 @@ export const berlin: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Berlin verbindet bei seinen Feiertagen internationale Weltoffenheit mit deutscher Geschichte und Tradition.",
   traditionInfo: "Die Feiertage in Berlin spiegeln die Vielfalt der Metropole wider, von traditionellen Festen bis zu modernen Kulturveranstaltungen.",

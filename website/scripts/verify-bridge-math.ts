@@ -55,7 +55,7 @@ const publicIso = new Set(
 
 const opportunities = getBridgeOpportunities(publicHolidays);
 
-assert(opportunities.length > 0, 'Berlin 2026 should have bridge opportunities');
+assert(opportunities.length > 0, `Berlin ${PLAN_YEAR} should have bridge opportunities`);
 
 for (const opp of opportunities) {
   const plannerTotal = plannerStyleTotalDaysOff(opp.vacationDate, publicIso);
@@ -65,10 +65,10 @@ for (const opp of opportunities) {
   );
 }
 
-const nextFromAug2026 = getNextBridgeOpportunity(publicHolidays, new Date(2026, 7, 18));
-assert(nextFromAug2026 !== null, 'Should find a next bridge from Aug 18 2026');
+const nextFromJan = getNextBridgeOpportunity(publicHolidays, new Date(2027, 0, 15));
+assert(nextFromJan !== null, 'Should find a next bridge from mid-January 2027');
 assert(
-  nextFromAug2026!.vacationDate >= '2026-08-18',
+  nextFromJan!.vacationDate >= '2027-01-15',
   'Next bridge vacation date must not be in the past relative to reference date'
 );
 

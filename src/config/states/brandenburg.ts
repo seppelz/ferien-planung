@@ -197,12 +197,14 @@ export const brandenburg: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Brandenburg verbindet preußische Traditionen mit regionalen Festen. Die Reformationsgeschichte und die Naturverbundenheit prägen das Festjahr.",
   traditionInfo: "Die brandenburgischen Traditionen sind geprägt von der preußischen Geschichte und dem ländlichen Erbe. Handwerk, Naturverbundenheit und regionale Bräuche bestimmen das kulturelle Leben.",

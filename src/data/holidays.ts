@@ -1600,6 +1600,520 @@ export const holidays: HolidayData = {
           "end": "2027-01-02"
         }
       ]
+    },
+    "2027": {
+      "BW": [
+        {
+          "name": "osterferien baden-württemberg 2027 (einzeltag)",
+          "start": "2027-03-25",
+          "end": "2027-03-25"
+        },
+        {
+          "name": "osterferien baden-württemberg 2027",
+          "start": "2027-03-30",
+          "end": "2027-04-03"
+        },
+        {
+          "name": "pfingstferien baden-württemberg 2027",
+          "start": "2027-05-18",
+          "end": "2027-05-29"
+        },
+        {
+          "name": "sommerferien baden-württemberg 2027",
+          "start": "2027-07-29",
+          "end": "2027-09-11"
+        },
+        {
+          "name": "herbstferien baden-württemberg 2027",
+          "start": "2027-11-02",
+          "end": "2027-11-06"
+        },
+        {
+          "name": "weihnachtsferien baden-württemberg 2027",
+          "start": "2027-12-23",
+          "end": "2028-01-08"
+        }
+      ],
+      "BY": [
+        {
+          "name": "winterferien bayern 2027",
+          "start": "2027-02-08",
+          "end": "2027-02-12"
+        },
+        {
+          "name": "osterferien bayern 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-02"
+        },
+        {
+          "name": "pfingstferien bayern 2027",
+          "start": "2027-05-18",
+          "end": "2027-05-28"
+        },
+        {
+          "name": "sommerferien bayern 2027",
+          "start": "2027-08-02",
+          "end": "2027-09-13"
+        },
+        {
+          "name": "herbstferien bayern 2027",
+          "start": "2027-11-02",
+          "end": "2027-11-05"
+        },
+        {
+          "name": "herbstferien bayern 2027 (einzeltag)",
+          "start": "2027-11-17",
+          "end": "2027-11-17"
+        },
+        {
+          "name": "weihnachtsferien bayern 2027",
+          "start": "2027-12-24",
+          "end": "2028-01-07"
+        }
+      ],
+      "BE": [
+        {
+          "name": "winterferien berlin 2027",
+          "start": "2027-02-01",
+          "end": "2027-02-06"
+        },
+        {
+          "name": "osterferien berlin 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-02"
+        },
+        {
+          "name": "osterferien berlin 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "pfingstferien berlin 2027",
+          "start": "2027-05-18",
+          "end": "2027-05-19"
+        },
+        {
+          "name": "sommerferien berlin 2027",
+          "start": "2027-07-01",
+          "end": "2027-08-14"
+        },
+        {
+          "name": "herbstferien berlin 2027",
+          "start": "2027-10-11",
+          "end": "2027-10-23"
+        },
+        {
+          "name": "weihnachtsferien berlin 2027",
+          "start": "2027-12-22",
+          "end": "2027-12-31"
+        }
+      ],
+      "BB": [
+        {
+          "name": "winterferien brandenburg 2027",
+          "start": "2027-02-01",
+          "end": "2027-02-06"
+        },
+        {
+          "name": "osterferien brandenburg 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-03"
+        },
+        {
+          "name": "osterferien brandenburg 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "pfingstferien brandenburg 2027",
+          "start": "2027-05-18",
+          "end": "2027-05-18"
+        },
+        {
+          "name": "sommerferien brandenburg 2027",
+          "start": "2027-07-01",
+          "end": "2027-08-14"
+        },
+        {
+          "name": "herbstferien brandenburg 2027",
+          "start": "2027-10-11",
+          "end": "2027-10-23"
+        },
+        {
+          "name": "weihnachtsferien brandenburg 2027",
+          "start": "2027-12-23",
+          "end": "2027-12-31"
+        }
+      ],
+      "HB": [
+        {
+          "name": "winterferien bremen 2027",
+          "start": "2027-02-01",
+          "end": "2027-02-02"
+        },
+        {
+          "name": "osterferien bremen 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-03"
+        },
+        {
+          "name": "osterferien bremen 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "pfingstferien bremen 2027",
+          "start": "2027-05-18",
+          "end": "2027-05-18"
+        },
+        {
+          "name": "sommerferien bremen 2027",
+          "start": "2027-07-08",
+          "end": "2027-08-18"
+        },
+        {
+          "name": "herbstferien bremen 2027",
+          "start": "2027-10-18",
+          "end": "2027-10-30"
+        },
+        {
+          "name": "weihnachtsferien bremen 2027",
+          "start": "2027-12-23",
+          "end": "2028-01-08"
+        }
+      ],
+      "HH": [
+        {
+          "name": "winterferien hamburg 2027",
+          "start": "2027-01-29",
+          "end": "2027-01-29"
+        },
+        {
+          "name": "osterferien hamburg 2027",
+          "start": "2027-03-01",
+          "end": "2027-03-12"
+        },
+        {
+          "name": "pfingstferien hamburg 2027",
+          "start": "2027-05-07",
+          "end": "2027-05-15"
+        },
+        {
+          "name": "sommerferien hamburg 2027",
+          "start": "2027-07-01",
+          "end": "2027-08-11"
+        },
+        {
+          "name": "herbstferien hamburg 2027",
+          "start": "2027-10-11",
+          "end": "2027-10-22"
+        },
+        {
+          "name": "weihnachtsferien hamburg 2027",
+          "start": "2027-12-20",
+          "end": "2027-12-31"
+        }
+      ],
+      "HE": [
+        {
+          "name": "osterferien hessen 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-02"
+        },
+        {
+          "name": "sommerferien hessen 2027",
+          "start": "2027-06-28",
+          "end": "2027-08-06"
+        },
+        {
+          "name": "herbstferien hessen 2027",
+          "start": "2027-10-04",
+          "end": "2027-10-16"
+        },
+        {
+          "name": "weihnachtsferien hessen 2027",
+          "start": "2027-12-23",
+          "end": "2028-01-11"
+        }
+      ],
+      "MV": [
+        {
+          "name": "winterferien mecklenburg-vorpommern 2027",
+          "start": "2027-02-08",
+          "end": "2027-02-19"
+        },
+        {
+          "name": "osterferien mecklenburg-vorpommern 2027",
+          "start": "2027-03-24",
+          "end": "2027-04-02"
+        },
+        {
+          "name": "osterferien mecklenburg-vorpommern 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "pfingstferien mecklenburg-vorpommern 2027",
+          "start": "2027-05-14",
+          "end": "2027-05-18"
+        },
+        {
+          "name": "sommerferien mecklenburg-vorpommern 2027",
+          "start": "2027-07-05",
+          "end": "2027-08-14"
+        },
+        {
+          "name": "herbstferien mecklenburg-vorpommern 2027",
+          "start": "2027-10-14",
+          "end": "2027-10-23"
+        },
+        {
+          "name": "weihnachtsferien mecklenburg-vorpommern 2027",
+          "start": "2027-12-22",
+          "end": "2028-01-04"
+        }
+      ],
+      "NI": [
+        {
+          "name": "winterferien niedersachsen 2027",
+          "start": "2027-02-01",
+          "end": "2027-02-02"
+        },
+        {
+          "name": "osterferien niedersachsen 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-03"
+        },
+        {
+          "name": "osterferien niedersachsen 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "pfingstferien niedersachsen 2027",
+          "start": "2027-05-18",
+          "end": "2027-05-18"
+        },
+        {
+          "name": "sommerferien niedersachsen 2027",
+          "start": "2027-07-08",
+          "end": "2027-08-18"
+        },
+        {
+          "name": "herbstferien niedersachsen 2027",
+          "start": "2027-10-16",
+          "end": "2027-10-30"
+        },
+        {
+          "name": "weihnachtsferien niedersachsen 2027",
+          "start": "2027-12-23",
+          "end": "2028-01-08"
+        }
+      ],
+      "NW": [
+        {
+          "name": "osterferien nordrhein-westfalen 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-03"
+        },
+        {
+          "name": "pfingstferien nordrhein-westfalen 2027",
+          "start": "2027-05-18",
+          "end": "2027-05-18"
+        },
+        {
+          "name": "sommerferien nordrhein-westfalen 2027",
+          "start": "2027-07-19",
+          "end": "2027-08-31"
+        },
+        {
+          "name": "herbstferien nordrhein-westfalen 2027",
+          "start": "2027-10-23",
+          "end": "2027-11-06"
+        },
+        {
+          "name": "weihnachtsferien nordrhein-westfalen 2027",
+          "start": "2027-12-24",
+          "end": "2028-01-08"
+        }
+      ],
+      "RP": [
+        {
+          "name": "osterferien rheinland-pfalz 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-02"
+        },
+        {
+          "name": "sommerferien rheinland-pfalz 2027",
+          "start": "2027-06-28",
+          "end": "2027-08-06"
+        },
+        {
+          "name": "herbstferien rheinland-pfalz 2027",
+          "start": "2027-10-04",
+          "end": "2027-10-15"
+        },
+        {
+          "name": "weihnachtsferien rheinland-pfalz 2027",
+          "start": "2027-12-23",
+          "end": "2028-01-07"
+        }
+      ],
+      "SL": [
+        {
+          "name": "winterferien saarland 2027",
+          "start": "2027-02-08",
+          "end": "2027-02-12"
+        },
+        {
+          "name": "osterferien saarland 2027",
+          "start": "2027-03-30",
+          "end": "2027-04-09"
+        },
+        {
+          "name": "sommerferien saarland 2027",
+          "start": "2027-06-28",
+          "end": "2027-08-06"
+        },
+        {
+          "name": "herbstferien saarland 2027",
+          "start": "2027-10-04",
+          "end": "2027-10-15"
+        },
+        {
+          "name": "weihnachtsferien saarland 2027",
+          "start": "2027-12-20",
+          "end": "2027-12-31"
+        }
+      ],
+      "SN": [
+        {
+          "name": "winterferien sachsen 2027",
+          "start": "2027-02-08",
+          "end": "2027-02-19"
+        },
+        {
+          "name": "osterferien sachsen 2027",
+          "start": "2027-03-26",
+          "end": "2027-04-02"
+        },
+        {
+          "name": "osterferien sachsen 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "pfingstferien sachsen 2027",
+          "start": "2027-05-15",
+          "end": "2027-05-18"
+        },
+        {
+          "name": "sommerferien sachsen 2027",
+          "start": "2027-07-10",
+          "end": "2027-08-20"
+        },
+        {
+          "name": "herbstferien sachsen 2027",
+          "start": "2027-10-11",
+          "end": "2027-10-23"
+        },
+        {
+          "name": "weihnachtsferien sachsen 2027",
+          "start": "2027-12-23",
+          "end": "2028-01-01"
+        }
+      ],
+      "ST": [
+        {
+          "name": "winterferien sachsen-anhalt 2027",
+          "start": "2027-02-01",
+          "end": "2027-02-06"
+        },
+        {
+          "name": "osterferien sachsen-anhalt 2027",
+          "start": "2027-03-22",
+          "end": "2027-03-27"
+        },
+        {
+          "name": "pfingstferien sachsen-anhalt 2027",
+          "start": "2027-05-15",
+          "end": "2027-05-22"
+        },
+        {
+          "name": "sommerferien sachsen-anhalt 2027",
+          "start": "2027-07-10",
+          "end": "2027-08-20"
+        },
+        {
+          "name": "herbstferien sachsen-anhalt 2027",
+          "start": "2027-10-18",
+          "end": "2027-10-23"
+        },
+        {
+          "name": "weihnachtsferien sachsen-anhalt 2027",
+          "start": "2027-12-20",
+          "end": "2027-12-31"
+        }
+      ],
+      "SH": [
+        {
+          "name": "osterferien schleswig-holstein 2027",
+          "start": "2027-03-30",
+          "end": "2027-04-10"
+        },
+        {
+          "name": "osterferien schleswig-holstein 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "sommerferien schleswig-holstein 2027",
+          "start": "2027-07-03",
+          "end": "2027-08-14"
+        },
+        {
+          "name": "herbstferien schleswig-holstein 2027",
+          "start": "2027-10-11",
+          "end": "2027-10-23"
+        },
+        {
+          "name": "weihnachtsferien schleswig-holstein 2027",
+          "start": "2027-12-23",
+          "end": "2028-01-08"
+        }
+      ],
+      "TH": [
+        {
+          "name": "winterferien thüringen 2027",
+          "start": "2027-02-01",
+          "end": "2027-02-06"
+        },
+        {
+          "name": "osterferien thüringen 2027",
+          "start": "2027-03-22",
+          "end": "2027-04-03"
+        },
+        {
+          "name": "osterferien thüringen 2027 (einzeltag)",
+          "start": "2027-05-07",
+          "end": "2027-05-07"
+        },
+        {
+          "name": "sommerferien thüringen 2027",
+          "start": "2027-07-10",
+          "end": "2027-08-20"
+        },
+        {
+          "name": "herbstferien thüringen 2027",
+          "start": "2027-10-09",
+          "end": "2027-10-23"
+        },
+        {
+          "name": "weihnachtsferien thüringen 2027",
+          "start": "2027-12-23",
+          "end": "2027-12-31"
+        }
+      ]
     }
   },
   publicHolidays: {
@@ -2207,6 +2721,199 @@ export const holidays: HolidayData = {
           "name": "Reformationstag",
           "start": "2026-10-31",
           "type": "public"
+        }
+      ]
+    },
+    "2027": {
+      "ALL": [
+        {
+          "name": "Neujahr",
+          "start": "2027-01-01",
+          "nationwide": true
+        },
+        {
+          "name": "Karfreitag",
+          "start": "2027-03-26",
+          "nationwide": true
+        },
+        {
+          "name": "Ostermontag",
+          "start": "2027-03-29",
+          "nationwide": true
+        },
+        {
+          "name": "Tag der Arbeit",
+          "start": "2027-05-01",
+          "nationwide": true
+        },
+        {
+          "name": "Christi Himmelfahrt",
+          "start": "2027-05-06",
+          "nationwide": true
+        },
+        {
+          "name": "Pfingstmontag",
+          "start": "2027-05-17",
+          "nationwide": true
+        },
+        {
+          "name": "Tag der Deutschen Einheit",
+          "start": "2027-10-03",
+          "nationwide": true
+        },
+        {
+          "name": "1. Weihnachtstag",
+          "start": "2027-12-25",
+          "nationwide": true
+        },
+        {
+          "name": "2. Weihnachtstag",
+          "start": "2027-12-26",
+          "nationwide": true
+        }
+      ],
+      "BW": [
+        {
+          "name": "Heilige Drei Könige",
+          "start": "2027-01-06"
+        },
+        {
+          "name": "Fronleichnam",
+          "start": "2027-05-27"
+        },
+        {
+          "name": "Allerheiligen",
+          "start": "2027-11-01"
+        }
+      ],
+      "BY": [
+        {
+          "name": "Heilige Drei Könige",
+          "start": "2027-01-06"
+        },
+        {
+          "name": "Fronleichnam",
+          "start": "2027-05-27"
+        },
+        {
+          "name": "Mariä Himmelfahrt",
+          "start": "2027-08-15"
+        },
+        {
+          "name": "Allerheiligen",
+          "start": "2027-11-01"
+        }
+      ],
+      "BE": [
+        {
+          "name": "Internationaler Frauentag",
+          "start": "2027-03-08"
+        }
+      ],
+      "BB": [
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        }
+      ],
+      "HB": [
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        }
+      ],
+      "HH": [
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        }
+      ],
+      "HE": [
+        {
+          "name": "Fronleichnam",
+          "start": "2027-05-27"
+        }
+      ],
+      "MV": [
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        }
+      ],
+      "NI": [
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        }
+      ],
+      "NW": [
+        {
+          "name": "Fronleichnam",
+          "start": "2027-05-27"
+        },
+        {
+          "name": "Allerheiligen",
+          "start": "2027-11-01"
+        }
+      ],
+      "RP": [
+        {
+          "name": "Fronleichnam",
+          "start": "2027-05-27"
+        },
+        {
+          "name": "Allerheiligen",
+          "start": "2027-11-01"
+        }
+      ],
+      "SL": [
+        {
+          "name": "Fronleichnam",
+          "start": "2027-05-27"
+        },
+        {
+          "name": "Mariä Himmelfahrt",
+          "start": "2027-08-15"
+        },
+        {
+          "name": "Allerheiligen",
+          "start": "2027-11-01"
+        }
+      ],
+      "SN": [
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        },
+        {
+          "name": "Buß- und Bettag",
+          "start": "2027-11-17"
+        }
+      ],
+      "ST": [
+        {
+          "name": "Heilige Drei Könige",
+          "start": "2027-01-06"
+        },
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        }
+      ],
+      "SH": [
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
+        }
+      ],
+      "TH": [
+        {
+          "name": "Weltkindertag",
+          "start": "2027-09-20"
+        },
+        {
+          "name": "Reformationstag",
+          "start": "2027-10-31"
         }
       ]
     }

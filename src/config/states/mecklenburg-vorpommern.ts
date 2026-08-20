@@ -192,12 +192,14 @@ export const mecklenburgVorpommern: StateInfo = {
   publicHolidays: {
     2024: getHolidaysForYear(2024),
     2025: getHolidaysForYear(2025),
-    2026: getHolidaysForYear(2026)
+    2026: getHolidaysForYear(2026),
+    2027: getHolidaysForYear(2027)
   },
   schoolHolidays: {
     2024: getSchoolHolidaysForYear(2024),
     2025: getSchoolHolidaysForYear(2025),
-    2026: getSchoolHolidaysForYear(2026)
+    2026: getSchoolHolidaysForYear(2026),
+    2027: getSchoolHolidaysForYear(2027)
   },
   uniqueHolidayInfo: "Mecklenburg-Vorpommern verbindet maritime Festkultur mit Naturerlebnissen. Die Kombination aus Strand, Hansestädten und Seenplatte prägt das Festjahr.",
   traditionInfo: "Die Traditionen Mecklenburg-Vorpommerns sind stark von der maritimen Geschichte und dem Leben an der Küste geprägt. Fischerei, Seefahrt und Bäderkultur bestimmen das kulturelle Leben.",
