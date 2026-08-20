@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { GermanState, stateNames } from '../types/GermanState';
-import { PLAN_YEAR } from '../constants/planYear';
+import { usePlanYear } from '../contexts/PlanYearContext';
 
 interface FirstRunStatePickerProps {
   isOpen: boolean;
@@ -14,16 +14,18 @@ const STATES = (Object.values(GermanState) as GermanState[])
 
 export const FirstRunStatePicker: React.FC<FirstRunStatePickerProps> = ({ isOpen, onSelect }) => {
   const [selectedState, setSelectedState] = useState<GermanState>(GermanState.BE);
+  const { planYear } = usePlanYear();
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-[1100] flex items-center justify-center bg-gray-900/50 p-4">
       <div className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
-        <h2 className="text-xl font-semibold text-gray-900">Bundesland für {PLAN_YEAR} wählen</h2>
+        <h2 className="text-xl font-semibold text-gray-900">Bundesland für {planYear} wählen</h2>
         <p className="mt-2 text-sm text-gray-600">
           Wähle dein Bundesland – danach siehst du die besten Brückentage. Klicke auf{' '}
-          <strong>Urlaub planen</strong>, um eigene Zeiträume im Kalender zu markieren.
+          <strong>Urlaub planen</strong>, um eigene Zeiträume im Kalender zu markieren. Das Jahr kannst du
+          später umschalten (2026 oder 2027).
         </p>
         <div className="mt-4 max-h-72 space-y-1 overflow-y-auto">
           {STATES.map((state) => (

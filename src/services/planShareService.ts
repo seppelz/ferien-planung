@@ -1,6 +1,6 @@
 import { GermanState } from '../types/GermanState';
 import { PersonInfo } from '../types/person';
-import { PLAN_YEAR } from '../constants/planYear';
+import { isAvailablePlanYear, PLAN_YEAR } from '../constants/planYear';
 import { toDateString } from '../utils/dateUtils';
 
 export interface SharedPlanPayload {
@@ -47,10 +47,13 @@ function planRanges(
     .filter((entry): entry is [string, string] => entry !== null);
 }
 
-export function buildSharedPlanPayload(persons: PersonInfo): SharedPlanPayload {
+export function buildSharedPlanPayload(
+  persons: PersonInfo,
+  year: number = PLAN_YEAR
+): SharedPlanPayload {
   const payload: SharedPlanPayload = {
     v: 1,
-    y: PLAN_YEAR,
+    y: year,
     s: persons.person1.selectedState,
     vd: persons.person1.availableVacationDays,
     p1: planRanges(persons.person1.vacationPlans),
@@ -67,24 +70,25 @@ export function buildSharedPlanPayload(persons: PersonInfo): SharedPlanPayload {
   return payload;
 }
 
-export function encodePlanToParam(persons: PersonInfo): string {
-  return encodeBase64Url(JSON.stringify(buildSharedPlanPayload(persons)));
+export function encodePlanToParam(persons: PersonInfo, year: number = PLAN_YEAR): string {
+  return encodeBase64Url(JSON.stringify(buildSharedPlanPayload(persons, year)));
 }
 
 export function decodePlanFromParam(encoded: string): SharedPlanPayload | null {
   try {
     const parsed = JSON.parse(decodeBase64Url(encoded)) as SharedPlanPayload;
-    if (parsed.v !== 1 || parsed.y !== PLAN_YEAR || !parsed.s) return null;
+    if (parsed.v !== 1 || !isAvailablePlanYear(parsed.y) || !parsed.s) return null;
     return parsed;
   } catch {
     return null;
   }
 }
 
-export function buildShareUrl(persons: PersonInfo): string {
-  const param = encodePlanToParam(persons);
+export function buildShareUrl(persons: PersonInfo, year: number = PLAN_YEAR): string {
+  const param = encodePlanToParam(persons, year);
   const url = new URL(window.location.href);
   url.searchParams.set('plan', param);
+  url.searchParams.set('year', String(year));
   url.hash = '';
   return url.toString();
 }

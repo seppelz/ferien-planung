@@ -1,5 +1,6 @@
 import React from 'react';
 import { GermanState, stateNames } from '../../../types/GermanState';
+import { PlanYearSwitcher } from '../../PlanYearSwitcher';
 
 interface MobileStateSelectorProps {
   selectedState: GermanState;
@@ -15,7 +16,11 @@ export const MobileStateSelector: React.FC<MobileStateSelectorProps> = ({
   const accentColor = personId === 1 ? '#10b981' : '#06b6d4';
   
   return (
-    <div className="w-full" role="region" aria-label="Bundesland-Auswahl">
+    <div className="w-full space-y-2" role="region" aria-label="Bundesland- und Jahresauswahl">
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-xs font-medium text-gray-500">Jahr</span>
+        <PlanYearSwitcher compact className="flex gap-1" />
+      </div>
       <div className="relative">
         <select
           id="state-select"
@@ -42,4 +47,4 @@ export const MobileStateSelector: React.FC<MobileStateSelectorProps> = ({
       </div>
     </div>
   );
-}; 
+};

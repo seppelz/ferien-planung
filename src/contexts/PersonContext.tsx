@@ -7,6 +7,8 @@ import { useNotification } from './NotificationContext';
 import { calculateVacationEfficiency } from '../utils/vacationEfficiency';
 import { ONBOARDING_KEYS } from '../constants/onboardingKeys';
 import { parseStateQuery } from '../utils/stateQuery';
+import { isAvailablePlanYear } from '../constants/planYear';
+import { usePlanYear } from './PlanYearContext';
 import {
   decodePlanFromParam,
   PLAN_SHARE_QUERY_KEY,
@@ -92,6 +94,7 @@ function applySharedPlan(base: PersonInfo, shared: SharedPlanPayload): PersonInf
 export const PersonProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { savePersons, loadPersons, clearPersons: clearStorage } = usePersonStorage();
   const { showNotification } = useNotification();
+  const { setPlanYear } = usePlanYear();
   const [persons, setPersons] = useState<PersonInfo>(DEFAULT_PERSON_INFO);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -112,6 +115,9 @@ export const PersonProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         if (sharedPlan) {
           nextPersons = applySharedPlan(nextPersons, sharedPlan);
           localStorage.setItem(ONBOARDING_KEYS.statePicked, 'true');
+          if (isAvailablePlanYear(sharedPlan.y)) {
+            setPlanYear(sharedPlan.y);
+          }
         } else if (stateFromUrl) {
           nextPersons = {
             ...nextPersons,

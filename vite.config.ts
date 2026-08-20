@@ -51,6 +51,7 @@ export default defineConfig({
       'src/services/bridgeDayService.test.ts',
       'src/services/planShareService.test.ts',
       'src/utils/stateQuery.test.ts',
+      'src/constants/planYear.test.ts',
     ],
   },
 })

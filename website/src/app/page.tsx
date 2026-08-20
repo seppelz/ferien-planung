@@ -276,6 +276,12 @@ export default function LandingPage() {
               <Link href={plannerUrl()} className={styles.ctaButton}>
                 Zum Ferienplaner {PLAN_YEAR}
               </Link>
+              <p style={{ marginTop: '0.75rem', fontSize: '0.95rem' }}>
+                Noch Resturlaub {PLAN_YEAR - 1}?{' '}
+                <Link href={plannerUrl(undefined, PLAN_YEAR - 1)} style={{ color: 'inherit', fontWeight: 600, textDecoration: 'underline' }}>
+                  Urlaub {PLAN_YEAR - 1} planen
+                </Link>
+              </p>
             </div>
           </div>
         </section>

@@ -30,7 +30,7 @@ import {
 import { NextBridgeWidget } from '../components/NextBridgeWidget';
 import { buildGoogleCalendarUrl } from '../utils/calendarLinks';
 import { toDate } from '../utils/dateUtils';
-import { PLAN_YEAR } from '../constants/planYear';
+import { usePlanYear } from '../contexts/PlanYearContext';
 import { ONBOARDING_KEYS } from '../constants/onboardingKeys';
 import { parseStateQuery } from '../utils/stateQuery';
 import { usePlanVacationHint } from '../hooks/usePlanVacationHint';
@@ -121,8 +121,8 @@ const generateHRData = (persons: { person1: any; person2: any }) => {
 };
 
 // Generate holiday data
-const generateHolidayData = (holidays1: Holiday[], holidays2: Holiday[]) => {
-  const lines = [`Feiertagsübersicht ${PLAN_YEAR}\n`];
+const generateHolidayData = (holidays1: Holiday[], holidays2: Holiday[], year: number) => {
+  const lines = [`Feiertagsübersicht ${year}\n`];
 
   // Helper to format date for holidays
   const formatHolidayDate = (date: Date) => format(date, 'dd.MM.yyyy', { locale: de });
@@ -197,6 +197,7 @@ export const MainLayout: React.FC = () => {
   const [showStatePicker, setShowStatePicker] = useState(false);
   const [showOnboardingChecklist, setShowOnboardingChecklist] = useState(false);
   const { persons, updatePerson, isLoading } = usePersonContext();
+  const { planYear } = usePlanYear();
   const { markTutorialAsSeen } = useFirstTimeUser();
   const { showHint: showPlanVacationHint, dismissHint: dismissPlanVacationHint } = usePlanVacationHint(
     !isLoading && !showStatePicker
@@ -244,7 +245,7 @@ export const MainLayout: React.FC = () => {
             setIsSelectingVacation(true);
             // Focus January 1st after a short delay
             setTimeout(() => {
-              const jan1Button = calendarRef.current?.querySelector(`[data-date="${PLAN_YEAR}-01-01"]`) as HTMLButtonElement;
+              const jan1Button = calendarRef.current?.querySelector(`[data-date="${planYear}-01-01"]`) as HTMLButtonElement;
               if (jan1Button) {
                 jan1Button.focus();
               }
@@ -259,7 +260,7 @@ export const MainLayout: React.FC = () => {
             setIsSelectingVacation(true);
             // Focus January 1st after a short delay
             setTimeout(() => {
-              const jan1Button = calendarRef.current?.querySelector(`[data-date="${PLAN_YEAR}-01-01"]`) as HTMLButtonElement;
+              const jan1Button = calendarRef.current?.querySelector(`[data-date="${planYear}-01-01"]`) as HTMLButtonElement;
               if (jan1Button) {
                 jan1Button.focus();
               }
@@ -434,7 +435,7 @@ export const MainLayout: React.FC = () => {
                 setIsSelectingVacation(true);
                 // Focus January 1st after a short delay when clicking the button
                 setTimeout(() => {
-                  const jan1Button = calendarRef.current?.querySelector(`[data-date="${PLAN_YEAR}-01-01"]`) as HTMLButtonElement;
+                  const jan1Button = calendarRef.current?.querySelector(`[data-date="${planYear}-01-01"]`) as HTMLButtonElement;
                   if (jan1Button) {
                     jan1Button.focus();
                   }
@@ -654,7 +655,7 @@ export const MainLayout: React.FC = () => {
               type="button"
               onClick={() => {
                 const icsData = generateICSData(persons);
-                downloadFile(icsData, `urlaubsplan-${PLAN_YEAR}.ics`, 'text/calendar');
+                downloadFile(icsData, `urlaubsplan-${planYear}.ics`, 'text/calendar');
               }}
               className={`w-full ${theme.button.base} border border-gray-200 bg-white text-gray-800 hover:bg-gray-50`}
             >
@@ -914,7 +915,7 @@ export const MainLayout: React.FC = () => {
         />
 
         {/* Main Content - Added pt-16 (64px) to account for navbar height */}
-        <main className="flex-1 w-full px-2 pt-16 pb-2 flex gap-4 min-h-0">
+        <main key={planYear} className="flex-1 w-full px-2 pt-16 pb-2 flex gap-4 min-h-0">
           {/* Left Sidebar - Person 1 */}
           <aside className="w-80 space-y-2">
             {renderSidebarContent(1)}

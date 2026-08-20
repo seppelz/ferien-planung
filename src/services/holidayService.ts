@@ -37,11 +37,14 @@ const getHolidaysForYear = (year: number, stateCode: GermanState) => {
 };
 
 export const holidayService = {
-  async getSchoolHolidays(stateCode: GermanState | null): Promise<MultiDayHoliday[]> {
+  async getSchoolHolidays(
+    stateCode: GermanState | null,
+    year: number = PLAN_YEAR
+  ): Promise<MultiDayHoliday[]> {
     if (!stateCode) return [];
     
     try {
-      const yearHolidays = getHolidaysForYear(PLAN_YEAR, stateCode).school;
+      const yearHolidays = getHolidaysForYear(year, stateCode).school;
       
       return yearHolidays
         .map(holiday => {
@@ -72,11 +75,14 @@ export const holidayService = {
     }
   },
 
-  async getPublicHolidays(stateCode: GermanState | null): Promise<SingleDayHoliday[]> {
+  async getPublicHolidays(
+    stateCode: GermanState | null,
+    year: number = PLAN_YEAR
+  ): Promise<SingleDayHoliday[]> {
     if (!stateCode) return [];
     
     try {
-      const yearHolidays = getHolidaysForYear(PLAN_YEAR, stateCode).public;
+      const yearHolidays = getHolidaysForYear(year, stateCode).public;
       
       return yearHolidays
         .map(holiday => {

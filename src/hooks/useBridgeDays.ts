@@ -4,22 +4,27 @@ import { GermanState } from '../types/GermanState';
 import { calculateBridgeDays } from '../services/bridgeDayService';
 import { holidayService } from '../services/holidayService';
 import { isSameDay } from 'date-fns';
+import { usePlanYear } from '../contexts/PlanYearContext';
 
-// Cache for bridge day calculations
-const bridgeDayCache: Record<GermanState, {
+type CacheEntry = {
   holidays: Holiday[];
   bridgeDays: BridgeDay[];
   timestamp: number;
-}> = {} as any;
+};
 
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+const bridgeDayCache: Record<string, CacheEntry> = {};
+const CACHE_DURATION = 24 * 60 * 60 * 1000;
+
+function cacheKey(state: GermanState, year: number): string {
+  return `${year}:${state}`;
+}
 
 export function useBridgeDays(state: GermanState | null) {
+  const { planYear } = usePlanYear();
   const [holidays, setHolidays] = useState<Holiday[]>([]);
   const [bridgeDays, setBridgeDays] = useState<BridgeDay[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Memoize the state to prevent unnecessary re-fetches
   const memoizedState = useMemo(() => state, [state]);
 
   useEffect(() => {
@@ -33,41 +38,40 @@ export function useBridgeDays(state: GermanState | null) {
           return;
         }
 
+        const key = cacheKey(memoizedState, planYear);
         const now = Date.now();
+        const cached = bridgeDayCache[key];
 
-        // Check cache
-        if (bridgeDayCache[memoizedState] && 
-            (now - bridgeDayCache[memoizedState].timestamp) < CACHE_DURATION) {
-          setHolidays(bridgeDayCache[memoizedState].holidays);
-          setBridgeDays(bridgeDayCache[memoizedState].bridgeDays);
+        if (cached && now - cached.timestamp < CACHE_DURATION) {
+          setHolidays(cached.holidays);
+          setBridgeDays(cached.bridgeDays);
           setIsLoading(false);
           return;
         }
 
-        // Fetch new data
         const [publicHolidays, schoolHolidays] = await Promise.all([
-          holidayService.getPublicHolidays(memoizedState),
-          holidayService.getSchoolHolidays(memoizedState)
+          holidayService.getPublicHolidays(memoizedState, planYear),
+          holidayService.getSchoolHolidays(memoizedState, planYear),
         ]);
-        
-        // Combine holidays, ensuring no duplicates by date and name
+
         const allHolidays: Holiday[] = [...publicHolidays];
-        schoolHolidays.forEach(holiday => {
-          const exists = allHolidays.some(h => 
-            h.date && holiday.date && isSameDay(new Date(h.date), new Date(holiday.date)) && 
-            h.name === holiday.name
+        schoolHolidays.forEach((holiday) => {
+          const exists = allHolidays.some(
+            (h) =>
+              h.date &&
+              holiday.date &&
+              isSameDay(new Date(h.date), new Date(holiday.date)) &&
+              h.name === holiday.name
           );
           if (!exists) allHolidays.push(holiday);
         });
 
-        // Calculate bridge days from public holidays only
         const calculatedBridgeDays = calculateBridgeDays(publicHolidays, memoizedState);
 
-        // Update cache
-        bridgeDayCache[memoizedState] = {
+        bridgeDayCache[key] = {
           holidays: allHolidays,
           bridgeDays: calculatedBridgeDays,
-          timestamp: now
+          timestamp: now,
         };
 
         setHolidays(allHolidays);
@@ -82,14 +86,15 @@ export function useBridgeDays(state: GermanState | null) {
     };
 
     fetchHolidays();
-  }, [memoizedState]);
+  }, [memoizedState, planYear]);
 
-  // Memoize the return value to prevent unnecessary re-renders
-  const result = useMemo(() => ({
-    holidays,
-    bridgeDays,
-    isLoading
-  }), [holidays, bridgeDays, isLoading]);
-
-  return result;
-} 
+  return useMemo(
+    () => ({
+      holidays,
+      bridgeDays,
+      isLoading,
+      planYear,
+    }),
+    [holidays, bridgeDays, isLoading, planYear]
+  );
+}

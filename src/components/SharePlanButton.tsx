@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import { usePersonContext } from '../contexts/PersonContext';
+import { usePlanYear } from '../contexts/PlanYearContext';
 import { buildShareUrl } from '../services/planShareService';
 
 export const SharePlanButton: React.FC = () => {
   const { persons } = usePersonContext();
+  const { planYear } = usePlanYear();
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    const url = buildShareUrl(persons);
+    const url = buildShareUrl(persons, planYear);
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);

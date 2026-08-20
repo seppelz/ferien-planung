@@ -4,6 +4,7 @@ import { Holiday, BridgeDay } from '../../../types/holiday';
 import { VacationPlan } from '../../../types/vacationPlan';
 import { isWithinInterval, isSameDay, min, max, addDays, isBefore, differenceInDays } from 'date-fns';
 import { planYearStart } from '../../../constants/planYear';
+import { usePlanYear } from '../../../contexts/PlanYearContext';
 
 interface MobileCalendarViewProps {
   holidays: Holiday[];
@@ -26,7 +27,8 @@ export const MobileCalendarView: React.FC<MobileCalendarViewProps> = ({
   otherPersonVacations = [],
   initialDate = null
 }) => {
-  const [month, setMonth] = useState(() => initialDate || planYearStart());
+  const { planYear } = usePlanYear();
+  const [month, setMonth] = useState(() => initialDate || planYearStart(planYear));
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [feedbackMessage, setFeedbackMessage] = useState<string | null>(null);
@@ -37,12 +39,12 @@ export const MobileCalendarView: React.FC<MobileCalendarViewProps> = ({
     bridgeDays.map(bd => bd.date)
   , [bridgeDays]);
 
-  // Update month when initialDate changes
+  // Update month when initialDate or plan year changes
   useEffect(() => {
-    if (initialDate) {
-      setMonth(initialDate);
-    }
-  }, [initialDate]);
+    setMonth(initialDate || planYearStart(planYear));
+    setStartDate(null);
+    setEndDate(null);
+  }, [initialDate, planYear]);
 
   // Cleanup feedback timeout
   useEffect(() => {

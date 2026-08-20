@@ -6,6 +6,7 @@ import { useTheme } from '../../../hooks/useTheme';
 import { Holiday, BridgeDay } from '../../../types/holiday';
 import { parseDateString, holidayOccursOn, toDate } from '../../../utils/dateUtils';
 import { isPlanYear } from '../../../constants/planYear';
+import { usePlanYear } from '../../../contexts/PlanYearContext';
 
 interface HolidayType {
   type: Holiday["type"] | "bridge" | null;
@@ -134,6 +135,7 @@ const getHolidayColor = (type: string, theme: any, personId: 1 | 2) => {
 
 export const DesktopCalendar: React.FC<ExtendedBaseCalendarProps> = (props) => {
   const theme = useTheme();
+  const { planYear } = usePlanYear();
   const {
     state,
     handleDateSelect,
@@ -371,7 +373,7 @@ export const DesktopCalendar: React.FC<ExtendedBaseCalendarProps> = (props) => {
   }, [props.endDate, props.isSelectingVacation]);
 
   const isDateDisabled = (date: Date) => {
-    if (!isPlanYear(date)) return true;
+    if (!isPlanYear(date, planYear)) return true;
     
     return props.disabledDates?.some(range => 
       isWithinInterval(date, { start: range.start, end: range.end })
