@@ -1796,7 +1796,7 @@ export const holidays: HolidayData = {
         {
           "name": "pfingstferien hamburg 2027",
           "start": "2027-05-07",
-          "end": "2027-05-15"
+          "end": "2027-05-14"
         },
         {
           "name": "sommerferien hamburg 2027",
