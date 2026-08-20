@@ -1796,7 +1796,7 @@ export const holidays: HolidayData = {
         {
           "name": "pfingstferien hamburg 2027",
           "start": "2027-05-07",
-          "end": "2027-05-15"
+          "end": "2027-05-14"
         },
         {
           "name": "sommerferien hamburg 2027",
@@ -2627,6 +2627,11 @@ export const holidays: HolidayData = {
       ],
       "MV": [
         {
+          "name": "Internationaler Frauentag",
+          "start": "2026-03-08",
+          "type": "public"
+        },
+        {
           "name": "Reformationstag",
           "start": "2026-10-31",
           "type": "public"
@@ -2835,6 +2840,10 @@ export const holidays: HolidayData = {
         }
       ],
       "MV": [
+        {
+          "name": "Internationaler Frauentag",
+          "start": "2027-03-08"
+        },
         {
           "name": "Reformationstag",
           "start": "2027-10-31"
