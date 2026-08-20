@@ -4,8 +4,8 @@ export const PLAN_YEAR = 2027;
 /** Next planning year after the default (for future rollovers). */
 export const NEXT_PLAN_YEAR = 2028;
 
-/** Years users can select in the planner (newest first for display). */
-export const AVAILABLE_PLAN_YEARS = [2027, 2026] as const;
+/** Years users can select in the planner (chronological). Default active year is still PLAN_YEAR. */
+export const AVAILABLE_PLAN_YEARS = [2026, 2027] as const;
 
 export type AvailablePlanYear = (typeof AVAILABLE_PLAN_YEARS)[number];
 

@@ -18,7 +18,10 @@ const PlanYearContext = createContext<PlanYearContextType | null>(null);
 function syncYearToUrl(year: AvailablePlanYear): void {
   const url = new URL(window.location.href);
   url.searchParams.set(PLAN_YEAR_QUERY_KEY, String(year));
-  window.history.replaceState({}, '', `${url.pathname}${url.search}${url.hash}`);
+  const next = `${url.pathname}${url.search}${url.hash}`;
+  if (`${window.location.pathname}${window.location.search}${window.location.hash}` !== next) {
+    window.history.replaceState(window.history.state, '', next);
+  }
 }
 
 export const PlanYearProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
