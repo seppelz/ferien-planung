@@ -2615,6 +2615,10 @@ export const holidays: HolidayData = {
       ],
       "MV": [
         {
+          "name": "Internationaler Frauentag",
+          "start": "2026-03-08"
+        },
+        {
           "name": "Reformationstag",
           "start": "2026-10-31"
         }
@@ -2807,6 +2811,10 @@ export const holidays: HolidayData = {
         }
       ],
       "MV": [
+        {
+          "name": "Internationaler Frauentag",
+          "start": "2027-03-08"
+        },
         {
           "name": "Reformationstag",
           "start": "2027-10-31"
